@@ -28,8 +28,8 @@ import AccordionInfo from "@/components/AccordionInfo";
 import Policy from "../product-detail/Policy";
 import ModalViewAllReviews from "../product-detail/ModalViewAllReviews";
 import ListingImageGallery from "@/components/listing-image-gallery/ListingImageGallery";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Route } from "next";
+import { withSearchParams } from "@/lib/withSearchParams";
 
 const LIST_IMAGES_GALLERY_DEMO: (string | StaticImageData)[] = [
   detail21JPG,
@@ -46,31 +46,36 @@ const LIST_IMAGES_GALLERY_DEMO: (string | StaticImageData)[] = [
 ];
 const PRICE = 108;
 
-const ProductDetailPage2 = ({}) => {
+interface ProductDetailProps {
+  router: any;
+  pathname: string;
+  searchParams: any;
+}
+
+const ProductDetailPage2 = ({
+  router,
+  pathname,
+  searchParams,
+}: ProductDetailProps) => {
   const { sizes, variants, status, allOfSizes, image } = PRODUCTS[0];
-  //
-  const router = useRouter();
-  const thisPathname = usePathname();
-  const searchParams = useSearchParams();
   const modal = searchParams?.get("modal");
-  //
   const [variantActive, setVariantActive] = useState(0);
   const [sizeSelected, setSizeSelected] = useState(sizes ? sizes[0] : "");
   const [qualitySelected, setQualitySelected] = useState(1);
   const [isOpenModalViewAllReviews, setIsOpenModalViewAllReviews] =
     useState(false);
-
-  //
   const handleCloseModalImageGallery = () => {
     let params = new URLSearchParams(document.location.search);
     params.delete("modal");
-    router.push(`${thisPathname}/?${params.toString()}` as Route);
+    router.push(`${pathname}/?${params.toString()}` as Route);
   };
   const handleOpenModalImageGallery = () => {
-    router.push(`${thisPathname}/?modal=PHOTO_TOUR_SCROLLABLE` as Route);
+    router.push(`${pathname}/?modal=PHOTO_TOUR_SCROLLABLE` as Route);
   };
+  if (!searchParams) {
+    return <div>Loading...</div>;
+  }
 
-  //
   const renderVariants = () => {
     if (!variants || !variants.length) {
       return null;
@@ -580,4 +585,4 @@ const ProductDetailPage2 = ({}) => {
   );
 };
 
-export default ProductDetailPage2;
+export default withSearchParams(ProductDetailPage2);
