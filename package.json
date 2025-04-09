@@ -16,7 +16,7 @@
     "seed:dev": "prisma db seed",
     "seed:prod": "NODE_ENV=production ts-node prisma/seed.ts",
     "docker:start": "docker start my-postgres",
-    "postbuild": "pnpm verify-build && prisma migrate deploy && prisma db seed",
+    "postbuild": "pnpm verify-build && prisma migrate deploy",
     "postinstall": "prisma generate --no-engine",
     "verify-build": "node src/scripts/verify-build.js"
   },
