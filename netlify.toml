@@ -1,7 +1,18 @@
 [build]
-command = "pnpm install && pnpm prisma generate && pnpm build"
+command = "pnpm install && pnpm prisma:full-setup && pnpm build"
+publish = ".next"
 functions = "netlify/functions"
-publish = "out"
+
+[build.environment]
+NODE_VERSION = "18"
+PRISMA_CLI_QUERY_ENGINE_TYPE = "binary"
+PRISMA_CLIENT_ENGINE_TYPE = "binary"
+DATABASE_URL = "prisma+postgres://accelerate.prisma-data.net/?api_key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlfa2V5IjoiYzU5OWY4ZDMtOWFlNy00ZDcwLWEwNjktYmZkNTdlMmNlMzE4IiwidGVuYW50X2lkIjoiMDkxMGZmY2Q0ZDNiYzA2YWFjZmNhODNmMWM3YjJlMDllYTFiMTUyM2Y4ZGM0MTlkMWNlZjk5MTE3ZGY4ZWY3OCIsImludGVybmFsX3NlY3JldCI6Ijg2ZGZkZTU5LTg2YTEtNDI5MS1iZDExLWM4OTk0N2FhOTM4ZiJ9.SXtgPiyX8obKnJcYsMZFg-GjGE5yYpmrDhRel6iv_mo"
+NEXT_PUBLIC_NETLIFY_URL = "/.netlify/functions/bff"
 
 [functions]
 node_bundler = "esbuild"
+external_node_modules = ["@prisma/client", "prisma"]
+
+[[plugins]]
+package = "@netlify/plugin-nextjs"
