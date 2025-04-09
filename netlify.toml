@@ -1,13 +1,12 @@
 [build]
-command = "pnpm install && pnpm prisma:full-setup && pnpm build"
+command = "rm -rf node_modules && pnpm install && pnpm build"
 publish = ".next"
 functions = "netlify/functions"
 
 [build.environment]
-NODE_VERSION = "23"
-PRISMA_CLI_QUERY_ENGINE_TYPE = "binary"
+CI = "true"
+PRISMA_SKIP_POSTINSTALL_GENERATE = "true"
 PRISMA_CLIENT_ENGINE_TYPE = "binary"
-PRISMA_GENERATE_ONLY = "true"
 
 [functions]
 node_bundler = "esbuild"

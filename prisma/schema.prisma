@@ -16,7 +16,7 @@ datasource db {
 
 model Gift {
   id           Int        @id @default(autoincrement())
-  name         String
+  name         String     @unique
   description  String
   purchaseLink String
   imageUrl     String?

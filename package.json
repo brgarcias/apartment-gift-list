@@ -8,7 +8,6 @@
     "start": "next start",
     "lint": "next lint",
     "netlify:dev": "netlify dev",
-    "postbuild": "prisma migrate deploy",
     "prisma:generate": "npx prisma generate",
     "prisma:migration": "npx prisma migrate dev --name :migration_name",
     "prisma:migration-resolve": "npx prisma migrate resolve --applied --name :migration_name",
@@ -17,9 +16,9 @@
     "seed:dev": "prisma db seed",
     "seed:prod": "NODE_ENV=production ts-node prisma/seed.ts",
     "docker:start": "docker start my-postgres",
-    "prisma:full-setup": "prisma generate && prisma migrate deploy && prisma db seed",
-    "postinstall": "prisma generate",
-    "prebuild": "prisma generate"
+    "postbuild": "pnpm verify-build && prisma migrate deploy && prisma db seed",
+    "postinstall": "prisma generate --no-engine",
+    "verify-build": "node src/scripts/verify-build.js"
   },
   "dependencies": {
     "@glidejs/glide": "^3.6.0",
