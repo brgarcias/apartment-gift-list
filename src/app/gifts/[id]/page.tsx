@@ -279,7 +279,7 @@ export default function GiftDetails({ params }: { params: { id: string } }) {
                       onClick={handlePurchase}
                       className="bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-600 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-300"
                     >
-                      Sim, confirmar
+                      Confirmar
                     </button>
                     <button
                       onClick={() => setShowConfirmation(false)}

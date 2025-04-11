@@ -137,3 +137,6 @@ dist
 
 # Local Netlify folder
 .netlify
+
+# Prisma
+generated/prisma/

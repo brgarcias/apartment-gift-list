@@ -4,6 +4,8 @@ import { errorResponse, jsonResponse } from "@/lib/response";
 import { GiftOperationResult } from "@/interfaces/gift.interface";
 import { GiftStatusEnum } from "@/enums/gift.enum";
 import { GiftStatus } from "@prisma/client";
+import { createOrder } from "../orders/create";
+import { createReservation } from "../reservations/create";
 
 interface HandlerEventWithParams extends HandlerEvent {
   pathParameters?: {
@@ -60,6 +62,11 @@ const updateGiftStatus = async (
 const purchaseGift = async (
   event: HandlerEventWithParams
 ): Promise<HandlerResponse> => {
+  const userId = event.body ? JSON.parse(event.body).userId : null;
+  if (!userId) {
+    return errorResponse(400, "User ID not provided");
+  }
+
   const giftId = event.pathParameters?.id
     ? parseInt(event.pathParameters.id)
     : NaN;
@@ -71,6 +78,11 @@ const purchaseGift = async (
   const validation = await validateGiftForOperation(giftId, "purchase");
   if (!validation.success) {
     return errorResponse(400, validation.error!);
+  }
+
+  const order = await createOrder(giftId, userId);
+  if (!order.success) {
+    return errorResponse(500, order.error!);
   }
 
   const operation = await updateGiftStatus(giftId, {
@@ -90,6 +102,11 @@ const reserveGift = async (
     ? parseInt(event.pathParameters.id)
     : NaN;
 
+  const userId = event.body ? JSON.parse(event.body).userId : null;
+  if (!userId) {
+    return errorResponse(400, "User ID not provided");
+  }
+
   if (!giftId) {
     return errorResponse(400, "Gift ID not provided");
   }
@@ -97,6 +114,11 @@ const reserveGift = async (
   const validation = await validateGiftForOperation(giftId, "reserve");
   if (!validation.success) {
     return errorResponse(400, validation.error!);
+  }
+
+  const reservation = await createReservation(giftId, userId);
+  if (!reservation.success) {
+    return errorResponse(500, reservation.error!);
   }
 
   const operation = await updateGiftStatus(giftId, {
@@ -116,7 +138,7 @@ export const handleGiftStatusUpdate = async (
     return errorResponse(400, "No data provided");
   }
 
-  const { action } = JSON.parse(event.body);
+  const { action }: { action: GiftStatusEnum } = JSON.parse(event.body);
   const giftId = event.pathParameters?.id;
 
   if (!giftId) {
@@ -124,14 +146,17 @@ export const handleGiftStatusUpdate = async (
   }
 
   try {
-    switch (action) {
-      case GiftStatusEnum.PURCHASED:
-        return await purchaseGift(event);
-      case GiftStatusEnum.RESERVED:
-        return await reserveGift(event);
-      default:
-        return errorResponse(400, "Invalid action");
-    }
+    const actions: Record<
+      Exclude<GiftStatusEnum, GiftStatusEnum.AVAILABLE>,
+      HandlerResponse
+    > = {
+      [GiftStatusEnum.PURCHASED]: await purchaseGift(event),
+      [GiftStatusEnum.RESERVED]: await reserveGift(event),
+    };
+    return (
+      actions[action as Exclude<GiftStatusEnum, GiftStatusEnum.AVAILABLE>] ||
+      errorResponse(400, "Invalid action")
+    );
   } catch (error) {
     console.error("Error in gift status update:", error);
     return errorResponse(500, "Internal server error");
