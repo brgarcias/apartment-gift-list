@@ -123,13 +123,15 @@ export default function GiftList() {
             >
               Filtrar por preço máximo
             </label>
-            <div className="flex items-center">
-              <span className="mr-2 dark:text-gray-300">R$</span>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <span className="text-gray-500 dark:text-gray-300">R$</span>
+              </div>
               <input
                 type="number"
                 id="price"
                 placeholder="Valor máximo"
-                className="w-full p-2 border border-gray-300 dark:border-slate-700 rounded-md dark:bg-slate-700 dark:text-white"
+                className="w-full p-2 pl-10 border border-gray-300 dark:border-slate-700 rounded-md dark:bg-slate-700 dark:text-white"
                 value={priceFilter || ""}
                 onChange={(e) => {
                   const value = e.target.value;
