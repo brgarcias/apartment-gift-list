@@ -5,6 +5,7 @@ import { Gift } from "@/types/gifts";
 import { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 
 export default function GiftList() {
   const [gifts, setGifts] = useState<Gift[]>([]);
@@ -170,74 +171,79 @@ export default function GiftList() {
           Nenhum presente encontrado com os filtros aplicados.
         </p>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredGifts.map((gift) => (
-            <div
-              key={gift.id}
-              className={`bg-white dark:bg-slate-800 rounded-lg shadow-md dark:shadow-slate-700/30 overflow-hidden hover:shadow-lg dark:hover:shadow-slate-700/50 transition-shadow duration-300 ${
-                gift.status !== GiftStatusEnum.AVAILABLE ? "opacity-70" : ""
-              }`}
-            >
-              <div className="h-48 bg-indigo-50 dark:bg-slate-700 flex items-center justify-center">
-                <Image
-                  src={gift.imageUrl}
-                  alt={gift.name}
-                  width={120}
-                  height={120}
-                  className="object-contain"
-                />
-              </div>
-
-              <div className="p-6">
-                <div className="flex justify-between items-start mb-2">
-                  <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
-                    {gift.name}
-                  </h2>
-                  {getStatusBadge(gift.status)}
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredGifts.map((gift) => (
+              <div
+                key={gift.id}
+                className={`bg-white dark:bg-slate-800 rounded-lg shadow-md dark:shadow-slate-700/30 overflow-hidden hover:shadow-lg dark:hover:shadow-slate-700/50 transition-shadow duration-300 ${
+                  gift.status !== GiftStatusEnum.AVAILABLE ? "opacity-70" : ""
+                }`}
+              >
+                <div className="h-48 bg-indigo-50 dark:bg-slate-700 flex items-center justify-center">
+                  <Image
+                    src={gift.imageUrl}
+                    alt={gift.name}
+                    width={120}
+                    height={120}
+                    className="object-contain"
+                  />
                 </div>
 
-                <p className="text-lg font-medium text-indigo-600 dark:text-indigo-400 mb-4">
-                  {formatPrice(gift.price)}
-                </p>
+                <div className="p-6">
+                  <div className="flex justify-between items-start mb-2">
+                    <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
+                      {gift.name}
+                    </h2>
+                    {getStatusBadge(gift.status)}
+                  </div>
 
-                <div className="text-xs text-gray-500 dark:text-gray-400 mb-4">
-                  <p>
-                    Adicionado em:{" "}
-                    {new Date(gift.createdAt).toLocaleDateString("pt-BR", {
-                      day: "2-digit",
-                      month: "2-digit",
-                      year: "numeric",
-                    })}
+                  <p className="text-lg font-medium text-indigo-600 dark:text-indigo-400 mb-4">
+                    {formatPrice(gift.price)}
                   </p>
-                  <p>
-                    Atualizado em:{" "}
-                    {new Date(gift.updatedAt).toLocaleDateString("pt-BR", {
-                      day: "2-digit",
-                      month: "2-digit",
-                      year: "numeric",
-                    })}
-                  </p>
+
+                  <div className="text-xs text-gray-500 dark:text-gray-400 mb-4">
+                    <p>
+                      Adicionado em:{" "}
+                      {new Date(gift.createdAt).toLocaleDateString("pt-BR", {
+                        day: "2-digit",
+                        month: "2-digit",
+                        year: "numeric",
+                      })}
+                    </p>
+                    <p>
+                      Atualizado em:{" "}
+                      {new Date(gift.updatedAt).toLocaleDateString("pt-BR", {
+                        day: "2-digit",
+                        month: "2-digit",
+                        year: "numeric",
+                      })}
+                    </p>
+                  </div>
+
+                  {gift.status === GiftStatusEnum.AVAILABLE.toUpperCase() ? (
+                    <button
+                      onClick={() => router.push(`/gifts/${gift.id}`)}
+                      className="w-full bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-700 dark:hover:bg-indigo-600 text-white font-medium py-2 px-4 rounded transition-colors duration-300"
+                    >
+                      Ver detalhes
+                    </button>
+                  ) : (
+                    <button
+                      disabled
+                      className="w-full bg-gray-300 dark:bg-slate-700 text-gray-500 dark:text-gray-400 font-medium py-2 px-4 rounded cursor-not-allowed"
+                    >
+                      Indisponível
+                    </button>
+                  )}
                 </div>
-
-                {gift.status === GiftStatusEnum.AVAILABLE.toUpperCase() ? (
-                  <button
-                    onClick={() => router.push(`/gifts/${gift.id}`)}
-                    className="w-full bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-700 dark:hover:bg-indigo-600 text-white font-medium py-2 px-4 rounded transition-colors duration-300"
-                  >
-                    Ver detalhes
-                  </button>
-                ) : (
-                  <button
-                    disabled
-                    className="w-full bg-gray-300 dark:bg-slate-700 text-gray-500 dark:text-gray-400 font-medium py-2 px-4 rounded cursor-not-allowed"
-                  >
-                    Indisponível
-                  </button>
-                )}
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+          <div className="flex mt-16 justify-center items-center">
+            <ButtonPrimary loading>Ver Mais</ButtonPrimary>
+          </div>
+        </>
       )}
     </div>
   );

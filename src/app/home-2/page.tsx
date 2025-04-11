@@ -10,6 +10,7 @@ import SectionHero3 from "@/components/SectionHero/SectionHero3";
 import SectionPromo1 from "@/components/SectionPromo1";
 import { SPORT_PRODUCTS } from "@/data/data";
 import SectionGridFeatureItems from "@/components/SectionGridFeatureItems";
+import GiftList from "@/components/GiftList";
 
 function PageHome2() {
   return (
@@ -19,31 +20,34 @@ function PageHome2() {
       </div>
 
       <div className="container relative space-y-24 my-24 lg:space-y-32 lg:my-32">
-        <SectionHowItWork />
+        {/* <SectionHowItWork /> */}
 
         {/* SECTION */}
-        <SectionSliderProductCard
+        {/* <SectionSliderProductCard
           data={SPORT_PRODUCTS.filter((_, i) => i < 8)}
           subHeading="New Sports equipment"
-        />
+        /> */}
+
+        {/* componente presentes */}
+        <GiftList />
 
         {/* SECTION */}
         <SectionPromo2 />
 
         {/* SECTION 3 */}
-        <SectionSliderLargeProduct />
+        {/* <SectionSliderLargeProduct /> */}
 
         {/* SECTION */}
-        <div className="relative py-24 lg:py-32">
+        {/* <div className="relative py-24 lg:py-32">
           <BackgroundSection />
           <SectionGridMoreExplore data={DEMO_MORE_EXPLORE_DATA_2} />
-        </div>
+        </div> */}
 
         {/* SECTION */}
-        <SectionGridFeatureItems data={SPORT_PRODUCTS} />
+        {/* <SectionGridFeatureItems data={SPORT_PRODUCTS} /> */}
 
         {/* SECTION */}
-        <SectionPromo1 />
+        {/* <SectionPromo1 /> */}
       </div>
     </div>
   );

@@ -49,7 +49,7 @@ export default function GiftDetails({ params }: { params: { id: string } }) {
           body: JSON.stringify({ action: GiftStatusEnum.PURCHASED }),
         }
       );
-      router.push("/gifts");
+      router.push("/home-2");
     } catch (err) {
       setError(
         err instanceof Error ? err.message : "Falha ao comprar presente"
@@ -107,7 +107,7 @@ export default function GiftDetails({ params }: { params: { id: string } }) {
           {error}
         </div>
         <button
-          onClick={() => router.push("/gifts")}
+          onClick={() => router.push("/home-2")}
           className="bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-700 dark:hover:bg-indigo-600 text-white font-medium py-2 px-4 rounded transition-colors duration-300"
         >
           Voltar para a lista
@@ -123,7 +123,7 @@ export default function GiftDetails({ params }: { params: { id: string } }) {
           Presente não encontrado
         </p>
         <button
-          onClick={() => router.push("/gifts")}
+          onClick={() => router.push("/home-2")}
           className="bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-700 dark:hover:bg-indigo-600 text-white font-medium py-2 px-4 rounded transition-colors duration-300"
         >
           Voltar para a lista
@@ -135,7 +135,7 @@ export default function GiftDetails({ params }: { params: { id: string } }) {
   return (
     <div className="max-w-6xl mx-auto p-6">
       <button
-        onClick={() => router.push("/gifts")}
+        onClick={() => router.push("/home-2")}
         className="mb-6 flex items-center text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300 transition-colors duration-300"
       >
         <svg
