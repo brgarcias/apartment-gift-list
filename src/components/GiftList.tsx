@@ -94,7 +94,7 @@ export default function GiftList() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto p-6">
+    <div id="gifts" className="max-w-6xl mx-auto p-6">
       <h1 className="text-3xl font-bold text-center text-indigo-700 dark:text-indigo-400 mb-8">
         Lista de Presentes
       </h1>
@@ -221,27 +221,26 @@ export default function GiftList() {
                     </p>
                   </div>
 
-                  {gift.status === GiftStatusEnum.AVAILABLE.toUpperCase() ? (
-                    <button
-                      onClick={() => router.push(`/gifts/${gift.id}`)}
-                      className="w-full bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-700 dark:hover:bg-indigo-600 text-white font-medium py-2 px-4 rounded transition-colors duration-300"
-                    >
-                      Ver detalhes
-                    </button>
-                  ) : (
-                    <button
-                      disabled
-                      className="w-full bg-gray-300 dark:bg-slate-700 text-gray-500 dark:text-gray-400 font-medium py-2 px-4 rounded cursor-not-allowed"
-                    >
-                      Indisponível
-                    </button>
-                  )}
+                  <ButtonPrimary
+                    onClick={() => router.push(`/gifts/${gift.id}`)}
+                    sizeClass="px-2 py-2 lg:px-4 lg:py-2"
+                    fontSize="text-sm sm:text-base lg:text-md font-sm"
+                    className="transition-colors duration-300"
+                  >
+                    Ver detalhes
+                  </ButtonPrimary>
                 </div>
               </div>
             ))}
           </div>
           <div className="flex mt-16 justify-center items-center">
-            <ButtonPrimary loading>Ver Mais</ButtonPrimary>
+            <ButtonPrimary
+              sizeClass="px-6 py-3 lg:px-8 lg:py-4"
+              fontSize="text-sm sm:text-base lg:text-lg font-medium"
+              loading
+            >
+              Ver Mais
+            </ButtonPrimary>
           </div>
         </>
       )}

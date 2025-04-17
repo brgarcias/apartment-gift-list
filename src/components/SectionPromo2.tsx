@@ -1,9 +1,7 @@
 import React, { FC } from "react";
-import NcImage from "@/shared/NcImage/NcImage";
-import rightImgDemo from "@/images/promo2.png";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
-import Logo from "@/shared/Logo/Logo";
-import backgroundLineSvg from "@/images/Moon.svg";
+import backgroundPattern from "@/images/Moon.svg";
+import imagePromo from "@/images/image-promo.webp";
 import Image from "next/image";
 
 export interface SectionPromo2Props {
@@ -13,43 +11,72 @@ export interface SectionPromo2Props {
 const SectionPromo2: FC<SectionPromo2Props> = ({ className = "lg:pt-10" }) => {
   return (
     <div className={`nc-SectionPromo2 ${className}`}>
-      <div className="relative flex flex-col lg:flex-row lg:justify-end bg-yellow-50 dark:bg-slate-800 rounded-2xl sm:rounded-[40px] p-4 pb-0 sm:p-5 sm:pb-0 lg:p-24">
-        <div className="absolute inset-0">
+      <div className="relative flex flex-col lg:flex-row justify-between bg-indigo-50 dark:bg-slate-800 rounded-2xl sm:rounded-[40px] p-8 sm:p-12 lg:p-16">
+        <div className="absolute inset-0 overflow-hidden">
           <Image
             fill
-            className="absolute w-full h-full object-contain dark:opacity-5"
-            src={backgroundLineSvg}
-            alt="backgroundLineSvg"
+            className="object-cover opacity-10 dark:opacity-5"
+            src={backgroundPattern}
+            alt="Padrão de fundo"
           />
         </div>
 
-        <div className="lg:w-[45%] max-w-lg relative">
-          <Logo className="w-28" />
-          <h2 className="font-semibold text-3xl sm:text-4xl xl:text-5xl 2xl:text-6xl mt-6 sm:mt-10 !leading-[1.13] tracking-tight">
-            Special offer <br />
-            in kids products
+        <div className="relative lg:w-[50%] mb-10 lg:mb-0">
+          <h2 className="font-semibold text-3xl sm:text-4xl xl:text-5xl !leading-[1.13] tracking-tight">
+            Obrigado por fazer parte <br />
+            dessa nova jornada!
           </h2>
-          <span className="block mt-6 text-slate-500 dark:text-slate-400">
-            Fashion is a form of self-expression and autonomy at a particular
-            period and place.
-          </span>
-          <div className="flex space-x-2 sm:space-x-5 mt-6 sm:mt-12">
+
+          <p className="mt-6 text-lg text-slate-600 dark:text-slate-300">
+            Cada presente escolhido com carinho vai ajudar a transformar nosso
+            apartamento em um verdadeiro lar.
+          </p>
+
+          <div className="mt-8 flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
             <ButtonPrimary
-              href="/search"
+              href="#gifts"
               className="dark:bg-slate-200 dark:text-slate-900"
             >
-              Discover more
+              Ver Lista Completa
+            </ButtonPrimary>
+
+            <ButtonPrimary
+              href="#"
+              className="bg-white text-slate-900 border border-slate-300 hover:bg-slate-50 dark:bg-slate-900 dark:text-white dark:border-slate-700"
+            >
+              Como Funciona
             </ButtonPrimary>
           </div>
         </div>
 
-        <NcImage
-          alt=""
-          containerClassName="relative block lg:absolute lg:left-0 lg:bottom-0 mt-10 lg:mt-0 max-w-xl lg:max-w-[calc(55%-40px)]"
-          src={rightImgDemo}
-          sizes="(max-width: 768px) 100vw, 50vw"
-          className=""
-        />
+        <div className="relative lg:w-[45%] flex items-center justify-center">
+          <div className="bg-white dark:bg-slate-700 p-6 rounded-xl shadow-lg w-full max-w-md">
+            <div className="aspect-w-16 aspect-h-9 bg-gray-100 dark:bg-slate-600 rounded-lg flex items-center justify-center">
+              <Image
+                fill
+                className="object-cover rounded-lg"
+                src={imagePromo}
+                alt="imagem promo"
+              />
+            </div>
+
+            <div className="mt-6 text-center">
+              <h3 className="text-xl font-medium text-slate-800 dark:text-white">
+                Endereço para Entrega
+              </h3>
+              <p className="mt-2 text-slate-600 dark:text-slate-300">
+                Av. Inajar de Souza, 3947 - Apt 501 Torre 3
+                <br />
+                Vila Nova Cachoeirinha, São Paulo - SP
+                <br />
+                CEP: 02861-160
+              </p>
+              <p className="mt-4 text-sm text-slate-500 dark:text-slate-400">
+                * Por favor, avise quando enviar o presente
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

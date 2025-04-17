@@ -21,7 +21,7 @@ export default function RootLayout({
   params: any;
 }) {
   return (
-    <html lang="en" dir="" className={poppins.className}>
+    <html lang="en" className={`${poppins.className} scroll-smooth`}>
       <body className="bg-white text-base dark:bg-neutral-900 text-neutral-900 dark:text-neutral-200">
         <SiteHeader />
         {children}

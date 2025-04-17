@@ -5,6 +5,8 @@ import { Gift } from "@/types/gifts";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import ButtonPrimary from "@/shared/Button/ButtonPrimary";
+import ButtonThird from "@/shared/Button/ButtonThird";
 
 const brlFormatter = new Intl.NumberFormat("pt-BR", {
   style: "currency",
@@ -275,35 +277,39 @@ export default function GiftDetails({ params }: { params: { id: string } }) {
                     Confirmar compra deste presente?
                   </p>
                   <div className="grid grid-cols-2 gap-4">
-                    <button
+                    <ButtonThird
                       onClick={handlePurchase}
-                      className="bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-600 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-300"
+                      sizeClass="px-1 py-1 lg:px-1 lg:py-3"
+                      className="bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-600 text-white font-medium py-3 px-6 transition-colors duration-300"
                     >
                       Confirmar
-                    </button>
-                    <button
+                    </ButtonThird>
+                    <ButtonPrimary
                       onClick={() => setShowConfirmation(false)}
-                      className="bg-gray-200 hover:bg-gray-300 dark:bg-slate-700 dark:hover:bg-slate-600 text-gray-800 dark:text-gray-200 font-medium py-3 px-6 rounded-lg transition-colors duration-300"
+                      sizeClass="px-1 py-1 lg:px-1 lg:py-3"
+                      className="bg-gray-200 hover:bg-gray-300 dark:bg-slate-700 dark:hover:bg-slate-600 text-gray-800 dark:text-white font-medium py-3 px-6 transition-colors duration-300"
                     >
                       Cancelar
-                    </button>
+                    </ButtonPrimary>
                   </div>
                 </div>
               ) : (
-                <button
+                <ButtonPrimary
                   onClick={() => setShowConfirmation(true)}
-                  className="w-full bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-700 dark:hover:bg-indigo-600 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-300"
+                  sizeClass="px-2 py-2 lg:px-6 lg:py-3"
+                  className="bg-gray-200 hover:bg-gray-300 dark:bg-slate-700 dark:hover:bg-slate-600 text-gray-800 dark:text-white font-medium py-3 px-6 transition-colors duration-300"
                 >
                   Comprar este presente
-                </button>
+                </ButtonPrimary>
               )
             ) : (
-              <button
+              <ButtonPrimary
                 disabled
-                className="w-full bg-gray-300 dark:bg-slate-700 text-gray-500 dark:text-gray-400 font-medium py-3 px-6 rounded-lg cursor-not-allowed"
+                sizeClass="px-2 py-2 lg:px-8 lg:py-4"
+                className="bg-gray-200 hover:bg-gray-300 dark:bg-slate-700 dark:hover:bg-slate-600 text-gray-800 dark:text-white font-medium py-3 px-6 transition-colors duration-300"
               >
                 Presente indisponível
-              </button>
+              </ButtonPrimary>
             )}
           </div>
         </div>
