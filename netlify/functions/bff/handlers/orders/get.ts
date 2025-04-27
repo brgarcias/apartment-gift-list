@@ -9,7 +9,7 @@ export const getOrders = async (
     const { queryStringParameters } = event;
     const { deletedAt } = queryStringParameters || {};
     const orders = await prisma.order.findMany({
-      cacheStrategy: { swr: 60, ttl: 60 * 60 * 12, tags: ["all_orders"] },
+      cacheStrategy: { swr: 60, ttl: 60, tags: ["all_orders"] },
       where: {
         deletedAt: deletedAt ? { not: null } : null,
       },
@@ -40,7 +40,7 @@ export const getOrderById = async (event: HandlerEvent) => {
   try {
     const order = await prisma.order.findUnique({
       where: { id: parseInt(orderId) },
-      cacheStrategy: { swr: 60, ttl: 60 * 60 * 12, tags: ["order_by_id"] },
+      cacheStrategy: { swr: 60, ttl: 60, tags: ["order_by_id"] },
     });
 
     if (!order) {

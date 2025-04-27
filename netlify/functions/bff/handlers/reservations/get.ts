@@ -11,7 +11,7 @@ export const getReservations = async (
     const reservations = await prisma.reservation.findMany({
       cacheStrategy: {
         swr: 60,
-        ttl: 60 * 60 * 12,
+        ttl: 60,
         tags: ["all_reservations"],
       },
       where: {
@@ -46,7 +46,7 @@ export const getReservationById = async (event: HandlerEvent) => {
       where: { id: parseInt(reservationId) },
       cacheStrategy: {
         swr: 60,
-        ttl: 60 * 60 * 12,
+        ttl: 60,
         tags: ["reservation_by_id"],
       },
     });
