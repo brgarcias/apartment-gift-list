@@ -1,66 +1,63 @@
 import React, { FC } from "react";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
-import backgroundLineSvg from "@/images/Moon.svg";
+import backgroundPattern from "@/images/Moon.svg";
 import imageAp from "@/images/ap.jpg";
 import Image from "next/image";
 
-export interface SectionHero3Props {
+export interface SectionPromo2Props {
   className?: string;
 }
 
-const SectionHero3: FC<SectionHero3Props> = ({ className = "" }) => {
+const SectionPromo2: FC<SectionPromo2Props> = ({ className = "lg:pt-10" }) => {
   return (
-    <div
-      className={`nc-SectionHero3 relative ${className} transition-colors duration-300`}
-    >
-      <div className="relative pt-8 lg:pt-0 lg:absolute z-10 inset-x-0 top-[10%] sm:top-[20%] container">
-        <div className="flex flex-col items-start max-w-lg xl:max-w-2xl space-y-5 xl:space-y-8">
-          <span className="sm:text-lg md:text-xl font-semibold text-neutral-900 dark:text-neutral-200">
+    <div className={`nc-SectionPromo2 ${className}`}>
+      <div className="relative flex flex-col lg:flex-row lg:items-center justify-between bg-indigo-50 dark:bg-slate-800 rounded-2xl sm:rounded-[40px] p-4 sm:p-8 lg:p-12 overflow-hidden">
+        <div className="absolute inset-0 overflow-hidden">
+          <Image
+            fill
+            className="object-cover opacity-10 dark:opacity-5"
+            src={backgroundPattern}
+            alt="Padrão de fundo"
+            priority
+          />
+        </div>
+
+        <div className="relative lg:w-[50%] mb-6 lg:mb-0 lg:pr-4 z-10">
+          <span className="block text-sm sm:text-md md:text-lg font-semibold text-indigo-600 dark:text-indigo-400 mb-2">
             Estamos começando uma nova jornada! 🏡
           </span>
-          <h2 className="font-bold text-black dark:text-white text-3xl sm:text-4xl md:text-5xl xl:text-6xl !leading-[115%]">
+          <h2 className="font-bold text-black dark:text-white text-2xl sm:text-3xl md:text-4xl xl:text-5xl !leading-[115%] mb-4">
             Ajude-nos a mobiliar nosso lar
           </h2>
-          <p className="text-lg text-gray-600 dark:text-gray-300">
+          <p className="text-sm sm:text-md text-gray-600 dark:text-gray-300 mb-6">
             Cada presente será um pedacinho da nossa história juntos
           </p>
-          <div className="sm:pt-4">
-            <ButtonPrimary
-              href="#gifts"
-              sizeClass="px-6 py-3 lg:px-8 lg:py-4"
-              fontSize="text-sm sm:text-base lg:text-lg font-medium"
-            >
-              Ver Lista de Presentes
-            </ButtonPrimary>
-          </div>
-        </div>
-      </div>
 
-      <div className="relative z-[1] lg:aspect-w-16 lg:aspect-h-8">
-        <div className="mt-5 lg:mt-0 lg:absolute right-0 bottom-0 top-0 w-full max-w-xl lg:max-w-2xl ml-auto">
-          <div className="w-full h-full rounded-lg flex items-center justify-center">
+          <ButtonPrimary
+            className="mt-2 sm:mt-4"
+            href="#gifts"
+            sizeClass="px-5 py-2.5 lg:px-6 lg:py-3"
+            fontSize="text-sm sm:text-md lg:text-lg font-medium"
+          >
+            Como Funciona
+          </ButtonPrimary>
+        </div>
+
+        <div className="relative lg:w-[45%] flex items-center justify-center z-10">
+          <div className="bg-white dark:bg-slate-700 p-3 sm:p-4 rounded-xl shadow-lg w-full max-w-md aspect-[4/3] lg:aspect-auto lg:h-[400px] xl:h-[450px] overflow-hidden">
             <Image
               fill
-              sizes="(max-width: 768px) 100vw, 50vw"
-              className="absolute w-full h-full object-cover rounded-lg scale-90 dark:opacity-90 dark:brightness-90"
+              className="w-full h-full object-cover rounded-lg"
               src={imageAp}
-              alt="apartamento"
+              alt="Nosso apartamento"
+              sizes="(max-width: 1023px) 100vw, 50vw"
+              priority
             />
           </div>
         </div>
-      </div>
-
-      <div className="absolute inset-0 bg-[#F7F0EA] dark:bg-slate-800 rounded-2xl overflow-hidden z-0">
-        <Image
-          fill
-          sizes="(max-width: 768px) 100vw, 50vw"
-          className="absolute w-full h-full object-cover dark:opacity-10"
-          src={backgroundLineSvg}
-          alt="background"
-        />
       </div>
     </div>
   );
 };
 
-export default SectionHero3;
+export default SectionPromo2;

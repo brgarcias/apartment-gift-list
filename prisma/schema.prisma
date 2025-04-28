@@ -25,6 +25,9 @@ model Gift {
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
 
+  categoryId Int?
+  Category   Category? @relation(fields: [categoryId], references: [id])
+
   GiftOnOrder       GiftOnOrder[]
   GiftOnReservation GiftOnReservation[]
 }
@@ -85,4 +88,13 @@ enum GiftStatus {
   AVAILABLE
   RESERVED
   PURCHASED
+}
+
+model Category {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  gifts       Gift[]
 }

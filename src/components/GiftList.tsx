@@ -6,6 +6,7 @@ import { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
+import HeaderFilterSection2 from "./HeaderFilterSection2";
 
 export default function GiftList() {
   const [gifts, setGifts] = useState<Gift[]>([]);
@@ -95,9 +96,7 @@ export default function GiftList() {
 
   return (
     <div id="gifts" className="max-w-6xl mx-auto p-6">
-      <h1 className="text-3xl font-bold text-center text-indigo-700 dark:text-indigo-400 mb-8">
-        Lista de Presentes
-      </h1>
+      <HeaderFilterSection2 />
       <div className="mb-8 bg-white dark:bg-slate-800 p-6 rounded-lg shadow-md dark:shadow-slate-700/30">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
@@ -232,15 +231,6 @@ export default function GiftList() {
                 </div>
               </div>
             ))}
-          </div>
-          <div className="flex mt-16 justify-center items-center">
-            <ButtonPrimary
-              sizeClass="px-6 py-3 lg:px-8 lg:py-4"
-              fontSize="text-sm sm:text-base lg:text-lg font-medium"
-              loading
-            >
-              Ver Mais
-            </ButtonPrimary>
           </div>
         </>
       )}

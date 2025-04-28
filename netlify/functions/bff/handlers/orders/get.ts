@@ -41,6 +41,13 @@ export const getOrderById = async (event: HandlerEvent) => {
     const order = await prisma.order.findUnique({
       where: { id: parseInt(orderId) },
       cacheStrategy: { swr: 60, ttl: 60, tags: ["order_by_id"] },
+      include: {
+        Gift: {
+          include: {
+            gift: true,
+          },
+        },
+      },
     });
 
     if (!order) {
