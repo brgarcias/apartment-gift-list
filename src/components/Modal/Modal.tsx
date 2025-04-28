@@ -134,6 +134,24 @@ const Modal: FC<ModalProps> = ({ isOpenMoreFilter, setisOpenMoreFilter }) => {
                       </p>
                     </div>
                   </div>
+
+                  <div className="flex items-start">
+                    <div className="flex-shrink-0 bg-indigo-100 dark:bg-indigo-900/50 rounded-full p-2 mr-4">
+                      <span className="text-indigo-600 dark:text-indigo-400 text-lg">
+                        5
+                      </span>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-lg text-neutral-900 dark:text-white mb-2">
+                        Entrega do Presente
+                      </h4>
+                      <p className="text-neutral-600 dark:text-neutral-400">
+                        O presente pode ser entregue na festa ou combine os
+                        noivos. Não se preocupe, não abriremos o presente antes
+                        do evento!
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
 

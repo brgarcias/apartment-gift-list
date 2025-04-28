@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { Dialog, Popover, Transition } from "@/app/headlessui";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import ButtonThird from "@/shared/Button/ButtonThird";
@@ -10,6 +10,7 @@ import Slider from "rc-slider";
 import Radio from "@/shared/Radio/Radio";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import MySwitch from "@/components/MySwitch";
+import { Category } from "@prisma/client";
 
 // DEMO DATA
 const DATA_categories = [
@@ -47,6 +48,28 @@ const DATA_sortOrderRadios = [
 const PRICE_RANGE = [1, 500];
 //
 const TabFilters = () => {
+  const [isLoadingCategories, setIsLoadingCategories] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const fetchCategories = async () => {
+    try {
+      setIsLoadingCategories(true);
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_NETLIFY_URL}/categories`
+      );
+      if (!res.ok) throw new Error("Falha ao carregar categorias");
+      const data = await res.json();
+      setCategories(data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Erro desconhecido");
+    } finally {
+      setIsLoadingCategories(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
   const [isOpenMoreFilter, setisOpenMoreFilter] = useState(false);
   //
   const [isOnSale, setIsIsOnSale] = useState(false);
@@ -179,17 +202,17 @@ const TabFilters = () => {
                 <div className="overflow-hidden rounded-2xl shadow-xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700">
                   <div className="relative flex flex-col px-5 py-6 space-y-5">
                     <Checkbox
-                      name="All Categories"
-                      label="All Categories"
+                      name="Todas as Categorias"
+                      label="Todas as Categorias"
                       defaultChecked={categoriesState.includes(
-                        "All Categories"
+                        "Todas as Categorias"
                       )}
                       onChange={(checked) =>
-                        handleChangeCategories(checked, "All Categories")
+                        handleChangeCategories(checked, "Todas as Categorias")
                       }
                     />
                     <div className="w-full border-b border-neutral-200 dark:border-neutral-700" />
-                    {DATA_categories.map((item) => (
+                    {categories.map((item) => (
                       <div key={item.name} className="">
                         <Checkbox
                           name={item.name}
@@ -548,13 +571,7 @@ const TabFilters = () => {
   };
 
   // OK
-  const renderMoreFilterItem = (
-    data: {
-      name: string;
-      description?: string;
-      defaultChecked?: boolean;
-    }[]
-  ) => {
+  const renderMoreFilterItem = (data: Category[]) => {
     const list1 = data.filter((_, i) => i < data.length / 2);
     const list2 = data.filter((_, i) => i >= data.length / 2);
     return (
@@ -564,9 +581,9 @@ const TabFilters = () => {
             <Checkbox
               key={item.name}
               name={item.name}
-              subLabel={item.description}
+              subLabel={item.description || ""}
               label={item.name}
-              defaultChecked={!!item.defaultChecked}
+              // defaultChecked={!!item.defaultChecked}
             />
           ))}
         </div>
@@ -575,9 +592,9 @@ const TabFilters = () => {
             <Checkbox
               key={item.name}
               name={item.name}
-              subLabel={item.description}
+              subLabel={item.description || ""}
               label={item.name}
-              defaultChecked={!!item.defaultChecked}
+              // defaultChecked={!!item.defaultChecked}
             />
           ))}
         </div>
@@ -708,7 +725,7 @@ const TabFilters = () => {
                       <div className="py-7">
                         <h3 className="text-xl font-medium">Categorias</h3>
                         <div className="mt-6 relative ">
-                          {renderMoreFilterItem(DATA_categories)}
+                          {renderMoreFilterItem(categories)}
                         </div>
                       </div>
                       {/* --------- */}
