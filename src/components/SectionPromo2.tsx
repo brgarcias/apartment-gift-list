@@ -1,14 +1,18 @@
-import React, { FC } from "react";
+"use client";
+
+import React, { FC, useState } from "react";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import backgroundPattern from "@/images/Moon.svg";
 import imagePromo from "@/images/image-promo.webp";
 import Image from "next/image";
+import Modal from "./Modal/Modal";
 
 export interface SectionPromo2Props {
   className?: string;
 }
 
 const SectionPromo2: FC<SectionPromo2Props> = ({ className = "lg:pt-10" }) => {
+  const [isOpenMoreFilter, setisOpenMoreFilter] = useState(false);
   return (
     <div className={`nc-SectionPromo2 ${className}`}>
       <div className="relative flex flex-col lg:flex-row justify-between bg-indigo-50 dark:bg-slate-800 rounded-2xl sm:rounded-[40px] p-8 sm:p-12 lg:p-16">
@@ -41,7 +45,7 @@ const SectionPromo2: FC<SectionPromo2Props> = ({ className = "lg:pt-10" }) => {
             </ButtonPrimary>
 
             <ButtonPrimary
-              href="#"
+              onClick={() => setisOpenMoreFilter(true)}
               className="bg-white text-slate-900 border border-slate-300 hover:bg-slate-50 dark:bg-slate-900 dark:text-white dark:border-slate-700"
             >
               Como Funciona
@@ -78,6 +82,11 @@ const SectionPromo2: FC<SectionPromo2Props> = ({ className = "lg:pt-10" }) => {
           </div>
         </div>
       </div>
+
+      <Modal
+        isOpenMoreFilter={isOpenMoreFilter}
+        setisOpenMoreFilter={setisOpenMoreFilter}
+      />
     </div>
   );
 };

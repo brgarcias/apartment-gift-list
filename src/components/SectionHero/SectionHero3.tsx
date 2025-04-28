@@ -1,14 +1,18 @@
-import React, { FC } from "react";
+"use client";
+
+import React, { FC, Fragment, useState } from "react";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import backgroundPattern from "@/images/Moon.svg";
 import imageAp from "@/images/ap.jpg";
 import Image from "next/image";
+import Modal from "../Modal/Modal";
 
 export interface SectionPromo2Props {
   className?: string;
 }
 
 const SectionPromo2: FC<SectionPromo2Props> = ({ className = "lg:pt-10" }) => {
+  const [isOpenMoreFilter, setisOpenMoreFilter] = useState(false);
   return (
     <div className={`nc-SectionPromo2 ${className}`}>
       <div className="relative flex flex-col lg:flex-row lg:items-center justify-between bg-indigo-50 dark:bg-slate-800 rounded-2xl sm:rounded-[40px] p-4 sm:p-8 lg:p-12 overflow-hidden">
@@ -35,9 +39,9 @@ const SectionPromo2: FC<SectionPromo2Props> = ({ className = "lg:pt-10" }) => {
 
           <ButtonPrimary
             className="mt-2 sm:mt-4"
-            href="#gifts"
             sizeClass="px-5 py-2.5 lg:px-6 lg:py-3"
             fontSize="text-sm sm:text-md lg:text-lg font-medium"
+            onClick={() => setisOpenMoreFilter(true)}
           >
             Como Funciona
           </ButtonPrimary>
@@ -56,6 +60,11 @@ const SectionPromo2: FC<SectionPromo2Props> = ({ className = "lg:pt-10" }) => {
           </div>
         </div>
       </div>
+
+      <Modal
+        isOpenMoreFilter={isOpenMoreFilter}
+        setisOpenMoreFilter={setisOpenMoreFilter}
+      />
     </div>
   );
 };
