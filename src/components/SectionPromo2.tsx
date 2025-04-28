@@ -46,7 +46,7 @@ const SectionPromo2: FC<SectionPromo2Props> = ({ className = "lg:pt-10" }) => {
 
             <ButtonPrimary
               onClick={() => setisOpenMoreFilter(true)}
-              className="bg-white text-slate-900 border border-slate-300 hover:bg-slate-50 dark:bg-slate-900 dark:text-white dark:border-slate-700"
+              className="bg-white text-slate-900 border border-slate-300 hover:bg-slate-50 dark:bg-slate-900 dark:text-white dark:border-slate-700 dark:hover:bg-indigo-800"
             >
               Como Funciona
             </ButtonPrimary>

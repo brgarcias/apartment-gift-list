@@ -1,8 +1,9 @@
 "use client";
 
-import React, { FC, Fragment, useEffect, useRef, useState } from "react";
+import React, { FC, Fragment, useRef } from "react";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import { Dialog, Transition } from "@headlessui/react";
+import ButtonClose from "@/shared/ButtonClose/ButtonClose";
 
 export interface ModalProps {
   isOpenMoreFilter: boolean;
@@ -10,16 +11,9 @@ export interface ModalProps {
 }
 
 const Modal: FC<ModalProps> = ({ isOpenMoreFilter, setisOpenMoreFilter }) => {
-  const modalContentRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    if (isOpenMoreFilter && modalContentRef.current) {
-      modalContentRef.current.scrollTo(0, 0);
-    }
-  }, [isOpenMoreFilter]);
   return (
     <Transition appear show={isOpenMoreFilter} as={Fragment}>
       <Dialog
-        ref={modalContentRef}
         as="div"
         className="fixed inset-0 z-50 overflow-y-auto"
         onClose={() => setisOpenMoreFilter(false)}
@@ -65,6 +59,7 @@ const Modal: FC<ModalProps> = ({ isOpenMoreFilter, setisOpenMoreFilter }) => {
                 <p className="mt-2 text-indigo-100">
                   Um guia simples para você nos presentear
                 </p>
+                <ButtonClose className="absolute right-3 top-3 opacity-0 w-0 h-0 overflow-hidden" />
               </div>
 
               <div className="flex-grow overflow-y-auto p-6 sm:p-8">
@@ -130,7 +125,7 @@ const Modal: FC<ModalProps> = ({ isOpenMoreFilter, setisOpenMoreFilter }) => {
                     </div>
                     <div>
                       <h4 className="font-semibold text-lg text-neutral-900 dark:text-white mb-2">
-                        Nos Avisa Que Comprou
+                        Nos Avise Que Comprou
                       </h4>
                       <p className="text-neutral-600 dark:text-neutral-400">
                         Depois de comprar, clique em &quot;Comprar Este
@@ -146,7 +141,7 @@ const Modal: FC<ModalProps> = ({ isOpenMoreFilter, setisOpenMoreFilter }) => {
                 <ButtonPrimary
                   onClick={() => setisOpenMoreFilter(false)}
                   sizeClass="px-6 py-3"
-                  className="bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-700 dark:hover:bg-indigo-800"
+                  className="bg-indigo-600 hover:bg-indigo-100 dark:bg-indigo-700 dark:hover:bg-indigo-300"
                 >
                   Entendi, vamos começar!
                 </ButtonPrimary>

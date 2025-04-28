@@ -38,7 +38,7 @@ const SectionPromo2: FC<SectionPromo2Props> = ({ className = "lg:pt-10" }) => {
           </p>
 
           <ButtonPrimary
-            className="mt-2 sm:mt-4"
+            className="mt-2 sm:mt-4 dark:hover:bg-indigo-300"
             sizeClass="px-5 py-2.5 lg:px-6 lg:py-3"
             fontSize="text-sm sm:text-md lg:text-lg font-medium"
             onClick={() => setisOpenMoreFilter(true)}
