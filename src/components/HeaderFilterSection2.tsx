@@ -12,20 +12,31 @@ import { Category } from "@prisma/client";
 
 export interface HeaderFilterSectionProps {
   className?: string;
+  priceRange: number[];
+  setPriceRange: (range: number[]) => void;
+  selectedCategories: string[];
+  setSelectedCategories: (categories: string[]) => void;
+  sortOrder: string;
+  setSortOrder: (order: string) => void;
+  onlyAvailable: boolean;
+  setOnlyAvailable: (available: boolean) => void;
 }
 
 const HeaderFilterSection2: FC<HeaderFilterSectionProps> = ({
-  className = "mb-12",
+  className = "mb-6",
+  priceRange,
+  setPriceRange,
+  selectedCategories,
+  setSelectedCategories,
+  sortOrder,
+  setSortOrder,
+  onlyAvailable,
+  setOnlyAvailable,
 }) => {
-  const [isOpen, setIsOpen] = useState(true);
-  const [tabActive, setTabActive] = useState("Todos");
-  const [isLoadingCategories, setIsLoadingCategories] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [categories, setCategories] = useState<Category[]>([]);
 
   const fetchCategories = async () => {
     try {
-      setIsLoadingCategories(true);
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_NETLIFY_URL}/categories`
       );
@@ -33,9 +44,7 @@ const HeaderFilterSection2: FC<HeaderFilterSectionProps> = ({
       const data = await res.json();
       setCategories(data);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Erro desconhecido");
-    } finally {
-      setIsLoadingCategories(false);
+      console.error(err);
     }
   };
 
@@ -60,7 +69,17 @@ const HeaderFilterSection2: FC<HeaderFilterSectionProps> = ({
         leaveTo="opacity-0"
       >
         <div className="w-full border-b border-neutral-200 dark:border-neutral-700 my-6"></div>
-        <TabFilters />
+        <TabFilters
+          categories={categories}
+          priceRange={priceRange}
+          setPriceRange={setPriceRange}
+          selectedCategories={selectedCategories}
+          setSelectedCategories={setSelectedCategories}
+          sortOrder={sortOrder}
+          setSortOrder={setSortOrder}
+          onlyAvailable={onlyAvailable}
+          setOnlyAvailable={setOnlyAvailable}
+        />
       </Transition>
     </div>
   );

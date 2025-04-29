@@ -65,7 +65,7 @@ const Modal: FC<ModalProps> = ({ isOpenMoreFilter, setisOpenMoreFilter }) => {
               <div className="flex-grow overflow-y-auto p-6 sm:p-8">
                 <div className="space-y-6 text-neutral-700 dark:text-neutral-300">
                   <div className="flex items-start">
-                    <div className="flex-shrink-0 bg-indigo-100 dark:bg-indigo-900/50 rounded-full p-2 mr-4">
+                    <div className="flex-shrink-0 bg-indigo-100 dark:bg-indigo-900/50 rounded-full pt-1 pb-1 pl-2 pr-2 mr-4">
                       <span className="text-indigo-600 dark:text-indigo-400 text-lg">
                         1
                       </span>
@@ -83,7 +83,7 @@ const Modal: FC<ModalProps> = ({ isOpenMoreFilter, setisOpenMoreFilter }) => {
                   </div>
 
                   <div className="flex items-start">
-                    <div className="flex-shrink-0 bg-indigo-100 dark:bg-indigo-900/50 rounded-full p-2 mr-4">
+                    <div className="flex-shrink-0 bg-indigo-100 dark:bg-indigo-900/50 rounded-full pt-1 pb-1 pl-2 pr-2 mr-4">
                       <span className="text-indigo-600 dark:text-indigo-400 text-lg">
                         2
                       </span>
@@ -101,7 +101,7 @@ const Modal: FC<ModalProps> = ({ isOpenMoreFilter, setisOpenMoreFilter }) => {
                   </div>
 
                   <div className="flex items-start">
-                    <div className="flex-shrink-0 bg-indigo-100 dark:bg-indigo-900/50 rounded-full p-2 mr-4">
+                    <div className="flex-shrink-0 bg-indigo-100 dark:bg-indigo-900/50 rounded-full pt-1 pb-1 pl-2 pr-2 mr-4">
                       <span className="text-indigo-600 dark:text-indigo-400 text-lg">
                         3
                       </span>
@@ -118,7 +118,7 @@ const Modal: FC<ModalProps> = ({ isOpenMoreFilter, setisOpenMoreFilter }) => {
                   </div>
 
                   <div className="flex items-start">
-                    <div className="flex-shrink-0 bg-indigo-100 dark:bg-indigo-900/50 rounded-full p-2 mr-4">
+                    <div className="flex-shrink-0 bg-indigo-100 dark:bg-indigo-900/50 rounded-full pt-1 pb-1 pl-2 pr-2 mr-4">
                       <span className="text-indigo-600 dark:text-indigo-400 text-lg">
                         4
                       </span>
@@ -136,7 +136,7 @@ const Modal: FC<ModalProps> = ({ isOpenMoreFilter, setisOpenMoreFilter }) => {
                   </div>
 
                   <div className="flex items-start">
-                    <div className="flex-shrink-0 bg-indigo-100 dark:bg-indigo-900/50 rounded-full p-2 mr-4">
+                    <div className="flex-shrink-0 bg-indigo-100 dark:bg-indigo-900/50 rounded-full pt-1 pb-1 pl-2 pr-2 mr-4">
                       <span className="text-indigo-600 dark:text-indigo-400 text-lg">
                         5
                       </span>

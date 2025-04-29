@@ -1,4 +1,5 @@
 import { GiftStatusEnum } from "@/enums/gift.enum";
+import { Category } from "@prisma/client";
 
 export type Gift = {
   id: number;
@@ -12,6 +13,7 @@ export type Gift = {
   updatedAt: Date;
   giftOnOrder: GiftOnOrder[];
   giftOnReservation: GiftOnReservation[];
+  Category: Category;
 };
 
 export type UpdatePresenteDTO = Partial<Gift>;

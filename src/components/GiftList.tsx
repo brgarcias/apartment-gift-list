@@ -13,9 +13,14 @@ export default function GiftList() {
   const [filteredGifts, setFilteredGifts] = useState<Gift[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [priceFilter, setPriceFilter] = useState<number | null>(null);
   const router = useRouter();
+
+  // Filtros
+  const [searchTerm, setSearchTerm] = useState("");
+  const [priceRange, setPriceRange] = useState<number[]>([0, 1000]);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [sortOrder, setSortOrder] = useState<string>("");
+  const [onlyAvailable, setOnlyAvailable] = useState(false);
 
   const fetchAvailableGifts = async () => {
     try {
@@ -35,18 +40,71 @@ export default function GiftList() {
   const applyFilters = useCallback(() => {
     let result = [...gifts];
 
+    // Filtro por nome
     if (searchTerm) {
       result = result.filter((gift) =>
         gift.name.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
-    if (priceFilter) {
-      result = result.filter((gift) => gift.price <= priceFilter);
+    // Filtro por range de preço
+    result = result.filter(
+      (gift) => gift.price >= priceRange[0] && gift.price <= priceRange[1]
+    );
+
+    // Filtro por categoria
+    if (selectedCategories.length > 0) {
+      result = result.filter((gift) =>
+        selectedCategories.includes(gift.Category?.name || "")
+      );
+    }
+
+    // Filtro por disponibilidade
+    if (onlyAvailable) {
+      result = result.filter(
+        (gift) => gift.status.toLocaleLowerCase() === GiftStatusEnum.AVAILABLE
+      );
+    }
+
+    // Ordenação
+    switch (sortOrder) {
+      case "Price-low-hight":
+        result.sort((a, b) => a.price - b.price);
+        break;
+      case "Price-hight-low":
+        result.sort((a, b) => b.price - a.price);
+        break;
+      case "Newest":
+        result.sort(
+          (a, b) =>
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+        break;
+      case "Oldest":
+        result.sort(
+          (a, b) =>
+            new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+        );
+        break;
+      case "A-Z":
+        result.sort((a, b) => a.name.localeCompare(b.name));
+        break;
+      case "Z-A":
+        result.sort((a, b) => b.name.localeCompare(a.name));
+        break;
+      default:
+        break;
     }
 
     setFilteredGifts(result);
-  }, [gifts, searchTerm, priceFilter]);
+  }, [
+    gifts,
+    searchTerm,
+    priceRange,
+    selectedCategories,
+    sortOrder,
+    onlyAvailable,
+  ]);
 
   useEffect(() => {
     fetchAvailableGifts();
@@ -54,7 +112,15 @@ export default function GiftList() {
 
   useEffect(() => {
     applyFilters();
-  }, [searchTerm, priceFilter, gifts, applyFilters]);
+  }, [
+    searchTerm,
+    priceRange,
+    selectedCategories,
+    sortOrder,
+    onlyAvailable,
+    gifts,
+    applyFilters,
+  ]);
 
   const brlFormatter = new Intl.NumberFormat("pt-BR", {
     style: "currency",
@@ -94,9 +160,27 @@ export default function GiftList() {
     );
   };
 
+  const clearAllFilters = () => {
+    setSearchTerm("");
+    setPriceRange([0, 1000]);
+    setSelectedCategories([]);
+    setSortOrder("");
+    setOnlyAvailable(false);
+  };
+
   return (
     <div id="gifts" className="max-w-6xl mx-auto p-6">
-      <HeaderFilterSection2 />
+      <HeaderFilterSection2
+        priceRange={priceRange}
+        setPriceRange={setPriceRange}
+        selectedCategories={selectedCategories}
+        setSelectedCategories={setSelectedCategories}
+        sortOrder={sortOrder}
+        setSortOrder={setSortOrder}
+        onlyAvailable={onlyAvailable}
+        setOnlyAvailable={setOnlyAvailable}
+      />
+
       <div className="mb-8 bg-white dark:bg-slate-800 p-6 rounded-lg shadow-md dark:shadow-slate-700/30">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
@@ -116,42 +200,12 @@ export default function GiftList() {
             />
           </div>
 
-          <div>
-            <label
-              htmlFor="price"
-              className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
-            >
-              Filtrar por preço máximo
-            </label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <span className="text-gray-500 dark:text-gray-300">R$</span>
-              </div>
-              <input
-                type="number"
-                id="price"
-                placeholder="Valor máximo"
-                className="w-full p-2 pl-10 border border-gray-300 dark:border-slate-700 rounded-md dark:bg-slate-700 dark:text-white"
-                value={priceFilter || ""}
-                onChange={(e) => {
-                  const value = e.target.value;
-                  setPriceFilter(value ? parseFloat(value) : null);
-                }}
-                min="0"
-                step="0.01"
-              />
-            </div>
-          </div>
-
           <div className="flex items-end">
             <button
-              onClick={() => {
-                setSearchTerm("");
-                setPriceFilter(null);
-              }}
+              onClick={clearAllFilters}
               className="w-full bg-gray-200 hover:bg-gray-300 dark:bg-slate-700 dark:hover:bg-slate-600 text-gray-800 dark:text-gray-200 font-medium py-2 px-4 rounded transition-colors duration-300"
             >
-              Limpar filtros
+              Limpar todos os filtros
             </button>
           </div>
         </div>
@@ -176,7 +230,9 @@ export default function GiftList() {
               <div
                 key={gift.id}
                 className={`bg-white dark:bg-slate-800 rounded-lg shadow-md dark:shadow-slate-700/30 overflow-hidden hover:shadow-lg dark:hover:shadow-slate-700/50 transition-shadow duration-300 ${
-                  gift.status !== GiftStatusEnum.AVAILABLE ? "opacity-70" : ""
+                  gift.status.toLocaleLowerCase() !== GiftStatusEnum.AVAILABLE
+                    ? "opacity-70"
+                    : ""
                 }`}
               >
                 <div className="h-48 bg-indigo-50 dark:bg-slate-700 flex items-center justify-center">
@@ -196,6 +252,12 @@ export default function GiftList() {
                     </h2>
                     {getStatusBadge(gift.status)}
                   </div>
+
+                  {gift.Category && (
+                    <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">
+                      {gift.Category.name}
+                    </p>
+                  )}
 
                   <p className="text-lg font-medium text-indigo-600 dark:text-indigo-400 mb-4">
                     {formatPrice(gift.price)}

@@ -12,87 +12,63 @@ import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import MySwitch from "@/components/MySwitch";
 import { Category } from "@prisma/client";
 
-// DEMO DATA
-const DATA_categories = [
-  {
-    name: "New Arrivals",
-  },
-  {
-    name: "Sale",
-  },
-  {
-    name: "Backpacks",
-  },
-  {
-    name: "Travel Bags",
-  },
-  {
-    name: "Laptop Sleeves",
-  },
-  {
-    name: "Organization",
-  },
-  {
-    name: "Accessories",
-  },
-];
-
 const DATA_sortOrderRadios = [
-  { name: "Most Popular", id: "Most-Popular" },
-  { name: "Best Rating", id: "Best-Rating" },
-  { name: "Newest", id: "Newest" },
-  { name: "Price Low - Hight", id: "Price-low-hight" },
-  { name: "Price Hight - Low", id: "Price-hight-low" },
+  { name: "Ordem alfabética crescente", id: "A-Z" },
+  { name: "Ordem alfabética decrescente", id: "Z-A" },
+  { name: "Mais Antigos", id: "Oldest" },
+  { name: "Mais Recentes", id: "Newest" },
+  { name: "Preço: Menor para Maior", id: "Price-low-hight" },
+  { name: "Preço: Maior para Menor", id: "Price-hight-low" },
 ];
 
-const PRICE_RANGE = [1, 500];
-//
-const TabFilters = () => {
-  const [isLoadingCategories, setIsLoadingCategories] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [categories, setCategories] = useState<Category[]>([]);
-  const fetchCategories = async () => {
-    try {
-      setIsLoadingCategories(true);
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_NETLIFY_URL}/categories`
-      );
-      if (!res.ok) throw new Error("Falha ao carregar categorias");
-      const data = await res.json();
-      setCategories(data);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Erro desconhecido");
-    } finally {
-      setIsLoadingCategories(false);
-    }
-  };
+const PRICE_RANGE = [0, 1000];
+
+interface TabFiltersProps {
+  categories: Category[];
+  priceRange: number[];
+  setPriceRange: (range: number[]) => void;
+  selectedCategories: string[];
+  setSelectedCategories: (categories: string[]) => void;
+  sortOrder: string;
+  setSortOrder: (order: string) => void;
+  onlyAvailable: boolean;
+  setOnlyAvailable: (available: boolean) => void;
+}
+
+const TabFilters: React.FC<TabFiltersProps> = ({
+  categories,
+  priceRange,
+  setPriceRange,
+  selectedCategories,
+  setSelectedCategories,
+  sortOrder,
+  setSortOrder,
+  onlyAvailable,
+  setOnlyAvailable,
+}) => {
+  const [isOpenMoreFilter, setIsOpenMoreFilter] = useState(false);
+  const [activeFiltersCount, setActiveFiltersCount] = useState(0);
 
   useEffect(() => {
-    fetchCategories();
-  }, []);
-  const [isOpenMoreFilter, setisOpenMoreFilter] = useState(false);
-  //
-  const [isOnSale, setIsIsOnSale] = useState(false);
-  const [rangePrices, setRangePrices] = useState([100, 500]);
-  const [categoriesState, setCategoriesState] = useState<string[]>([]);
-  const [colorsState, setColorsState] = useState<string[]>([]);
-  const [sizesState, setSizesState] = useState<string[]>([]);
-  const [sortOrderStates, setSortOrderStates] = useState<string>("");
+    let count = 0;
+    if (priceRange[0] !== PRICE_RANGE[0] || priceRange[1] !== PRICE_RANGE[1])
+      count++;
+    if (selectedCategories.length > 0) count++;
+    if (onlyAvailable) count++;
+    if (sortOrder) count++;
 
-  //
-  const closeModalMoreFilter = () => setisOpenMoreFilter(false);
-  const openModalMoreFilter = () => setisOpenMoreFilter(true);
+    setActiveFiltersCount(count);
+  }, [priceRange, selectedCategories, onlyAvailable, sortOrder]);
 
-  //
+  const closeModalMoreFilter = () => setIsOpenMoreFilter(false);
+  const openModalMoreFilter = () => setIsOpenMoreFilter(true);
+
   const handleChangeCategories = (checked: boolean, name: string) => {
     checked
-      ? setCategoriesState([...categoriesState, name])
-      : setCategoriesState(categoriesState.filter((i) => i !== name));
+      ? setSelectedCategories([...selectedCategories, name])
+      : setSelectedCategories(selectedCategories.filter((i) => i !== name));
   };
 
-  //
-
-  // OK
   const renderXClear = () => {
     return (
       <span className="flex-shrink-0 w-4 h-4 rounded-full bg-primary-500 text-white flex items-center justify-center ml-3 cursor-pointer">
@@ -112,7 +88,6 @@ const TabFilters = () => {
     );
   };
 
-  // OK
   const renderTabsCategories = () => {
     return (
       <Popover className="relative">
@@ -126,7 +101,7 @@ const TabFilters = () => {
                    : "border-neutral-300 dark:border-neutral-700"
                }
                 ${
-                  !!categoriesState.length
+                  selectedCategories.length
                     ? "!border-primary-500 bg-primary-50 text-primary-900"
                     : "border-neutral-300 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 hover:border-neutral-400 dark:hover:border-neutral-500"
                 }
@@ -180,11 +155,11 @@ const TabFilters = () => {
                 />
               </svg>
 
-              <span className="ml-2">Categories</span>
-              {!categoriesState.length ? (
+              <span className="ml-2">Categorias</span>
+              {!selectedCategories.length ? (
                 <ChevronDownIcon className="w-4 h-4 ml-3" />
               ) : (
-                <span onClick={() => setCategoriesState([])}>
+                <span onClick={() => setSelectedCategories([])}>
                   {renderXClear()}
                 </span>
               )}
@@ -201,23 +176,14 @@ const TabFilters = () => {
               <Popover.Panel className="absolute z-40 w-screen max-w-sm px-4 mt-3 left-0 sm:px-0 lg:max-w-md">
                 <div className="overflow-hidden rounded-2xl shadow-xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700">
                   <div className="relative flex flex-col px-5 py-6 space-y-5">
-                    <Checkbox
-                      name="Todas as Categorias"
-                      label="Todas as Categorias"
-                      defaultChecked={categoriesState.includes(
-                        "Todas as Categorias"
-                      )}
-                      onChange={(checked) =>
-                        handleChangeCategories(checked, "Todas as Categorias")
-                      }
-                    />
-                    <div className="w-full border-b border-neutral-200 dark:border-neutral-700" />
                     {categories.map((item) => (
-                      <div key={item.name} className="">
+                      <div key={item.id} className="">
                         <Checkbox
                           name={item.name}
                           label={item.name}
-                          defaultChecked={categoriesState.includes(item.name)}
+                          defaultChecked={selectedCategories.includes(
+                            item.name
+                          )}
                           onChange={(checked) =>
                             handleChangeCategories(checked, item.name)
                           }
@@ -228,19 +194,13 @@ const TabFilters = () => {
                   <div className="p-5 bg-neutral-50 dark:bg-neutral-900 dark:border-t dark:border-neutral-800 flex items-center justify-between">
                     <ButtonThird
                       onClick={() => {
+                        setSelectedCategories([]);
                         close();
-                        setCategoriesState([]);
                       }}
                       sizeClass="px-4 py-2 sm:px-5"
                     >
-                      Clear
+                      Limpar
                     </ButtonThird>
-                    <ButtonPrimary
-                      onClick={close}
-                      sizeClass="px-4 py-2 sm:px-5"
-                    >
-                      Apply
-                    </ButtonPrimary>
                   </div>
                 </div>
               </Popover.Panel>
@@ -251,7 +211,6 @@ const TabFilters = () => {
     );
   };
 
-  // OK
   const renderTabsSortOrder = () => {
     return (
       <Popover className="relative">
@@ -261,7 +220,7 @@ const TabFilters = () => {
               className={`flex items-center justify-center px-4 py-2 text-sm border rounded-full focus:outline-none select-none
               ${open ? "!border-primary-500 " : ""}
                 ${
-                  !!sortOrderStates.length
+                  sortOrder
                     ? "!border-primary-500 bg-primary-50 text-primary-900"
                     : "border-neutral-300 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 hover:border-neutral-400 dark:hover:border-neutral-500"
                 }
@@ -310,18 +269,14 @@ const TabFilters = () => {
               </svg>
 
               <span className="ml-2">
-                {sortOrderStates
-                  ? DATA_sortOrderRadios.filter(
-                      (i) => i.id === sortOrderStates
-                    )[0].name
-                  : "Sort order"}
+                {sortOrder
+                  ? DATA_sortOrderRadios.find((i) => i.id === sortOrder)?.name
+                  : "Ordenar por"}
               </span>
-              {!sortOrderStates.length ? (
+              {!sortOrder ? (
                 <ChevronDownIcon className="w-4 h-4 ml-3" />
               ) : (
-                <span onClick={() => setSortOrderStates("")}>
-                  {renderXClear()}
-                </span>
+                <span onClick={() => setSortOrder("")}>{renderXClear()}</span>
               )}
             </Popover.Button>
             <Transition
@@ -342,27 +297,21 @@ const TabFilters = () => {
                         key={item.id}
                         name="radioNameSort"
                         label={item.name}
-                        defaultChecked={sortOrderStates === item.id}
-                        onChange={setSortOrderStates}
+                        defaultChecked={sortOrder === item.id}
+                        onChange={setSortOrder}
                       />
                     ))}
                   </div>
                   <div className="p-5 bg-neutral-50 dark:bg-neutral-900 dark:border-t dark:border-neutral-800 flex items-center justify-between">
                     <ButtonThird
                       onClick={() => {
+                        setSortOrder("");
                         close();
-                        setSortOrderStates("");
                       }}
                       sizeClass="px-4 py-2 sm:px-5"
                     >
-                      Clear
+                      Limpar
                     </ButtonThird>
-                    <ButtonPrimary
-                      onClick={close}
-                      sizeClass="px-4 py-2 sm:px-5"
-                    >
-                      Apply
-                    </ButtonPrimary>
                   </div>
                 </div>
               </Popover.Panel>
@@ -373,14 +322,21 @@ const TabFilters = () => {
     );
   };
 
-  // OK
-  const renderTabsPriceRage = () => {
+  const renderTabsPriceRange = () => {
     return (
       <Popover className="relative">
         {({ open, close }) => (
           <>
             <Popover.Button
-              className={`flex items-center justify-center px-4 py-2 text-sm rounded-full border border-primary-500 bg-primary-50 text-primary-900 focus:outline-none `}
+              className={`flex items-center justify-center px-4 py-2 text-sm rounded-full border focus:outline-none select-none
+              ${open ? "!border-primary-500 " : ""}
+              ${
+                priceRange[0] !== PRICE_RANGE[0] ||
+                priceRange[1] !== PRICE_RANGE[1]
+                  ? "!border-primary-500 bg-primary-50 text-primary-900"
+                  : "border-neutral-300 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 hover:border-neutral-400 dark:hover:border-neutral-500"
+              }
+              `}
             >
               <svg
                 className="w-4 h-4"
@@ -411,10 +367,10 @@ const TabFilters = () => {
                 />
               </svg>
 
-              <span className="ml-2 min-w-[90px]">{`${rangePrices[0]}$ - ${rangePrices[1]}$`}</span>
-              {rangePrices[0] === PRICE_RANGE[0] &&
-              rangePrices[1] === PRICE_RANGE[1] ? null : (
-                <span onClick={() => setRangePrices(PRICE_RANGE)}>
+              <span className="ml-2 min-w-[90px]">{`${priceRange[0]} - ${priceRange[1]} R$`}</span>
+              {(priceRange[0] !== PRICE_RANGE[0] ||
+                priceRange[1] !== PRICE_RANGE[1]) && (
+                <span onClick={() => setPriceRange(PRICE_RANGE)}>
                   {renderXClear()}
                 </span>
               )}
@@ -428,21 +384,23 @@ const TabFilters = () => {
               leaveFrom="opacity-100 translate-y-0"
               leaveTo="opacity-0 translate-y-1"
             >
-              <Popover.Panel className="absolute z-40 w-screen max-w-sm px-4 mt-3 left-0 sm:px-0 ">
+              <Popover.Panel className="absolute z-40 w-screen max-w-sm px-4 mt-3 left-0 sm:px-0">
                 <div className="overflow-hidden rounded-2xl shadow-xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700">
                   <div className="relative flex flex-col px-5 py-6 space-y-8">
                     <div className="space-y-5">
-                      <span className="font-medium">Price range</span>
+                      <span className="font-medium">Faixa de preço</span>
                       <Slider
                         range
                         min={PRICE_RANGE[0]}
                         max={PRICE_RANGE[1]}
-                        step={1}
-                        defaultValue={[rangePrices[0], rangePrices[1]]}
+                        step={10}
+                        value={priceRange}
                         allowCross={false}
-                        onChange={(_input: number | number[]) =>
-                          setRangePrices(_input as number[])
-                        }
+                        onChange={(value) => {
+                          if (Array.isArray(value)) {
+                            setPriceRange([value[0], value[1]]);
+                          }
+                        }}
                       />
                     </div>
 
@@ -452,19 +410,27 @@ const TabFilters = () => {
                           htmlFor="minPrice"
                           className="block text-sm font-medium text-neutral-700 dark:text-neutral-300"
                         >
-                          Min price
+                          Preço mínimo
                         </label>
                         <div className="mt-1 relative rounded-md">
                           <span className="absolute inset-y-0 right-4 flex items-center pointer-events-none text-neutral-500 sm:text-sm">
-                            $
+                            R$
                           </span>
                           <input
-                            type="text"
+                            type="number"
                             name="minPrice"
-                            disabled
                             id="minPrice"
                             className="block w-32 pr-10 pl-4 sm:text-sm border-neutral-200 dark:border-neutral-700 rounded-full bg-transparent"
-                            value={rangePrices[0]}
+                            value={priceRange[0]}
+                            onChange={(e) => {
+                              const value = Math.min(
+                                Number(e.target.value),
+                                priceRange[1]
+                              );
+                              setPriceRange([value, priceRange[1]]);
+                            }}
+                            min={PRICE_RANGE[0]}
+                            max={PRICE_RANGE[1]}
                           />
                         </div>
                       </div>
@@ -473,19 +439,27 @@ const TabFilters = () => {
                           htmlFor="maxPrice"
                           className="block text-sm font-medium text-neutral-700 dark:text-neutral-300"
                         >
-                          Max price
+                          Preço máximo
                         </label>
                         <div className="mt-1 relative rounded-md">
                           <span className="absolute inset-y-0 right-4 flex items-center pointer-events-none text-neutral-500 sm:text-sm">
-                            $
+                            R$
                           </span>
                           <input
-                            type="text"
-                            disabled
+                            type="number"
                             name="maxPrice"
                             id="maxPrice"
                             className="block w-32 pr-10 pl-4 sm:text-sm border-neutral-200 dark:border-neutral-700 rounded-full bg-transparent"
-                            value={rangePrices[1]}
+                            value={priceRange[1]}
+                            onChange={(e) => {
+                              const value = Math.max(
+                                Number(e.target.value),
+                                priceRange[0]
+                              );
+                              setPriceRange([priceRange[0], value]);
+                            }}
+                            min={PRICE_RANGE[0]}
+                            max={PRICE_RANGE[1]}
                           />
                         </div>
                       </div>
@@ -494,19 +468,13 @@ const TabFilters = () => {
                   <div className="p-5 bg-neutral-50 dark:bg-neutral-900 dark:border-t dark:border-neutral-800 flex items-center justify-between">
                     <ButtonThird
                       onClick={() => {
-                        setRangePrices(PRICE_RANGE);
+                        setPriceRange(PRICE_RANGE);
                         close();
                       }}
                       sizeClass="px-4 py-2 sm:px-5"
                     >
-                      Clear
+                      Limpar
                     </ButtonThird>
-                    <ButtonPrimary
-                      onClick={close}
-                      sizeClass="px-4 py-2 sm:px-5"
-                    >
-                      Apply
-                    </ButtonPrimary>
                   </div>
                 </div>
               </Popover.Panel>
@@ -517,16 +485,15 @@ const TabFilters = () => {
     );
   };
 
-  // OK
   const renderTabIsOnsale = () => {
     return (
       <div
         className={`flex items-center justify-center px-4 py-2 text-sm rounded-full border focus:outline-none cursor-pointer select-none ${
-          isOnSale
+          onlyAvailable
             ? "border-primary-500 bg-primary-50 text-primary-900"
             : "border-neutral-300 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 hover:border-neutral-400 dark:hover:border-neutral-500"
         }`}
-        onClick={() => setIsIsOnSale(!isOnSale)}
+        onClick={() => setOnlyAvailable(!onlyAvailable)}
       >
         <svg
           className="w-4 h-4"
@@ -564,50 +531,17 @@ const TabFilters = () => {
           />
         </svg>
 
-        <span className="line-clamp-1 ml-2">On sale</span>
-        {isOnSale && renderXClear()}
+        <span className="line-clamp-1 ml-2">Disponíveis</span>
+        {onlyAvailable && renderXClear()}
       </div>
     );
   };
 
-  // OK
-  const renderMoreFilterItem = (data: Category[]) => {
-    const list1 = data.filter((_, i) => i < data.length / 2);
-    const list2 = data.filter((_, i) => i >= data.length / 2);
-    return (
-      <div className="grid grid-cols-2 gap-x-4 sm:gap-x-8 gap-8">
-        <div className="flex flex-col space-y-5">
-          {list1.map((item) => (
-            <Checkbox
-              key={item.name}
-              name={item.name}
-              subLabel={item.description || ""}
-              label={item.name}
-              // defaultChecked={!!item.defaultChecked}
-            />
-          ))}
-        </div>
-        <div className="flex flex-col space-y-5">
-          {list2.map((item) => (
-            <Checkbox
-              key={item.name}
-              name={item.name}
-              subLabel={item.description || ""}
-              label={item.name}
-              // defaultChecked={!!item.defaultChecked}
-            />
-          ))}
-        </div>
-      </div>
-    );
-  };
-
-  // FOR RESPONSIVE MOBILE
   const renderTabMobileFilter = () => {
     return (
-      <div className="flex-shrink-0">
+      <div className="w-full">
         <div
-          className={`flex flex-shrink-0 items-center justify-center px-4 py-2 text-sm rounded-full border border-primary-500 bg-primary-50 text-primary-900 focus:outline-none cursor-pointer select-none`}
+          className={`flex w-full items-center justify-center px-4 py-2 text-sm rounded-full border border-primary-500 bg-primary-50 text-primary-900 focus:outline-none cursor-pointer select-none`}
           onClick={openModalMoreFilter}
         >
           <svg
@@ -666,8 +600,8 @@ const TabFilters = () => {
             />
           </svg>
 
-          <span className="ml-2">Adicionar Filtros (3)</span>
-          {renderXClear()}
+          <span className="ml-2">Filtros ({activeFiltersCount})</span>
+          {activeFiltersCount > 0 && renderXClear()}
         </div>
 
         <Transition appear show={isOpenMoreFilter} as={Fragment}>
@@ -689,7 +623,6 @@ const TabFilters = () => {
                 <Dialog.Overlay className="fixed inset-0 bg-black bg-opacity-40 dark:bg-opacity-60" />
               </Transition.Child>
 
-              {/* This element is to trick the browser into centering the modal contents. */}
               <span
                 className="inline-block h-screen align-middle"
                 aria-hidden="true"
@@ -711,7 +644,7 @@ const TabFilters = () => {
                       as="h3"
                       className="text-lg font-medium leading-6 text-gray-900"
                     >
-                      Adicionar Filtros
+                      Filtros
                     </Dialog.Title>
                     <span className="absolute left-3 top-3">
                       <ButtonClose onClick={closeModalMoreFilter} />
@@ -720,120 +653,145 @@ const TabFilters = () => {
 
                   <div className="flex-grow overflow-y-auto">
                     <div className="px-6 sm:px-8 md:px-10 divide-y divide-neutral-200 dark:divide-neutral-800">
-                      {/* --------- */}
-                      {/* ---- */}
+                      {/* Categorias */}
                       <div className="py-7">
                         <h3 className="text-xl font-medium">Categorias</h3>
-                        <div className="mt-6 relative ">
-                          {renderMoreFilterItem(categories)}
+                        <div className="mt-6 relative grid grid-cols-1 gap-6">
+                          {categories.map((item) => (
+                            <Checkbox
+                              key={item.id}
+                              name={item.name}
+                              label={item.name}
+                              subLabel={item.description || ""}
+                              defaultChecked={selectedCategories.includes(
+                                item.name
+                              )}
+                              onChange={(checked) =>
+                                handleChangeCategories(checked, item.name)
+                              }
+                              className="items-center"
+                            />
+                          ))}
                         </div>
                       </div>
-                      {/* --------- */}
-                      {/* ---- */}
+
+                      {/* Faixa de preço */}
                       <div className="py-7">
-                        <h3 className="text-xl font-medium">Range Prices</h3>
-                        <div className="mt-6 relative ">
-                          <div className="relative flex flex-col space-y-8">
-                            <div className="space-y-5">
-                              <Slider
-                                range
-                                className="text-red-400"
-                                min={PRICE_RANGE[0]}
-                                max={PRICE_RANGE[1]}
-                                defaultValue={rangePrices}
-                                allowCross={false}
-                                onChange={(_input: number | number[]) =>
-                                  setRangePrices(_input as number[])
+                        <h3 className="text-xl font-medium">Faixa de preço</h3>
+                        <div className="mt-6 relative">
+                          <div className="space-y-5 mb-6">
+                            <Slider
+                              range
+                              min={PRICE_RANGE[0]}
+                              max={PRICE_RANGE[1]}
+                              step={10}
+                              value={priceRange}
+                              allowCross={false}
+                              onChange={(value) => {
+                                if (Array.isArray(value)) {
+                                  setPriceRange([value[0], value[1]]);
                                 }
-                              />
-                            </div>
+                              }}
+                            />
+                          </div>
 
-                            <div className="flex justify-between space-x-5">
-                              <div>
-                                <label
-                                  htmlFor="minPrice"
-                                  className="block text-sm font-medium text-neutral-700 dark:text-neutral-300"
-                                >
-                                  Min price
-                                </label>
-                                <div className="mt-1 relative rounded-md">
-                                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <span className="text-neutral-500 sm:text-sm">
-                                      $
-                                    </span>
-                                  </div>
-                                  <input
-                                    type="text"
-                                    name="minPrice"
-                                    disabled
-                                    id="minPrice"
-                                    className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-3 sm:text-sm border-neutral-200 rounded-full text-neutral-900"
-                                    value={rangePrices[0]}
-                                  />
-                                </div>
+                          <div className="flex justify-between space-x-5">
+                            <div className="flex-1">
+                              <label
+                                htmlFor="minPrice"
+                                className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1"
+                              >
+                                Mínimo
+                              </label>
+                              <div className="relative rounded-md">
+                                <span className="absolute inset-y-0 left-3 flex items-center pointer-events-none text-neutral-500 sm:text-sm">
+                                  R$
+                                </span>
+                                <input
+                                  type="number"
+                                  name="minPrice"
+                                  id="minPrice"
+                                  className="block w-full pl-10 pr-3 py-2 sm:text-sm border-neutral-200 dark:border-neutral-700 rounded-full bg-transparent"
+                                  value={priceRange[0]}
+                                  onChange={(e) => {
+                                    const value = Math.min(
+                                      Number(e.target.value),
+                                      priceRange[1]
+                                    );
+                                    setPriceRange([value, priceRange[1]]);
+                                  }}
+                                  min={PRICE_RANGE[0]}
+                                  max={PRICE_RANGE[1]}
+                                />
                               </div>
-                              <div>
-                                <label
-                                  htmlFor="maxPrice"
-                                  className="block text-sm font-medium text-neutral-700 dark:text-neutral-300"
-                                >
-                                  Max price
-                                </label>
-                                <div className="mt-1 relative rounded-md">
-                                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <span className="text-neutral-500 sm:text-sm">
-                                      $
-                                    </span>
-                                  </div>
-                                  <input
-                                    type="text"
-                                    disabled
-                                    name="maxPrice"
-                                    id="maxPrice"
-                                    className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-3 sm:text-sm border-neutral-200 rounded-full text-neutral-900"
-                                    value={rangePrices[1]}
-                                  />
-                                </div>
+                            </div>
+                            <div className="flex-1">
+                              <label
+                                htmlFor="maxPrice"
+                                className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1"
+                              >
+                                Máximo
+                              </label>
+                              <div className="relative rounded-md">
+                                <span className="absolute inset-y-0 left-3 flex items-center pointer-events-none text-neutral-500 sm:text-sm">
+                                  R$
+                                </span>
+                                <input
+                                  type="number"
+                                  name="maxPrice"
+                                  id="maxPrice"
+                                  className="block w-full pl-10 pr-3 py-2 sm:text-sm border-neutral-200 dark:border-neutral-700 rounded-full bg-transparent"
+                                  value={priceRange[1]}
+                                  onChange={(e) => {
+                                    const value = Math.max(
+                                      Number(e.target.value),
+                                      priceRange[0]
+                                    );
+                                    setPriceRange([priceRange[0], value]);
+                                  }}
+                                  min={PRICE_RANGE[0]}
+                                  max={PRICE_RANGE[1]}
+                                />
                               </div>
                             </div>
                           </div>
                         </div>
                       </div>
 
-                      {/* --------- */}
-                      {/* ---- */}
+                      {/* Ordenação */}
                       <div className="py-7">
-                        <h3 className="text-xl font-medium">Sort Order</h3>
-                        <div className="mt-6 relative ">
-                          <div className="relative flex flex-col space-y-5">
-                            {DATA_sortOrderRadios.map((item) => (
-                              <Radio
-                                id={item.id}
-                                key={item.id}
-                                name="radioNameSort"
-                                label={item.name}
-                                defaultChecked={sortOrderStates === item.id}
-                                onChange={setSortOrderStates}
-                              />
-                            ))}
-                          </div>
+                        <h3 className="text-xl font-medium">Ordenação</h3>
+                        <div className="mt-6 relative space-y-4">
+                          {DATA_sortOrderRadios.map((item) => (
+                            <Radio
+                              id={item.id}
+                              key={item.id}
+                              name="radioNameSort"
+                              label={item.name}
+                              defaultChecked={sortOrder === item.id}
+                              onChange={setSortOrder}
+                            />
+                          ))}
                         </div>
                       </div>
 
-                      {/* --------- */}
-                      {/* ---- */}
+                      {/* Disponibilidade */}
                       <div className="py-7">
-                        <h3 className="text-xl font-medium">Em estoque</h3>
-                        <div className="mt-6 relative ">
+                        <h3 className="text-xl font-medium">Disponibilidade</h3>
+                        <div className="mt-6 relative">
                           <MySwitch
-                            label={isOnSale ? "Somente disponíveis!" : "Todos!"}
-                            desc={
-                              isOnSale
-                                ? "Presentes atualmente disponíveis"
-                                : "Todos os presentes cadastrados"
+                            label={
+                              onlyAvailable
+                                ? "Somente disponíveis"
+                                : "Todos os itens"
                             }
-                            enabled={isOnSale}
-                            onChange={setIsIsOnSale}
+                            desc={
+                              onlyAvailable
+                                ? "Mostrar apenas presentes disponíveis"
+                                : "Mostrar todos os presentes"
+                            }
+                            enabled={onlyAvailable}
+                            onChange={setOnlyAvailable}
                           />
                         </div>
                       </div>
@@ -843,21 +801,20 @@ const TabFilters = () => {
                   <div className="p-6 flex-shrink-0 bg-neutral-50 dark:bg-neutral-900 dark:border-t dark:border-neutral-800 flex items-center justify-between">
                     <ButtonThird
                       onClick={() => {
-                        setRangePrices(PRICE_RANGE);
-                        setCategoriesState([]);
-                        setColorsState([]);
-                        setSortOrderStates("");
-                        closeModalMoreFilter();
+                        setPriceRange(PRICE_RANGE);
+                        setSelectedCategories([]);
+                        setSortOrder("");
+                        setOnlyAvailable(false);
                       }}
                       sizeClass="px-4 py-2 sm:px-5"
                     >
-                      Limpar
+                      Limpar tudo
                     </ButtonThird>
                     <ButtonPrimary
                       onClick={closeModalMoreFilter}
                       sizeClass="px-4 py-2 sm:px-5"
                     >
-                      Aplicar
+                      Aplicar filtros
                     </ButtonPrimary>
                   </div>
                 </div>
@@ -874,13 +831,13 @@ const TabFilters = () => {
       {/* FOR DESKTOP */}
       <div className="hidden lg:flex flex-1 space-x-4">
         {renderTabsCategories()}
-        {renderTabsPriceRage()}
+        {renderTabsPriceRange()}
         {renderTabIsOnsale()}
         <div className="!ml-auto">{renderTabsSortOrder()}</div>
       </div>
 
       {/* FOR RESPONSIVE MOBILE */}
-      <div className="flex overflow-x-auto lg:hidden space-x-4">
+      <div className="w-full flex overflow-x-auto lg:hidden space-x-4">
         {renderTabMobileFilter()}
       </div>
     </div>
