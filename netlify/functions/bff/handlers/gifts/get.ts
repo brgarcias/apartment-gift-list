@@ -9,6 +9,9 @@ export const getGifts = async (): Promise<HandlerResponse> => {
       include: {
         Category: true,
       },
+      orderBy: {
+        name: "asc",
+      },
     });
 
     return jsonResponse(200, gifts);
