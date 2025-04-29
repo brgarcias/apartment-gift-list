@@ -229,25 +229,29 @@ export default function GiftList() {
             {filteredGifts.map((gift) => (
               <div
                 key={gift.id}
-                className={`bg-white dark:bg-slate-800 rounded-lg shadow-md dark:shadow-slate-700/30 overflow-hidden hover:shadow-lg dark:hover:shadow-slate-700/50 transition-shadow duration-300 ${
+                className={`bg-white dark:bg-slate-800 rounded-lg shadow-md dark:shadow-slate-700/30 overflow-hidden hover:shadow-lg dark:hover:shadow-slate-700/50 transition-shadow duration-300 flex flex-col ${
                   gift.status.toLocaleLowerCase() !== GiftStatusEnum.AVAILABLE
                     ? "opacity-70"
                     : ""
                 }`}
+                style={{ minHeight: "450px" }} // Altura mínima para consistência
               >
-                <div className="h-48 bg-indigo-50 dark:bg-slate-700 flex items-center justify-center">
+                {/* Bloco 1: Imagem (altura fixa) */}
+                <div className="h-48 bg-indigo-50 dark:bg-slate-700 flex items-center justify-center p-4">
                   <Image
                     src={gift.imageUrl}
                     alt={gift.name}
-                    width={120}
-                    height={120}
-                    className="object-contain"
+                    width={200}
+                    height={200}
+                    className="object-contain h-full w-full"
+                    style={{ maxHeight: "100%", maxWidth: "100%" }}
                   />
                 </div>
 
-                <div className="p-6">
+                {/* Bloco 2: Conteúdo (flexível) */}
+                <div className="p-6 flex-grow flex flex-col">
                   <div className="flex justify-between items-start mb-2">
-                    <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
+                    <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200 line-clamp-2">
                       {gift.name}
                     </h2>
                     {getStatusBadge(gift.status)}
@@ -259,7 +263,7 @@ export default function GiftList() {
                     </p>
                   )}
 
-                  <p className="text-lg font-medium text-indigo-600 dark:text-indigo-400 mb-4">
+                  <p className="text-lg font-medium text-indigo-600 dark:text-indigo-400 my-2">
                     {formatPrice(gift.price)}
                   </p>
 
@@ -281,11 +285,14 @@ export default function GiftList() {
                       })}
                     </p>
                   </div>
+                </div>
 
+                {/* Bloco 3: Footer (altura fixa) */}
+                <div className="p-6 pt-0">
                   <ButtonPrimary
                     onClick={() => router.push(`/gifts/${gift.id}`)}
-                    sizeClass="px-2 py-2 lg:px-4 lg:py-2"
-                    fontSize="text-sm sm:text-base lg:text-md font-sm"
+                    sizeClass="px-4 py-2 w-full"
+                    fontSize="text-sm sm:text-base font-medium"
                     className="transition-colors duration-300"
                   >
                     Ver detalhes
