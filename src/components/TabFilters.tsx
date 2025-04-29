@@ -181,12 +181,14 @@ const TabFilters: React.FC<TabFiltersProps> = ({
                         <Checkbox
                           name={item.name}
                           label={item.name}
+                          subLabel={item.description || ""}
                           defaultChecked={selectedCategories.includes(
                             item.name
                           )}
                           onChange={(checked) =>
                             handleChangeCategories(checked, item.name)
                           }
+                          className="items-center"
                         />
                       </div>
                     ))}
@@ -663,9 +665,7 @@ const TabFilters: React.FC<TabFiltersProps> = ({
                               name={item.name}
                               label={item.name}
                               subLabel={item.description || ""}
-                              defaultChecked={selectedCategories.includes(
-                                item.name
-                              )}
+                              checked={selectedCategories.includes(item.name)}
                               onChange={(checked) =>
                                 handleChangeCategories(checked, item.name)
                               }
@@ -768,7 +768,7 @@ const TabFilters: React.FC<TabFiltersProps> = ({
                               key={item.id}
                               name="radioNameSort"
                               label={item.name}
-                              defaultChecked={sortOrder === item.id}
+                              checked={sortOrder === item.id}
                               onChange={setSortOrder}
                             />
                           ))}
