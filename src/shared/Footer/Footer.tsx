@@ -1,7 +1,10 @@
+"use client";
+
 import Logo from "@/shared/Logo/Logo";
 import SocialsList1 from "@/shared/SocialsList1/SocialsList1";
 import { CustomLink } from "@/data/types";
-import React from "react";
+import React, { useState } from "react";
+import Modal from "@/components/Modal/Modal";
 
 export interface WidgetFooterMenu {
   id: string;
@@ -10,74 +13,141 @@ export interface WidgetFooterMenu {
 }
 
 const Footer: React.FC = () => {
+  const currentYear = new Date().getFullYear();
+  const [isOpenMoreFilter, setisOpenMoreFilter] = useState(false);
+
   return (
-    <div className="nc-Footer relative py-5 lg:pt-28 lg:pb-24 border-t border-neutral-200 dark:border-neutral-700">
-      <div className="container grid grid-cols-2 gap-y-10 gap-x-5 sm:gap-x-8 md:grid-cols-4 lg:grid-cols-5 lg:gap-x-10 xl:gap-x-20">
-        <div className="grid grid-cols-4 gap-5 col-span-2 md:col-span-4 lg:col-span-1 lg:block">
-          <div className="col-span-2 md:col-span-1 lg:mb-10">
-            <Logo />
+    <footer className="nc-Footer bg-neutral-50 dark:bg-neutral-900 text-neutral-700 dark:text-neutral-300">
+      <div className="container mx-auto px-4 py-10 lg:py-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-12">
+          {/* Logo and Socials */}
+          <div className="lg:col-span-2 space-y-4">
+            <div className="w-40 h-auto">
+              <Logo />
+            </div>
+            <p className="text-sm leading-relaxed opacity-80 max-w-md">
+              Nos ajude a construir nossa casa com o presente perfeito. Navegue
+              por nossa seleção de presentes e faça a gente feliz!
+            </p>
+            <div className="flex space-x-4 lg:space-x-6">
+              <SocialsList1 className="flex items-center space-x-4" />
+            </div>
           </div>
-          <div className="col-span-2 flex items-center justify-end md:col-span-3 lg:block">
-            <SocialsList1 className="flex items-center space-x-2 lg:space-x-0 lg:flex-col lg:space-y-3 lg:items-start" />
+
+          {/* Information Links */}
+          <div>
+            <h3 className="text-lg font-semibold text-neutral-800 dark:text-white mb-2 uppercase tracking-wider">
+              Informações
+            </h3>
+            <ul className="space-y-3">
+              <li>
+                <a
+                  href="/about"
+                  className="transition-colors duration-200 hover:text-primary-600 dark:hover:text-primary-400"
+                  aria-label="About us"
+                >
+                  Sobre a Festa
+                </a>
+              </li>
+              <li>
+                <a
+                  onClick={() => setisOpenMoreFilter(true)}
+                  className="transition-colors duration-200 hover:text-primary-600 dark:hover:text-primary-400"
+                  aria-label="How it works"
+                >
+                  Como Funciona
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          {/* Contact Information */}
+          <div>
+            <h3 className="text-lg font-semibold text-neutral-800 dark:text-white mb-2 uppercase tracking-wider">
+              Contato
+            </h3>
+            <address className="not-italic space-y-3">
+              <div className="flex items-start">
+                <svg
+                  className="w-5 h-5 mt-0.5 mr-3 text-primary-600 dark:text-primary-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={1.5}
+                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                  />
+                </svg>
+                <a
+                  href="mailto:amanda0bruno@gmail.com"
+                  className="transition-colors duration-200 hover:text-primary-600 dark:hover:text-primary-400"
+                >
+                  amanda0bruno@gmail.com
+                </a>
+              </div>
+              <div className="flex items-start">
+                <svg
+                  className="w-5 h-5 mt-0.5 mr-3 text-primary-600 dark:text-primary-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={1.5}
+                    d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+                  />
+                </svg>
+                <div className="space-y-1">
+                  <a
+                    href="tel:+5511996969301"
+                    className="block transition-colors duration-200 hover:text-primary-600 dark:hover:text-primary-400"
+                  >
+                    +55 (11) 99696-9301
+                  </a>
+                  <a
+                    href="tel:+5511996240704"
+                    className="block transition-colors duration-200 hover:text-primary-600 dark:hover:text-primary-400"
+                  >
+                    +55 (11) 99624-0704
+                  </a>
+                </div>
+              </div>
+            </address>
           </div>
         </div>
 
-        <div className="col-span-2 md:col-span-2 lg:col-span-1">
-          <h2 className="font-semibold text-neutral-700 dark:text-neutral-200">
-            Informações
-          </h2>
-          <ul className="mt-5 space-y-4">
-            <li>
-              <a
-                href="#"
-                className="text-neutral-6000 dark:text-neutral-300 hover:text-black dark:hover:text-white"
-              >
-                Sobre
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className="text-neutral-6000 dark:text-neutral-300 hover:text-black dark:hover:text-white"
-              >
-                Como Funciona
-              </a>
-            </li>
-          </ul>
-        </div>
-
-        <div className="col-span-2 md:col-span-2 lg:col-span-1">
-          <h2 className="font-semibold text-neutral-700 dark:text-neutral-200">
-            Contato
-          </h2>
-          <ul className="mt-5 space-y-4">
-            <li className="text-neutral-6000 dark:text-neutral-300">
-              amanda0bruno@gmail.com
-            </li>
-            <li className="text-neutral-6000 dark:text-neutral-300">
-              +55 (11) 99696-9301
-            </li>
-            <li className="text-neutral-6000 dark:text-neutral-300">
-              +55 (11) 99624-0704
-            </li>
-          </ul>
-        </div>
-
-        <div className="col-span-2 md:col-span-2 lg:col-span-2 lg:text-right">
-          <div className="text-sm text-neutral-6000 dark:text-neutral-300">
-            © {new Date().getFullYear()} All rights reserved. Made with ❤️ by{" "}
+        {/* Copyright */}
+        <div className="border-t border-neutral-200 dark:border-neutral-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+          <div className="text-sm opacity-80 mb-4 md:mb-0">
+            © {currentYear} All rights reserved.
+          </div>
+          <div className="text-sm">
+            Made with <span className="text-red-500">❤️</span> by{" "}
             <a
               href="https://brgarcias-portfolio.netlify.app/"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-neutral-900 dark:text-neutral-100 hover:text-black dark:hover:text-white"
+              className="font-medium text-primary-600 dark:text-primary-400 hover:underline"
+              aria-label="Visit developer's portfolio"
             >
               brgarcias
             </a>
           </div>
         </div>
       </div>
-    </div>
+
+      <Modal
+        isOpenMoreFilter={isOpenMoreFilter}
+        setisOpenMoreFilter={setisOpenMoreFilter}
+      />
+    </footer>
   );
 };
 
