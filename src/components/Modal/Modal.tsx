@@ -146,7 +146,7 @@ const Modal: FC<ModalProps> = ({ isOpenMoreFilter, setisOpenMoreFilter }) => {
                         Entrega do Presente
                       </h4>
                       <p className="text-neutral-600 dark:text-neutral-400">
-                        O presente pode ser entregue na festa ou combine os
+                        O presente pode ser entregue na festa ou combine com os
                         noivos. Não se preocupe, não abriremos o presente antes
                         do evento!
                       </p>
