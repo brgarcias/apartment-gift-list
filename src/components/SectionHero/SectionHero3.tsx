@@ -3,7 +3,7 @@
 import React, { FC, Fragment, useState } from "react";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import backgroundPattern from "@/images/Moon.svg";
-import imageAp from "@/images/ap.jpg";
+import imageNoivos from "@/images/foto-noivos.png";
 import Image from "next/image";
 import Modal from "../Modal/Modal";
 
@@ -48,12 +48,12 @@ const SectionPromo2: FC<SectionPromo2Props> = ({ className = "lg:pt-10" }) => {
         </div>
 
         <div className="relative lg:w-[45%] flex items-center justify-center z-10">
-          <div className="bg-white dark:bg-slate-700 p-3 sm:p-4 rounded-xl shadow-lg w-full max-w-md aspect-[4/3] lg:aspect-auto lg:h-[400px] xl:h-[450px] overflow-hidden">
+          <div className="bg-white dark:bg-slate-700 p-3 sm:p-4 rounded-xl shadow-lg w-full aspect-[4/3] lg:aspect-auto lg:h-[400px] xl:h-[450px] overflow-hidden">
             <Image
               fill
               className="w-full h-full object-cover rounded-lg"
-              src={imageAp}
-              alt="Nosso apartamento"
+              src={imageNoivos}
+              alt="Noivos"
               sizes="(max-width: 1023px) 100vw, 50vw"
               priority
             />

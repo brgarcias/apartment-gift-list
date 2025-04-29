@@ -79,17 +79,29 @@ const Footer: React.FC = () => {
   };
 
   return (
-    <div className="nc-Footer relative py-20 lg:pt-28 lg:pb-24 border-t border-neutral-200 dark:border-neutral-700">
+    <div className="nc-Footer relative py-5 lg:pt-28 lg:pb-24 border-t border-neutral-200 dark:border-neutral-700">
       <div className="container grid grid-cols-2 gap-y-10 gap-x-5 sm:gap-x-8 md:grid-cols-4 lg:grid-cols-5 lg:gap-x-10 ">
         <div className="grid grid-cols-4 gap-5 col-span-2 md:col-span-4 lg:md:col-span-1 lg:flex lg:flex-col">
           <div className="col-span-2 md:col-span-1">
             <Logo />
           </div>
-          <div className="col-span-2 flex items-center md:col-span-3">
+          <div className="col-span-2 flex items-center md:col-span-3 justify-end">
             <SocialsList1 className="flex items-center space-x-2 lg:space-x-0 lg:flex-col lg:space-y-3 lg:items-start" />
           </div>
         </div>
-        {widgetMenus.map(renderWidgetMenuItem)}
+        <div className="col-span-2 md:col-span-4 lg:md:col-span-1 lg:flex lg:flex-col">
+          <div className="text-sm text-neutral-6000 dark:text-neutral-300">
+            © {new Date().getFullYear()} All rights reserved. Made with ❤️ by{" "}
+            <a
+              href="https://brgarcias-portfolio.netlify.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-neutral-900 dark:text-neutral-100 hover:text-black dark:hover:text-white"
+            >
+              brgarcias
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   );

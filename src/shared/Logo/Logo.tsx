@@ -1,6 +1,5 @@
 import React from "react";
-import logoImg from "@/images/logo.svg";
-import logoLightImg from "@/images/logo-light.svg";
+import logoImg from "@/images/logo.png";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -12,7 +11,7 @@ export interface LogoProps {
 
 const Logo: React.FC<LogoProps> = ({
   img = logoImg,
-  imgLight = logoLightImg,
+  imgLight, // Removemos o valor padrão pois vamos usar CSS
   className = "flex-shrink-0",
 }) => {
   return (
@@ -20,29 +19,26 @@ const Logo: React.FC<LogoProps> = ({
       href="/"
       className={`ttnc-logo inline-block text-slate-600 ${className}`}
     >
-      {/* THIS USE FOR MY CLIENT */}
-      {/* PLEASE UN COMMENT BELLOW CODE AND USE IT */}
       {img ? (
-        <Image
-          className={`block h-8 sm:h-10 w-auto ${
-            imgLight ? "dark:hidden" : ""
-          }`}
-          src={img}
-          alt="Logo"
-          sizes="200px"
-          priority
-        />
+        <>
+          <Image
+            className={`block h-12 sm:h-10 w-auto dark:hidden`}
+            src={img}
+            alt="Logo"
+            sizes="200px"
+            priority
+          />
+
+          <Image
+            className={`hidden dark:block h-12 sm:h-10 w-auto filter invert brightness-0 dark:brightness-100`}
+            src={img}
+            alt="Logo"
+            sizes="200px"
+            priority
+          />
+        </>
       ) : (
         "Logo Here"
-      )}
-      {imgLight && (
-        <Image
-          className="hidden h-8 sm:h-10 w-auto dark:block"
-          src={imgLight}
-          alt="Logo-Light"
-          sizes="200px"
-          priority
-        />
       )}
     </Link>
   );
