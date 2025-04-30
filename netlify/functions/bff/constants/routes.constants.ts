@@ -1,3 +1,4 @@
+import { get } from "http";
 import { getAuthUser, signin, signout, signup } from "../handlers/auth/auth";
 import authCheck from "../handlers/auth/auth.check";
 import { getCategories } from "../handlers/categories/get";
@@ -10,6 +11,7 @@ import {
 } from "../handlers/orders/get";
 import { getUserById } from "../handlers/users/get";
 import { RouteTable } from "../types/routes.types";
+import { updateUserById } from "../handlers/users/update";
 
 export const ROUTES: RouteTable = {
   "/gifts": {
@@ -32,6 +34,9 @@ export const ROUTES: RouteTable = {
   },
   "/users/:id": {
     GET: getUserById,
+  },
+  "/users/update/:id": {
+    PATCH: updateUserById,
   },
   "/categories": {
     GET: getCategories,
