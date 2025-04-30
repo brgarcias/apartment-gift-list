@@ -221,7 +221,7 @@ const AccountPage = () => {
                 </div>
               </div>
               <div className="flex-grow mt-10 md:mt-0 md:pl-16 max-w-3xl space-y-6">
-                <div>
+                <div className="max-w-lg">
                   <Label>Nome completo</Label>
                   <Input
                     className="mt-1.5"
