@@ -85,10 +85,8 @@ export default function AvatarDropdown() {
   };
 
   useEffect(() => {
-    if (user) {
-      setIsLoading(false);
-    }
-  }, [user]);
+    setIsLoading(isLoggedIn && !user);
+  }, [isLoggedIn, user]);
 
   const SkeletonLoader = () => (
     <div className="AvatarDropdown">
@@ -125,7 +123,7 @@ export default function AvatarDropdown() {
               {({ open, close }) => (
                 <>
                   <Popover.Button
-                    className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none flex items-center justify-center`}
+                    className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none flex items-center justify-center transition duration-150 ease`}
                   >
                     <svg
                       className=" w-6 h-6"
