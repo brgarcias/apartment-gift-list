@@ -16,6 +16,7 @@ interface AuthContextType {
   login: (userData: User) => void;
   logout: () => void;
   checkAuth: () => Promise<void>;
+  isLoading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -23,6 +24,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   const login = (userData: User) => {
     setIsLoggedIn(true);
@@ -35,6 +37,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const checkAuth = useCallback(async () => {
+    setIsLoading(true);
     try {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_NETLIFY_URL}/auth/users`,
@@ -51,6 +54,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
     } catch (error) {
       logout();
+    } finally {
+      setIsLoading(false);
     }
   }, []);
 
@@ -60,7 +65,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   return (
     <AuthContext.Provider
-      value={{ isLoggedIn, user, login, logout, checkAuth }}
+      value={{ isLoggedIn, user, login, logout, checkAuth, isLoading }}
     >
       {children}
     </AuthContext.Provider>

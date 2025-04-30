@@ -3,7 +3,7 @@
 import { createContext, useContext, useState, ReactNode } from "react";
 import { Toast } from "@/components/Toast/Toast";
 
-type ToastType = "success" | "error";
+type ToastType = "success" | "error" | "info" | "warning";
 
 interface ToastContextType {
   showToast: (message: string, type: ToastType, duration?: number) => void;
