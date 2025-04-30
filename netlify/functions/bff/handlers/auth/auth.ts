@@ -79,6 +79,7 @@ export const signin = async (event: HandlerEvent): Promise<HandlerResponse> => {
       id: userFinded.id,
       name: userFinded.name,
       birthDate: userFinded.birthDate,
+      profileImage: userFinded.profileImage,
     });
 
     const cookieHeader = [
