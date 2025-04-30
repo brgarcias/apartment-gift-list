@@ -58,7 +58,7 @@ export const signin = async (event: HandlerEvent): Promise<HandlerResponse> => {
     }
 
     const sessionToken = randomBytes(32).toString("hex");
-    const sessionDuration = 24 * 60 * 60;
+    const sessionDuration = 60 * 60 * 24 * 7;
 
     const sessionData = {
       userId: userFinded.id,
