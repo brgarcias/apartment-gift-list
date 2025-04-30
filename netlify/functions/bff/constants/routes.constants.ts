@@ -12,6 +12,7 @@ import {
 import { getUserById } from "../handlers/users/get";
 import { RouteTable } from "../types/routes.types";
 import { updateUserById } from "../handlers/users/update";
+import { uploadImage } from "../handlers/google-drive/upload";
 
 export const ROUTES: RouteTable = {
   "/gifts": {
@@ -52,5 +53,8 @@ export const ROUTES: RouteTable = {
   },
   "/auth/users": {
     GET: getAuthUser,
+  },
+  "/drive/upload/:id": {
+    POST: uploadImage,
   },
 };

@@ -14,15 +14,42 @@ export const updateUserById = async (
     if (!body) {
       return errorResponse(400, "Invalid request body");
     }
-    const { name, birthDate } = body;
+    const { name, birthDate, profileImage } = body;
 
-    if (!name || !birthDate) {
-      return errorResponse(400, "Name or birth date are required");
+    if (!name || !birthDate || !profileImage) {
+      return errorResponse(
+        400,
+        "Name, birth date or profile image are required"
+      );
     }
 
     const updatedUser = await prisma.user.update({
       where: { id: parseInt(userId) },
-      data: { name, birthDate },
+      data: { name, birthDate, profileImage },
+    });
+
+    return jsonResponse(200, updatedUser);
+  } catch (error) {
+    console.error("Error updating user by ID:", error);
+    return errorResponse(500, "Failed to update user by ID");
+  }
+};
+
+export const uploadProfileImage = async (
+  userId: string,
+  profileImage: string
+): Promise<HandlerResponse> => {
+  if (!userId || isNaN(parseInt(userId))) {
+    return errorResponse(400, "Invalid user ID");
+  }
+  try {
+    if (!profileImage) {
+      return errorResponse(400, "Profile image is required");
+    }
+
+    const updatedUser = await prisma.user.update({
+      where: { id: parseInt(userId) },
+      data: { profileImage },
     });
 
     return jsonResponse(200, updatedUser);

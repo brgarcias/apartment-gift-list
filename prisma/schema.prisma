@@ -33,11 +33,12 @@ model Gift {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  name      String
-  birthDate String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id           Int      @id @default(autoincrement())
+  name         String
+  birthDate    String
+  profileImage String?  @default("")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
   orders       Order[]
   reservations Reservation[]

@@ -93,7 +93,11 @@ export default function AvatarDropdown() {
                     <div className="relative grid grid-cols-1 gap-6 bg-white dark:bg-neutral-800 py-7 px-6">
                       {/* ------------------ FOTO E NOME --------------------- */}
                       <div className="flex items-center space-x-3">
-                        <Avatar imgUrl={avatarImgs[7]} sizeClass="w-12 h-12" />
+                        <Avatar
+                          imgUrl={user?.profileImage}
+                          sizeClass="w-12 h-12"
+                          userName={user?.name}
+                        />
 
                         <div className="flex-grow">
                           <h4 className="font-semibold">{user?.name}</h4>

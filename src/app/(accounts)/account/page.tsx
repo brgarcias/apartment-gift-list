@@ -1,15 +1,15 @@
 "use client";
 
 import Label from "@/components/Label/Label";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import Input from "@/shared/Input/Input";
-import { avatarImgs } from "@/contains/fakeData";
 import Image from "next/image";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/contexts/ToastContext";
 import { useFeedback } from "@/contexts/FeedbackContext";
 import { motion, AnimatePresence } from "framer-motion";
+import InitialsAvatar from "@/components/Avatar/Avatar";
 
 const AccountPage = () => {
   const { login, user } = useAuth();
@@ -18,11 +18,14 @@ const AccountPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [fullName, setFullName] = useState("");
   const [birthDate, setBirthDate] = useState("");
+  const [profileImage, setProfileImage] = useState("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (user) {
       setFullName(user?.name || "");
       setBirthDate(formatDateForInput(user?.birthDate) || "");
+      setProfileImage(user?.profileImage || "");
       setIsLoading(false);
     }
   }, [user]);
@@ -32,6 +35,40 @@ const AccountPage = () => {
 
     const [day, month, year] = dateString.split("/");
     return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    showFeedback("Enviando imagem", true);
+
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const updateRes = await fetch(
+        `${process.env.NEXT_PUBLIC_NETLIFY_URL}/drive/upload/${user?.id}`,
+        {
+          method: "POST",
+          credentials: "include",
+          body: formData,
+        }
+      );
+
+      if (updateRes.ok) {
+        const userData = await updateRes.json();
+        login(JSON.parse(userData.updatedUser.body));
+        showToast("Imagem de perfil atualizada com sucesso!", "success");
+      } else {
+        throw new Error("Falha ao atualizar imagem no banco de dados");
+      }
+    } catch (error) {
+      console.error("Erro ao enviar imagem:", error);
+      showToast("Erro ao enviar imagem. Tente novamente.", "error");
+    } finally {
+      showFeedback("", false);
+    }
   };
 
   const updateAccount = () => {
@@ -84,19 +121,15 @@ const AccountPage = () => {
     }, 2000);
   };
 
-  // Componente Skeleton
   const SkeletonLoader = () => (
     <div className="space-y-10 sm:space-y-12 w-full">
-      {/* Skeleton Heading */}
       <div className="h-10 w-64 bg-neutral-200 dark:bg-neutral-700 rounded animate-pulse"></div>
 
       <div className="flex flex-col md:flex-row gap-8">
-        {/* Skeleton Avatar */}
         <div className="flex-shrink-0">
           <div className="w-32 h-32 rounded-full bg-neutral-200 dark:bg-neutral-700 animate-pulse"></div>
         </div>
 
-        {/* Skeleton Form */}
         <div className="flex-grow space-y-6">
           <div>
             <div className="h-5 w-24 bg-neutral-200 dark:bg-neutral-700 rounded animate-pulse mb-2"></div>
@@ -149,13 +182,17 @@ const AccountPage = () => {
               <div className="flex-shrink-0 flex items-start">
                 {/* AVATAR */}
                 <div className="relative rounded-full overflow-hidden flex">
-                  <Image
-                    src={avatarImgs[2]}
-                    alt="avatar"
-                    width={128}
-                    height={128}
-                    className="w-32 h-32 rounded-full object-cover z-0"
-                  />
+                  {profileImage ? (
+                    <Image
+                      src={profileImage || "/default-avatar.png"}
+                      alt="avatar"
+                      width={128}
+                      height={128}
+                      className="w-32 h-32 rounded-full object-cover z-0"
+                    />
+                  ) : (
+                    <InitialsAvatar name={fullName} size={128} />
+                  )}
                   <div className="absolute inset-0 bg-black bg-opacity-60 flex flex-col items-center justify-center text-neutral-50 cursor-pointer">
                     <svg
                       width="30"
@@ -176,7 +213,10 @@ const AccountPage = () => {
                   </div>
                   <input
                     type="file"
+                    ref={fileInputRef}
                     className="absolute inset-0 opacity-0 cursor-pointer"
+                    onChange={handleImageUpload}
+                    accept="image/*"
                   />
                 </div>
               </div>
