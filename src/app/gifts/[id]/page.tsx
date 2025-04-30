@@ -7,6 +7,8 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import ButtonThird from "@/shared/Button/ButtonThird";
+import { useAuth } from "@/contexts/AuthContext";
+import ModalLogin from "@/components/Modal/Login";
 
 const brlFormatter = new Intl.NumberFormat("pt-BR", {
   style: "currency",
@@ -20,7 +22,9 @@ export default function GiftDetails({ params }: { params: { id: string } }) {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const [openModalLogIn, setOpenModalLogIn] = useState(false);
   const router = useRouter();
+  const { isLoggedIn, user } = useAuth();
 
   const fetchGiftDetails = async (id: string) => {
     try {
@@ -48,7 +52,10 @@ export default function GiftDetails({ params }: { params: { id: string } }) {
         {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ action: GiftStatusEnum.PURCHASED }),
+          body: JSON.stringify({
+            action: GiftStatusEnum.PURCHASED,
+            userId: user?.id,
+          }),
         }
       );
       router.push("/");
@@ -295,7 +302,13 @@ export default function GiftDetails({ params }: { params: { id: string } }) {
                 </div>
               ) : (
                 <ButtonPrimary
-                  onClick={() => setShowConfirmation(true)}
+                  onClick={() => {
+                    if (!isLoggedIn) {
+                      setOpenModalLogIn(true);
+                      return;
+                    }
+                    setShowConfirmation(true);
+                  }}
                   sizeClass="px-2 py-2 lg:px-6 lg:py-3"
                   className="bg-gray-200 hover:bg-gray-300 dark:bg-slate-700 dark:hover:bg-slate-600 text-gray-800 dark:text-white font-medium py-3 px-6 transition-colors duration-300"
                 >
@@ -314,6 +327,7 @@ export default function GiftDetails({ params }: { params: { id: string } }) {
           </div>
         </div>
       </div>
+      <ModalLogin isOpen={openModalLogIn} setIsOpen={setOpenModalLogIn} />
     </div>
   );
 }
