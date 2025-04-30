@@ -76,11 +76,9 @@ export const signin = async (event: HandlerEvent): Promise<HandlerResponse> => {
     await redis.setCache(`user:${userFinded.id}`, userFinded);
 
     const response = jsonResponse(200, {
-      user: {
-        id: userFinded.id,
-        name: userFinded.name,
-        birthDate: userFinded.birthDate,
-      },
+      id: userFinded.id,
+      name: userFinded.name,
+      birthDate: userFinded.birthDate,
     });
 
     const cookieHeader = [
