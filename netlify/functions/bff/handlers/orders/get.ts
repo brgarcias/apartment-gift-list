@@ -1,6 +1,7 @@
 import { HandlerEvent, HandlerResponse } from "@netlify/functions";
 import { prisma } from "@/lib/prisma";
 import { errorResponse, jsonResponse } from "@/lib/response";
+import { verifySession } from "../auth/auth.middleware";
 
 export const getOrders = async (
   event: HandlerEvent
@@ -58,5 +59,40 @@ export const getOrderById = async (event: HandlerEvent) => {
   } catch (error) {
     console.error("Error fetching order by ID:", error);
     return errorResponse(500, "Failed to fetch order by ID");
+  }
+};
+
+export const getOrdersByUserId = async (event: HandlerEvent) => {
+  const userId = event.path.split("/").pop();
+  if (!userId || isNaN(parseInt(userId))) {
+    return errorResponse(400, "Invalid User ID");
+  }
+  try {
+    const session = await verifySession(event);
+
+    if (!session) {
+      return errorResponse(401, "Unauthorized");
+    }
+
+    const orders = await prisma.order.findMany({
+      where: { userId: parseInt(userId) },
+      cacheStrategy: { swr: 60, ttl: 60, tags: ["order_by_user_id"] },
+      include: {
+        Gift: {
+          include: {
+            gift: {
+              include: {
+                Category: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    return jsonResponse(200, orders);
+  } catch (error) {
+    console.error("Error fetching order by user ID:", error);
+    return errorResponse(500, "Failed to fetch order by user ID");
   }
 };

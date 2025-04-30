@@ -1,7 +1,14 @@
+import { getAuthUser, signin, signout, signup } from "../handlers/auth/auth";
+import authCheck from "../handlers/auth/auth.check";
 import { getCategories } from "../handlers/categories/get";
 import { getGiftById, getGifts } from "../handlers/gifts/get";
 import { handleGiftStatusUpdate } from "../handlers/gifts/update";
-import { getOrderById, getOrders } from "../handlers/orders/get";
+import {
+  getOrderById,
+  getOrders,
+  getOrdersByUserId,
+} from "../handlers/orders/get";
+import { getUserById } from "../handlers/users/get";
 import { RouteTable } from "../types/routes.types";
 
 export const ROUTES: RouteTable = {
@@ -20,7 +27,25 @@ export const ROUTES: RouteTable = {
   "/orders/:id": {
     GET: getOrderById,
   },
+  "/orders/user/:id": {
+    GET: getOrdersByUserId,
+  },
+  "/users/:id": {
+    GET: getUserById,
+  },
   "/categories": {
     GET: getCategories,
+  },
+  "/auth/signin": {
+    POST: signin,
+  },
+  "/auth/signout": {
+    POST: signout,
+  },
+  "/auth/check": {
+    GET: authCheck,
+  },
+  "/auth/users": {
+    GET: getAuthUser,
   },
 };

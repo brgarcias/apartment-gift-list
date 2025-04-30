@@ -6,6 +6,7 @@ import { GiftStatusEnum } from "@/enums/gift.enum";
 import { GiftStatus } from "@prisma/client";
 import { createOrder } from "../orders/create";
 import { createReservation } from "../reservations/create";
+import { verifySession } from "../auth/auth.middleware";
 
 interface HandlerEventWithParams extends HandlerEvent {
   pathParameters?: {
@@ -134,6 +135,12 @@ const reserveGift = async (
 export const handleGiftStatusUpdate = async (
   event: HandlerEventWithParams
 ): Promise<HandlerResponse> => {
+  const session = await verifySession(event);
+
+  if (!session) {
+    return errorResponse(401, "Unauthorized");
+  }
+
   if (!event.body) {
     return errorResponse(400, "No data provided");
   }

@@ -1,27 +1,20 @@
 import { PrismaClient } from "@prisma/client";
-import { hash } from "bcryptjs";
 
 const prisma = new PrismaClient();
 
 async function main() {
-  const user1 = await prisma.user.upsert({
-    where: { email: "bruno-151299@hotmail.com" },
-    update: {},
-    create: {
-      name: "Bruno Garcia",
-      email: "bruno-151299@hotmail.com",
-      password: await hash("senha123", 12),
-    },
-  });
-
-  const user2 = await prisma.user.upsert({
-    where: { email: "arra347@gmail.com" },
-    update: {},
-    create: {
-      name: "Amanda Roque",
-      email: "arra347@gmail.com",
-      password: await hash("senha456", 12),
-    },
+  const users = await prisma.user.createMany({
+    data: [
+      {
+        name: "Bruno Garcia",
+        birthDate: "15/12/1999",
+      },
+      {
+        name: "Amanda Roque",
+        birthDate: "11/07/2000",
+      },
+    ],
+    skipDuplicates: true,
   });
 
   const gifts = await prisma.gift.createMany({
@@ -80,7 +73,7 @@ async function main() {
     skipDuplicates: true,
   });
 
-  console.log({ user1, user2, gifts });
+  console.log({ users, gifts });
 }
 
 main()

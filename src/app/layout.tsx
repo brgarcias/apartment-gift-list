@@ -6,6 +6,9 @@ import "rc-slider/assets/index.css";
 import Footer from "@/shared/Footer/Footer";
 import SiteHeader from "@/app/SiteHeader";
 import CommonClient from "./CommonClient";
+import { ToastProvider } from "@/contexts/ToastContext";
+import { FeedbackProvider } from "@/contexts/FeedbackContext";
+import { AuthProvider } from "@/contexts/AuthContext";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -23,10 +26,16 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${poppins.className} scroll-smooth`}>
       <body className="bg-white text-base dark:bg-neutral-900 text-neutral-900 dark:text-neutral-200">
-        <SiteHeader />
-        {children}
-        <CommonClient />
-        <Footer />
+        <AuthProvider>
+          <ToastProvider>
+            <FeedbackProvider>
+              <SiteHeader />
+              {children}
+              <CommonClient />
+              <Footer />
+            </FeedbackProvider>
+          </ToastProvider>
+        </AuthProvider>
       </body>
     </html>
   );

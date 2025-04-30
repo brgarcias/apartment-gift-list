@@ -1,19 +1,38 @@
+"use client";
+
 import Label from "@/components/Label/Label";
-import React, { FC } from "react";
+import React from "react";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import Input from "@/shared/Input/Input";
-import Select from "@/shared/Select/Select";
-import Textarea from "@/shared/Textarea/Textarea";
 import { avatarImgs } from "@/contains/fakeData";
 import Image from "next/image";
 
 const AccountPage = () => {
+  const [userData, setUserData] = React.useState<any>(null);
+  const [isLoading, setIsLoading] = React.useState(true);
+  const [error, setError] = React.useState<string | null>(null);
+  const fetchUserData = async () => {
+    try {
+      const userId = localStorage.getItem("userId");
+      if (!userId) throw new Error("User not logged in");
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_NETLIFY_URL}/users/${userId}`
+      );
+      if (!res.ok) throw new Error("Falha ao carregar user");
+      const data = await res.json();
+      setUserData(data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Erro desconhecido");
+    } finally {
+      setIsLoading(false);
+    }
+  };
   return (
     <div className={`nc-AccountPage `}>
       <div className="space-y-10 sm:space-y-12">
         {/* HEADING */}
         <h2 className="text-2xl sm:text-3xl font-semibold">
-          Account infomation
+          Informações da conta
         </h2>
         <div className="flex flex-col md:flex-row">
           <div className="flex-shrink-0 flex items-start">
@@ -53,29 +72,13 @@ const AccountPage = () => {
           </div>
           <div className="flex-grow mt-10 md:mt-0 md:pl-16 max-w-3xl space-y-6">
             <div>
-              <Label>Full name</Label>
+              <Label>Nome completo</Label>
               <Input className="mt-1.5" defaultValue="Enrico Cole" />
             </div>
 
             {/* ---- */}
-
-            {/* ---- */}
-            <div>
-              <Label>Email</Label>
-              <div className="mt-1.5 flex">
-                <span className="inline-flex items-center px-2.5 rounded-l-2xl border border-r-0 border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 text-sm">
-                  <i className="text-2xl las la-envelope"></i>
-                </span>
-                <Input
-                  className="!rounded-l-none"
-                  placeholder="example@email.com"
-                />
-              </div>
-            </div>
-
-            {/* ---- */}
             <div className="max-w-lg">
-              <Label>Date of birth</Label>
+              <Label>Data de nascimento</Label>
               <div className="mt-1.5 flex">
                 <span className="inline-flex items-center px-2.5 rounded-l-2xl border border-r-0 border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 text-sm">
                   <i className="text-2xl las la-calendar"></i>
@@ -87,47 +90,8 @@ const AccountPage = () => {
                 />
               </div>
             </div>
-            {/* ---- */}
-            <div>
-              <Label>Addess</Label>
-              <div className="mt-1.5 flex">
-                <span className="inline-flex items-center px-2.5 rounded-l-2xl border border-r-0 border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 text-sm">
-                  <i className="text-2xl las la-map-signs"></i>
-                </span>
-                <Input
-                  className="!rounded-l-none"
-                  defaultValue="New york, USA"
-                />
-              </div>
-            </div>
-
-            {/* ---- */}
-            <div>
-              <Label>Gender</Label>
-              <Select className="mt-1.5">
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Other">Other</option>
-              </Select>
-            </div>
-
-            {/* ---- */}
-            <div>
-              <Label>Phone number</Label>
-              <div className="mt-1.5 flex">
-                <span className="inline-flex items-center px-2.5 rounded-l-2xl border border-r-0 border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 text-sm">
-                  <i className="text-2xl las la-phone-volume"></i>
-                </span>
-                <Input className="!rounded-l-none" defaultValue="003 888 232" />
-              </div>
-            </div>
-            {/* ---- */}
-            <div>
-              <Label>About you</Label>
-              <Textarea className="mt-1.5" defaultValue="..." />
-            </div>
             <div className="pt-2">
-              <ButtonPrimary>Update account</ButtonPrimary>
+              <ButtonPrimary>Atualizar conta</ButtonPrimary>
             </div>
           </div>
         </div>
