@@ -153,7 +153,7 @@ export default function GiftList() {
 
     return (
       <span
-        className={`text-xs font-medium px-2.5 py-0.5 rounded-full ${statusMap[status].color}`}
+        className={`text-xs font-small px-2 py-0.5 rounded-full ${statusMap[status].color}`}
       >
         {statusMap[status].text}
       </span>
@@ -238,7 +238,7 @@ export default function GiftList() {
 
                 {/* Bloco 2: Conteúdo (flexível) */}
                 <div className="p-6 flex-grow flex flex-col">
-                  <div className="flex justify-between items-start mb-2">
+                  <div className="flex justify-between items-center mb-2">
                     <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200 line-clamp-2">
                       {gift.name}
                     </h2>
