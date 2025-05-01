@@ -1,11 +1,12 @@
 "use client";
 
-import React, { FC, useState } from "react";
+import React, { FC, use, useState } from "react";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import backgroundPattern from "@/images/Moon.svg";
 import imagePromo from "@/images/image-promo.webp";
 import Image from "next/image";
 import Modal from "./Modal/Modal";
+import { useRouter } from "next/navigation";
 
 export interface SectionPromo2Props {
   className?: string;
@@ -13,6 +14,7 @@ export interface SectionPromo2Props {
 
 const SectionPromo2: FC<SectionPromo2Props> = ({ className = "lg:pt-10" }) => {
   const [isOpenMoreFilter, setisOpenMoreFilter] = useState(false);
+  const router = useRouter();
   return (
     <div className={`nc-SectionPromo2 ${className}`}>
       <div className="relative flex flex-col lg:flex-row justify-between bg-indigo-50 dark:bg-slate-800 rounded-2xl sm:rounded-[40px] p-8 sm:p-12 lg:p-16">
@@ -38,10 +40,10 @@ const SectionPromo2: FC<SectionPromo2Props> = ({ className = "lg:pt-10" }) => {
 
           <div className="mt-8 flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
             <ButtonPrimary
-              href="#gifts"
+              onClick={() => router.push("/about")}
               className="dark:bg-slate-200 dark:text-slate-900"
             >
-              Ver Lista Completa
+              Sobre a Festa
             </ButtonPrimary>
 
             <ButtonPrimary

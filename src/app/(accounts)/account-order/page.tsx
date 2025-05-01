@@ -61,7 +61,7 @@ const AccountOrder = () => {
                 <p className="mt-1 text-xs sm:text-sm text-slate-500 dark:text-slate-400 line-clamp-2">
                   {description}
                 </p>
-                <span className="mt-1 inline-block text-xs bg-indigo-100 text-indigo-800 py-0.5 px-2 rounded-full">
+                <span className="mt-1 inline-block text-xs bg-indigo-100 text-indigo-800 py-0.5 px-2 rounded-full max-w-[10rem] truncate whitespace-nowrap">
                   {Category.name}
                 </span>
               </div>
