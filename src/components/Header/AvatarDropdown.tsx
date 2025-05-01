@@ -130,24 +130,24 @@ export default function AvatarDropdown() {
 
   return (
     <div className="AvatarDropdown">
-      <AnimatePresence>
+      <AnimatePresence mode="wait">
         {isLoading ? (
           <motion.div
             key="skeleton"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.1 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
           >
             <SkeletonLoader />
           </motion.div>
         ) : isLoggedIn && user ? (
           <motion.div
             key="dropdown"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.1 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
           >
             <Popover className="relative">
               {({ open, close }) => (
@@ -446,10 +446,10 @@ export default function AvatarDropdown() {
         ) : (
           <motion.div
             key="login-button"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
           >
             <LoginButton />
           </motion.div>
