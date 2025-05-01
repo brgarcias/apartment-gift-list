@@ -73,7 +73,7 @@ export default function UnauthorizedAccess() {
 
               <ButtonPrimary
                 onClick={() => router.push("/")}
-                className="bg-white dark:bg-slate-700 text-gray-800 dark:text-white border border-gray-300 dark:border-slate-600 hover:bg-gray-50 dark:hover:bg-slate-600"
+                className="bg-grey-50 dark:bg-slate-700 text-gray-800 dark:text-white border border-gray-300 dark:border-slate-600 hover:bg-gray-50 dark:hover:bg-slate-600"
               >
                 Voltar à Página Inicial
               </ButtonPrimary>

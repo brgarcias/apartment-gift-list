@@ -621,6 +621,7 @@ const TabFilters: React.FC<TabFiltersProps> = ({
             as="div"
             className="fixed inset-0 z-50 overflow-y-auto"
             onClose={closeModalMoreFilter}
+            static
           >
             <div className="min-h-screen text-center">
               <Transition.Child
@@ -632,7 +633,7 @@ const TabFilters: React.FC<TabFiltersProps> = ({
                 leaveFrom="opacity-100"
                 leaveTo="opacity-0"
               >
-                <Dialog.Overlay className="fixed inset-0 bg-black bg-opacity-40 dark:bg-opacity-60" />
+                <Dialog.Overlay className="fixed inset-0 bg-black bg-opacity-40 dark:bg-opacity-60 backdrop-blur-sm" />
               </Transition.Child>
 
               <span
@@ -641,8 +642,9 @@ const TabFilters: React.FC<TabFiltersProps> = ({
               >
                 &#8203;
               </span>
+
               <Transition.Child
-                className="inline-block h-screen w-full max-w-4xl"
+                className="inline-block w-full max-w-2xl py-10 px-4"
                 enter="ease-out duration-300"
                 enterFrom="opacity-0 scale-95"
                 enterTo="opacity-100 scale-100"
@@ -650,165 +652,153 @@ const TabFilters: React.FC<TabFiltersProps> = ({
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <div className="inline-flex flex-col w-full text-left align-middle transition-all transform bg-white dark:bg-neutral-900 dark:border dark:border-neutral-700 dark:text-neutral-100 h-full">
-                  <div className="relative flex-shrink-0 px-6 py-4 border-b border-neutral-200 dark:border-neutral-800 text-center">
+                <div className="inline-flex flex-col w-full text-left align-middle transition-all transform bg-white dark:bg-neutral-800 rounded-2xl overflow-hidden shadow-xl">
+                  <div className="relative bg-gradient-to-r from-primary-500 to-primary-700 p-6 text-center">
                     <Dialog.Title
                       as="h3"
-                      className="text-lg font-medium leading-6 text-gray-900"
+                      className="text-2xl font-bold text-white leading-tight"
                     >
                       Filtros
                     </Dialog.Title>
-                    <span className="absolute left-3 top-3">
+                    <span className="absolute right-3 top-3">
                       <ButtonClose onClick={closeModalMoreFilter} />
                     </span>
                   </div>
 
-                  <div className="flex-grow overflow-y-auto">
-                    <div className="px-6 sm:px-8 md:px-10 divide-y divide-neutral-200 dark:divide-neutral-800">
-                      {/* Categorias */}
-                      <div className="py-7">
-                        <h3 className="text-xl font-medium">Categorias</h3>
-                        <div className="mt-6 relative grid grid-cols-1 gap-6">
-                          {categories.map((item) => (
-                            <Checkbox
-                              key={item.id}
-                              name={item.name}
-                              label={item.name}
-                              subLabel={item.description || ""}
-                              checked={selectedCategories.includes(item.name)}
-                              onChange={(checked) =>
-                                handleChangeCategories(checked, item.name)
-                              }
-                              className="items-center"
-                            />
-                          ))}
-                        </div>
+                  <div className="p-6 space-y-6">
+                    {/* Categorias */}
+                    <div>
+                      <h3 className="text-xl font-medium mb-4">Categorias</h3>
+                      <div className="grid grid-cols-1 gap-4">
+                        {categories.map((item) => (
+                          <Checkbox
+                            key={item.id}
+                            name={item.name}
+                            label={item.name}
+                            subLabel={item.description || ""}
+                            checked={selectedCategories.includes(item.name)}
+                            onChange={(checked) =>
+                              handleChangeCategories(checked, item.name)
+                            }
+                            className="items-center"
+                          />
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Faixa de preço */}
+                    <div>
+                      <h3 className="text-xl font-medium mb-4">
+                        Faixa de preço
+                      </h3>
+                      <div className="space-y-5 mb-4">
+                        <Slider
+                          range
+                          min={PRICE_RANGE[0]}
+                          max={PRICE_RANGE[1]}
+                          step={10}
+                          value={priceRange}
+                          allowCross={false}
+                          onChange={(value) => {
+                            if (Array.isArray(value)) {
+                              setPriceRange([value[0], value[1]]);
+                            }
+                          }}
+                        />
                       </div>
 
-                      {/* Faixa de preço */}
-                      <div className="py-7">
-                        <h3 className="text-xl font-medium">Faixa de preço</h3>
-                        <div className="mt-6 relative">
-                          <div className="space-y-5 mb-6">
-                            <Slider
-                              range
+                      <div className="flex justify-between space-x-4">
+                        <div className="flex-1">
+                          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                            Mínimo
+                          </label>
+                          <div className="relative rounded-md">
+                            <span className="absolute inset-y-0 left-3 flex items-center pointer-events-none text-neutral-500 sm:text-sm">
+                              R$
+                            </span>
+                            <input
+                              type="number"
+                              className="block w-full pl-10 pr-3 py-2 sm:text-sm border-neutral-200 dark:border-neutral-700 rounded-full bg-transparent"
+                              value={priceRange[0]}
+                              onChange={(e) => {
+                                const value = Math.min(
+                                  Number(e.target.value),
+                                  priceRange[1]
+                                );
+                                setPriceRange([value, priceRange[1]]);
+                              }}
                               min={PRICE_RANGE[0]}
                               max={PRICE_RANGE[1]}
-                              step={10}
-                              value={priceRange}
-                              allowCross={false}
-                              onChange={(value) => {
-                                if (Array.isArray(value)) {
-                                  setPriceRange([value[0], value[1]]);
-                                }
+                            />
+                          </div>
+                        </div>
+                        <div className="flex-1">
+                          <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                            Máximo
+                          </label>
+                          <div className="relative rounded-md">
+                            <span className="absolute inset-y-0 left-3 flex items-center pointer-events-none text-neutral-500 sm:text-sm">
+                              R$
+                            </span>
+                            <input
+                              type="number"
+                              className="block w-full pl-10 pr-3 py-2 sm:text-sm border-neutral-200 dark:border-neutral-700 rounded-full bg-transparent"
+                              value={priceRange[1]}
+                              onChange={(e) => {
+                                const value = Math.max(
+                                  Number(e.target.value),
+                                  priceRange[0]
+                                );
+                                setPriceRange([priceRange[0], value]);
                               }}
+                              min={PRICE_RANGE[0]}
+                              max={PRICE_RANGE[1]}
                             />
                           </div>
-
-                          <div className="flex justify-between space-x-5">
-                            <div className="flex-1">
-                              <label
-                                htmlFor="minPrice"
-                                className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1"
-                              >
-                                Mínimo
-                              </label>
-                              <div className="relative rounded-md">
-                                <span className="absolute inset-y-0 left-3 flex items-center pointer-events-none text-neutral-500 sm:text-sm">
-                                  R$
-                                </span>
-                                <input
-                                  type="number"
-                                  name="minPrice"
-                                  id="minPrice"
-                                  className="block w-full pl-10 pr-3 py-2 sm:text-sm border-neutral-200 dark:border-neutral-700 rounded-full bg-transparent"
-                                  value={priceRange[0]}
-                                  onChange={(e) => {
-                                    const value = Math.min(
-                                      Number(e.target.value),
-                                      priceRange[1]
-                                    );
-                                    setPriceRange([value, priceRange[1]]);
-                                  }}
-                                  min={PRICE_RANGE[0]}
-                                  max={PRICE_RANGE[1]}
-                                />
-                              </div>
-                            </div>
-                            <div className="flex-1">
-                              <label
-                                htmlFor="maxPrice"
-                                className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1"
-                              >
-                                Máximo
-                              </label>
-                              <div className="relative rounded-md">
-                                <span className="absolute inset-y-0 left-3 flex items-center pointer-events-none text-neutral-500 sm:text-sm">
-                                  R$
-                                </span>
-                                <input
-                                  type="number"
-                                  name="maxPrice"
-                                  id="maxPrice"
-                                  className="block w-full pl-10 pr-3 py-2 sm:text-sm border-neutral-200 dark:border-neutral-700 rounded-full bg-transparent"
-                                  value={priceRange[1]}
-                                  onChange={(e) => {
-                                    const value = Math.max(
-                                      Number(e.target.value),
-                                      priceRange[0]
-                                    );
-                                    setPriceRange([priceRange[0], value]);
-                                  }}
-                                  min={PRICE_RANGE[0]}
-                                  max={PRICE_RANGE[1]}
-                                />
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Ordenação */}
-                      <div className="py-7">
-                        <h3 className="text-xl font-medium">Ordenação</h3>
-                        <div className="mt-6 relative space-y-4">
-                          {DATA_sortOrderRadios.map((item) => (
-                            <Radio
-                              id={item.id}
-                              key={item.id}
-                              name="radioNameSort"
-                              label={item.name}
-                              checked={sortOrder === item.id}
-                              onChange={setSortOrder}
-                            />
-                          ))}
-                        </div>
-                      </div>
-
-                      {/* Disponibilidade */}
-                      <div className="py-7">
-                        <h3 className="text-xl font-medium">Disponibilidade</h3>
-                        <div className="mt-6 relative">
-                          <MySwitch
-                            label={
-                              onlyAvailable
-                                ? "Somente disponíveis"
-                                : "Todos os itens"
-                            }
-                            desc={
-                              onlyAvailable
-                                ? "Mostrar apenas presentes disponíveis"
-                                : "Mostrar todos os presentes"
-                            }
-                            enabled={onlyAvailable}
-                            onChange={setOnlyAvailable}
-                          />
                         </div>
                       </div>
                     </div>
+
+                    {/* Ordenação */}
+                    <div>
+                      <h3 className="text-xl font-medium mb-4">Ordenação</h3>
+                      <div className="space-y-3">
+                        {DATA_sortOrderRadios.map((item) => (
+                          <Radio
+                            id={item.id}
+                            key={item.id}
+                            name="radioNameSort"
+                            label={item.name}
+                            checked={sortOrder === item.id}
+                            onChange={setSortOrder}
+                          />
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Disponibilidade */}
+                    <div>
+                      <h3 className="text-xl font-medium mb-4">
+                        Disponibilidade
+                      </h3>
+                      <MySwitch
+                        label={
+                          onlyAvailable
+                            ? "Somente disponíveis"
+                            : "Todos os itens"
+                        }
+                        desc={
+                          onlyAvailable
+                            ? "Mostrar apenas presentes disponíveis"
+                            : "Mostrar todos os presentes"
+                        }
+                        enabled={onlyAvailable}
+                        onChange={setOnlyAvailable}
+                      />
+                    </div>
                   </div>
 
-                  <div className="p-6 flex-shrink-0 bg-neutral-50 dark:bg-neutral-900 dark:border-t dark:border-neutral-800 flex items-center justify-between">
+                  <div className="bg-neutral-50 dark:bg-neutral-900/50 p-6 flex justify-between border-t border-neutral-200 dark:border-neutral-700">
                     <ButtonThird
                       onClick={() => {
                         setPriceRange(PRICE_RANGE);
@@ -816,13 +806,13 @@ const TabFilters: React.FC<TabFiltersProps> = ({
                         setSortOrder("");
                         setOnlyAvailable(false);
                       }}
-                      sizeClass="px-4 py-2 sm:px-5"
+                      sizeClass="px-6 py-3"
                     >
                       Limpar tudo
                     </ButtonThird>
                     <ButtonPrimary
                       onClick={closeModalMoreFilter}
-                      sizeClass="px-4 py-2 sm:px-5"
+                      sizeClass="px-6 py-3"
                     >
                       Aplicar filtros
                     </ButtonPrimary>
