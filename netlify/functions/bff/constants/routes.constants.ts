@@ -42,6 +42,9 @@ export const ROUTES: RouteTable = {
   "/categories": {
     GET: getCategories,
   },
+  "/auth/signup": {
+    POST: signup,
+  },
   "/auth/signin": {
     POST: signin,
   },

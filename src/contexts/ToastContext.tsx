@@ -19,7 +19,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
     duration: number;
   } | null>(null);
 
-  const showToast = (message: string, type: ToastType, duration = 6000) => {
+  const showToast = (message: string, type: ToastType, duration = 5000) => {
     setToast({ message, type, duration });
   };
 

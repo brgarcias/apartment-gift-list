@@ -7,10 +7,13 @@ import { randomBytes } from "crypto";
 import { User } from "@prisma/client";
 import authCheck from "./auth.check";
 
-export const signup = async (
-  userData: UserPayload
-): Promise<User | HandlerResponse> => {
+export const signup = async (event: HandlerEvent): Promise<HandlerResponse> => {
   try {
+    const { body } = event;
+    if (!body) {
+      return errorResponse(400, "No data provided");
+    }
+    const userData: UserPayload = JSON.parse(body);
     const verifyIfUserExists = await prisma.user.findFirst({
       where: {
         name: userData.name,
@@ -26,7 +29,9 @@ export const signup = async (
       data: userData,
     });
 
-    return createdUser;
+    return jsonResponse(200, {
+      user: createdUser,
+    });
   } catch (error) {
     console.error("Error creating user:", error);
     return errorResponse(500, "Failed to create user");
@@ -50,11 +55,7 @@ export const signin = async (event: HandlerEvent): Promise<HandlerResponse> => {
     });
 
     if (!userFinded) {
-      const userCreated = await signup(userData);
-      if (userCreated instanceof Error) {
-        return errorResponse(400, userCreated.message);
-      }
-      userFinded = userCreated as User;
+      return errorResponse(404, "User not found");
     }
 
     const sessionToken = randomBytes(32).toString("hex");
