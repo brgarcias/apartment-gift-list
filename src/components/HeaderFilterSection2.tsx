@@ -20,6 +20,9 @@ export interface HeaderFilterSectionProps {
   setSortOrder: (order: string) => void;
   onlyAvailable: boolean;
   setOnlyAvailable: (available: boolean) => void;
+  searchQuery: string;
+  setSearchQuery: (query: string) => void;
+  clearAllFilters: () => void;
 }
 
 const HeaderFilterSection2: FC<HeaderFilterSectionProps> = ({
@@ -32,6 +35,9 @@ const HeaderFilterSection2: FC<HeaderFilterSectionProps> = ({
   setSortOrder,
   onlyAvailable,
   setOnlyAvailable,
+  searchQuery,
+  setSearchQuery,
+  clearAllFilters,
 }) => {
   const [categories, setCategories] = useState<Category[]>([]);
 
@@ -59,6 +65,16 @@ const HeaderFilterSection2: FC<HeaderFilterSectionProps> = ({
         className="mb-1"
       >{`Lista de Presentes`}</Heading>
 
+      <div className="w-full mt-4 mb-4">
+        <input
+          type="text"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          placeholder="Buscar presentes..."
+          className="w-full px-4 py-2 border border-neutral-300 rounded-2xl dark:bg-neutral-800 dark:text-neutral-100 dark:border-neutral-600"
+        />
+      </div>
+
       <Transition
         show
         enter="transition-opacity duration-150"
@@ -68,7 +84,7 @@ const HeaderFilterSection2: FC<HeaderFilterSectionProps> = ({
         leaveFrom="opacity-100"
         leaveTo="opacity-0"
       >
-        <div className="w-full border-b border-neutral-200 dark:border-neutral-700 my-6"></div>
+        <div className="w-full border-b border-neutral-200 dark:border-neutral-700 my-4"></div>
         <TabFilters
           categories={categories}
           priceRange={priceRange}
@@ -79,6 +95,7 @@ const HeaderFilterSection2: FC<HeaderFilterSectionProps> = ({
           setSortOrder={setSortOrder}
           onlyAvailable={onlyAvailable}
           setOnlyAvailable={setOnlyAvailable}
+          clearAllFilters={clearAllFilters}
         />
       </Transition>
     </div>

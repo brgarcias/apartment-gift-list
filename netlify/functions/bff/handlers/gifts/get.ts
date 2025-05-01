@@ -5,7 +5,6 @@ import { errorResponse, jsonResponse } from "@/lib/response";
 export const getGifts = async (): Promise<HandlerResponse> => {
   try {
     const gifts = await prisma.gift.findMany({
-      cacheStrategy: { swr: 60, ttl: 60, tags: ["all_gifts"] },
       include: {
         Category: true,
       },
@@ -29,7 +28,6 @@ export const getGiftById = async (event: HandlerEvent) => {
   try {
     const gift = await prisma.gift.findUnique({
       where: { id: parseInt(giftId) },
-      cacheStrategy: { swr: 60, ttl: 60, tags: ["gift_by_id"] },
       include: {
         Category: true,
       },

@@ -1,5 +1,5 @@
 import { HandlerEvent, HandlerResponse } from "@netlify/functions";
-import { prisma } from "@/lib/prisma";
+import { invalidateCacheByTags, prisma } from "@/lib/prisma";
 import { errorResponse, jsonResponse } from "@/lib/response";
 
 export const updateUserById = async (
@@ -28,6 +28,8 @@ export const updateUserById = async (
       data: { name, birthDate, profileImage },
     });
 
+    await invalidateCacheByTags(["user_by_id"]);
+
     return jsonResponse(200, updatedUser);
   } catch (error) {
     console.error("Error updating user by ID:", error);
@@ -51,6 +53,8 @@ export const uploadProfileImage = async (
       where: { id: parseInt(userId) },
       data: { profileImage },
     });
+
+    await invalidateCacheByTags(["user_by_id"]);
 
     return jsonResponse(200, updatedUser);
   } catch (error) {

@@ -1,7 +1,7 @@
 import { HandlerEvent, HandlerResponse } from "@netlify/functions";
 import { prisma } from "@/lib/prisma";
 import { errorResponse, jsonResponse } from "@/lib/response";
-import { verifySession } from "../auth/auth.middleware";
+import authCheck from "../auth/auth.check";
 
 export const getOrders = async (
   event: HandlerEvent
@@ -39,6 +39,12 @@ export const getOrderById = async (event: HandlerEvent) => {
     return errorResponse(400, "Invalid Order ID");
   }
   try {
+    const session = await authCheck(event);
+
+    if (session.statusCode !== 200) {
+      return session;
+    }
+
     const order = await prisma.order.findUnique({
       where: { id: parseInt(orderId) },
       cacheStrategy: { swr: 60, ttl: 60, tags: ["order_by_id"] },
@@ -68,10 +74,10 @@ export const getOrdersByUserId = async (event: HandlerEvent) => {
     return errorResponse(400, "Invalid User ID");
   }
   try {
-    const session = await verifySession(event);
+    const session = await authCheck(event);
 
-    if (!session) {
-      return errorResponse(401, "Unauthorized");
+    if (session.statusCode !== 200) {
+      return session;
     }
 
     const orders = await prisma.order.findMany({

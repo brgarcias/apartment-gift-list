@@ -168,9 +168,24 @@ export default function GiftList() {
     setOnlyAvailable(false);
   };
 
+  const GiftCardSkeleton = () => (
+    <div className="bg-white dark:bg-slate-800 rounded-lg shadow-md dark:shadow-slate-700/30 p-6 animate-pulse flex flex-col space-y-4">
+      <div className="h-48 bg-gray-200 dark:bg-slate-600 rounded" />
+      <div className="h-4 bg-gray-200 dark:bg-slate-600 rounded w-3/4" />
+      <div className="h-3 bg-gray-200 dark:bg-slate-600 rounded w-1/2" />
+      <div className="h-4 bg-gray-200 dark:bg-slate-600 rounded w-1/3" />
+      <div className="space-y-2 mt-auto">
+        <div className="h-3 bg-gray-200 dark:bg-slate-600 rounded w-1/2" />
+        <div className="h-10 bg-gray-300 dark:bg-slate-700 rounded" />
+      </div>
+    </div>
+  );
+
   return (
     <div id="gifts" className="max-w-6xl mx-auto p-6">
       <HeaderFilterSection2
+        searchQuery={searchTerm}
+        setSearchQuery={setSearchTerm}
         priceRange={priceRange}
         setPriceRange={setPriceRange}
         selectedCategories={selectedCategories}
@@ -179,41 +194,14 @@ export default function GiftList() {
         setSortOrder={setSortOrder}
         onlyAvailable={onlyAvailable}
         setOnlyAvailable={setOnlyAvailable}
+        clearAllFilters={clearAllFilters}
       />
 
-      <div className="mb-8 bg-white dark:bg-slate-800 p-6 rounded-lg shadow-md dark:shadow-slate-700/30">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div>
-            <label
-              htmlFor="search"
-              className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
-            >
-              Buscar presente
-            </label>
-            <input
-              type="text"
-              id="search"
-              placeholder="Digite o nome do presente"
-              className="w-full p-2 border border-gray-300 dark:border-slate-700 rounded-md dark:bg-slate-700 dark:text-white"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
-
-          <div className="flex items-end">
-            <button
-              onClick={clearAllFilters}
-              className="w-full bg-gray-200 hover:bg-gray-300 dark:bg-slate-700 dark:hover:bg-slate-600 text-gray-800 dark:text-gray-200 font-medium py-2 px-4 rounded transition-colors duration-300"
-            >
-              Limpar todos os filtros
-            </button>
-          </div>
-        </div>
-      </div>
-
       {isLoading ? (
-        <div className="flex justify-center items-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500 dark:border-indigo-400"></div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <GiftCardSkeleton key={i} />
+          ))}
         </div>
       ) : error ? (
         <div className="bg-red-100 dark:bg-red-900 border border-red-400 dark:border-red-700 text-red-700 dark:text-red-100 px-4 py-3 rounded mb-6">
