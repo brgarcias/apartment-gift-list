@@ -17,7 +17,7 @@ export default function GiftList() {
 
   // Filtros
   const [searchTerm, setSearchTerm] = useState("");
-  const [priceRange, setPriceRange] = useState<number[]>([0, 1000]);
+  const [priceRange, setPriceRange] = useState<number[]>([0, 5000]);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [sortOrder, setSortOrder] = useState<string>("");
   const [onlyAvailable, setOnlyAvailable] = useState(false);
@@ -162,7 +162,7 @@ export default function GiftList() {
 
   const clearAllFilters = () => {
     setSearchTerm("");
-    setPriceRange([0, 1000]);
+    setPriceRange([0, 5000]);
     setSelectedCategories([]);
     setSortOrder("");
     setOnlyAvailable(false);

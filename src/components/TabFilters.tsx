@@ -21,7 +21,7 @@ const DATA_sortOrderRadios = [
   { name: "Preço: Maior para Menor", id: "Price-hight-low" },
 ];
 
-const PRICE_RANGE = [0, 1000];
+const PRICE_RANGE = [0, 5000];
 
 interface TabFiltersProps {
   categories: Category[];
@@ -74,7 +74,10 @@ const TabFilters: React.FC<TabFiltersProps> = ({
   const renderXClear = () => {
     return (
       <span
-        onClick={clearAllFilters}
+        onClick={(e) => {
+          e.stopPropagation(); // Impede que o evento de clique propague para o elemento pai
+          clearAllFilters();
+        }}
         className="flex-shrink-0 w-4 h-4 rounded-full bg-primary-500 text-white flex items-center justify-center ml-3 cursor-pointer"
       >
         <svg
@@ -538,7 +541,9 @@ const TabFilters: React.FC<TabFiltersProps> = ({
           />
         </svg>
 
-        <span className="line-clamp-1 ml-2">Disponíveis</span>
+        <span className="line-clamp-1 ml-2">
+          {onlyAvailable ? "Somente disponíveis" : "Todos os itens"}
+        </span>
         {onlyAvailable && renderXClear()}
       </div>
     );
