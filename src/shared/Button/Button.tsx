@@ -18,6 +18,7 @@ export interface ButtonProps {
   targetBlank?: boolean;
   onClick?: () => void;
   children?: React.ReactNode;
+  hasRing?: boolean;
 }
 
 const Button: FC<ButtonProps> = ({
@@ -31,11 +32,12 @@ const Button: FC<ButtonProps> = ({
   targetBlank,
   type,
   loading,
+  hasRing = false,
   onClick = () => {},
 }) => {
   const CLASSES =
     `nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors ${fontSize} ${sizeClass} ${translate} ${className} ` +
-    twFocusClass(true);
+    twFocusClass(hasRing);
 
   const _renderLoading = () => {
     return (

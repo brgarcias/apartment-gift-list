@@ -9,9 +9,12 @@ import { useCallback, useEffect, useState } from "react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { motion, AnimatePresence } from "framer-motion";
+import { useRouter } from "next/navigation";
+import ButtonThird from "@/shared/Button/ButtonThird";
 
 const AccountOrder = () => {
   const { user } = useAuth();
+  const router = useRouter();
   const [orders, setOrders] = useState<Order[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -71,14 +74,15 @@ const AccountOrder = () => {
               />
             </div>
           </div>
-          <div className="flex flex-1 items-end justify-between text-xs sm:text-sm mt-2">
-            <a
-              href={`/gifts/${gift.id}`}
-              rel="noopener noreferrer"
-              className="font-medium text-indigo-600 dark:text-primary-500 hover:text-indigo-800"
+          <div className="flex flex-1 items-center justify-between text-xs sm:text-sm mt-1">
+            <ButtonThird
+              onClick={() => router.push(`/gifts/${gift.id}`)}
+              sizeClass="py-0 px-0"
+              fontSize="font-small"
+              className="text-indigo-600 dark:text-primary-500 hover:text-indigo-800 focus:outline-none"
             >
               Ver produto
-            </a>
+            </ButtonThird>
           </div>
         </div>
       </div>
