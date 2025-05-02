@@ -66,9 +66,7 @@ const Badge: FC<BadgeProps> = ({
       {name}
     </Link>
   ) : (
-    <span className={`${CLASSES} ${getColorClass(false)} ${className}`}>
-      {name}
-    </span>
+    <span className={`${CLASSES} ${getColorClass(false)}`}>{name}</span>
   );
 };
 

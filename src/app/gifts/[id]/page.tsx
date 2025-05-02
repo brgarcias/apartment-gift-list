@@ -146,29 +146,105 @@ export default function GiftDetails({ params }: { params: { id: string } }) {
   }, [params.id]);
 
   const getStatusBadge = (status: GiftStatusEnum) => {
+    const pulseAnimation = "animate-[pulse_1.5s_ease-in-out_infinite]";
+    const bounceAnimation = "animate-[bounce_1s_ease-in-out_infinite]";
+    const shakeAnimation = "hover:animate-[shake_0.5s_ease-in-out]";
+
     const statusMap = {
       [GiftStatusEnum.AVAILABLE.toUpperCase()]: {
         text: "Disponível",
         color:
-          "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200",
+          "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-300",
+        icon: (
+          <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+            <path
+              fillRule="evenodd"
+              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+              clipRule="evenodd"
+            />
+          </svg>
+        ),
       },
       [GiftStatusEnum.PURCHASED.toUpperCase()]: {
         text: "Comprado",
-        color: "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300",
+        color: "bg-blue-800 text-blue-100 dark:bg-blue-100 dark:text-blue-900",
+        icon: (
+          <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+            <path
+              className="w-4 h-4 mr-2 text-red-600 dark:text-red-600 flex-shrink-0"
+              fillRule="evenodd"
+              d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
+              clipRule="evenodd"
+            />
+          </svg>
+        ),
       },
       [GiftStatusEnum.RESERVED.toUpperCase()]: {
         text: "Reservado",
         color:
-          "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200",
+          "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300",
+        icon: (
+          <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
+          </svg>
+        ),
       },
     };
 
+    const purchasedByCurrentUser =
+      status === GiftStatusEnum.PURCHASED.toUpperCase() &&
+      gift?.GiftOnOrder?.some((order) => order.order.user.id === user?.id);
+
     return (
-      <span
-        className={`text-xs font-medium px-2.5 py-0.5 rounded-full ${statusMap[status].color}`}
-      >
-        {statusMap[status].text}
-      </span>
+      <div className="relative inline-block group">
+        <div className="flex justify-center">
+          <span
+            className={`inline-flex items-center text-xs font-semibold px-3 py-1 rounded-full leading-4 ${
+              statusMap[status].color
+            } transition-all duration-300 transform hover:scale-105 ${shakeAnimation} ${
+              purchasedByCurrentUser ? pulseAnimation : ""
+            }`}
+          >
+            {statusMap[status].icon}
+            {statusMap[status].text}
+          </span>
+        </div>
+
+        {purchasedByCurrentUser && (
+          <div
+            className={`
+              absolute z-20 w-full min-w-[180px] max-w-[340px] 
+              bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 
+              rounded-lg shadow-lg p-3 top-full mt-2 
+              opacity-100 group-hover:opacity-100 
+              transition-all duration-300 pointer-events-none 
+              ${bounceAnimation}
+            `}
+            style={{
+              right: "-38%",
+              transform: "translateX(-50%)",
+            }}
+          >
+            <div className="flex items-center">
+              <svg
+                className="w-4 h-4 mr-2 text-emerald-500 dark:text-emerald-400 flex-shrink-0"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                  clipRule="evenodd"
+                />
+              </svg>
+              <p className="text-sm font-small text-gray-700 dark:text-gray-200">
+                Você comprou este presente!
+              </p>
+            </div>
+            <div className="absolute -top-1.5 left-1/2 w-3 h-3 bg-white dark:bg-gray-800 border-t border-l border-gray-100 dark:border-gray-700 transform rotate-45 -translate-x-1/2"></div>
+          </div>
+        )}
+      </div>
     );
   };
 
@@ -230,7 +306,7 @@ export default function GiftDetails({ params }: { params: { id: string } }) {
                   Voltar para a lista
                 </button>
 
-                <div className="bg-white dark:bg-slate-800 rounded-lg shadow-md dark:shadow-slate-700/30 overflow-hidden">
+                <div className="bg-white dark:bg-slate-800 rounded-lg shadow-md dark:shadow-slate-700/30">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div className="h-96 bg-indigo-50 dark:bg-slate-700 flex items-center justify-center p-8">
                       <Image
@@ -242,8 +318,8 @@ export default function GiftDetails({ params }: { params: { id: string } }) {
                         priority
                       />
                     </div>
-                    <div className="p-8">
-                      <div className="flex justify-between items-start mb-2">
+                    <div className="p-6">
+                      <div className="flex justify-between items-center mb-2">
                         <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">
                           {gift.name}
                         </h1>
@@ -323,7 +399,7 @@ export default function GiftDetails({ params }: { params: { id: string } }) {
                           Descrição
                         </h2>
                         <p className="text-gray-600 dark:text-gray-300">
-                          {gift.description ||
+                          {gift.description.trim() ||
                             "Este presente não possui descrição detalhada."}
                         </p>
                       </div>

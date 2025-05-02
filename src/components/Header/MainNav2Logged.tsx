@@ -20,6 +20,8 @@ const MainNav2Logged: FC<MainNav2LoggedProps> = () => {
 
           <div className="lg:flex-1 flex items-center">
             <Logo className="flex-shrink-0" />
+            <div className="hidden lg:block mx-1 h-10 border-l border-slate-200 dark:border-slate-700"></div>
+            <SwitchDarkMode className="bg-neutral-100 dark:bg-neutral-800 hidden lg:flex" />
           </div>
 
           <div className="flex-1 flex items-center justify-end text-slate-700 dark:text-slate-100">

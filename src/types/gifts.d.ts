@@ -1,5 +1,5 @@
 import { GiftStatusEnum } from "@/enums/gift.enum";
-import { Category } from "@prisma/client";
+import { Category, GiftOnOrder } from "@prisma/client";
 
 export type Gift = {
   id: number;
@@ -11,7 +11,13 @@ export type Gift = {
   status: GiftStatusEnum;
   createdAt: Date;
   updatedAt: Date;
-  giftOnOrder: GiftOnOrder[];
+  GiftOnOrder?: Array<{
+    order: {
+      user: {
+        id: number;
+      };
+    };
+  }>;
   giftOnReservation: GiftOnReservation[];
   Category: Category;
 };

@@ -29,7 +29,24 @@ export const getGiftById = async (event: HandlerEvent) => {
     const gift = await prisma.gift.findUnique({
       where: { id: parseInt(giftId) },
       include: {
-        Category: true,
+        Category: {
+          select: {
+            name: true,
+          },
+        },
+        GiftOnOrder: {
+          select: {
+            order: {
+              select: {
+                user: {
+                  select: {
+                    id: true,
+                  },
+                },
+              },
+            },
+          },
+        },
       },
     });
 

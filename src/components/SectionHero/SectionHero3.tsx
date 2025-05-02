@@ -6,8 +6,8 @@ import backgroundPattern from "@/images/Moon.svg";
 import imageNoivos from "@/images/foto-noivos.png";
 import Image from "next/image";
 import Modal from "../Modal/Modal";
-import { useRouter } from "next/navigation";
 import ButtonSecondary from "@/shared/Button/ButtonSecondary";
+import ModalParty from "../Modal/Party";
 
 export interface SectionPromo2Props {
   className?: string;
@@ -15,7 +15,7 @@ export interface SectionPromo2Props {
 
 const SectionPromo2: FC<SectionPromo2Props> = ({ className = "lg:pt-10" }) => {
   const [isOpenMoreFilter, setisOpenMoreFilter] = useState(false);
-  const router = useRouter();
+  const [isOpenModalParty, setisOpenModalParty] = useState(false);
   return (
     <div className={`nc-SectionPromo2 ${className}`}>
       <div className="relative flex flex-col lg:flex-row lg:items-center justify-between bg-indigo-50 dark:bg-slate-800 rounded-2xl sm:rounded-[40px] p-4 sm:p-8 lg:p-12 overflow-hidden">
@@ -52,7 +52,7 @@ const SectionPromo2: FC<SectionPromo2Props> = ({ className = "lg:pt-10" }) => {
               className="flex-1 sm:flex-none"
               sizeClass="px-5 py-2.5 lg:px-6 lg:py-3"
               fontSize="text-sm sm:text-md lg:text-lg font-medium"
-              onClick={() => router.push("/about")}
+              onClick={() => setisOpenModalParty(true)}
             >
               Sobre a Festa
             </ButtonSecondary>
@@ -77,6 +77,8 @@ const SectionPromo2: FC<SectionPromo2Props> = ({ className = "lg:pt-10" }) => {
         isOpenMoreFilter={isOpenMoreFilter}
         setisOpenMoreFilter={setisOpenMoreFilter}
       />
+
+      <ModalParty isOpen={isOpenModalParty} setisOpen={setisOpenModalParty} />
     </div>
   );
 };

@@ -6,7 +6,7 @@ import backgroundPattern from "@/images/Moon.svg";
 import imagePromo from "@/images/image-promo.webp";
 import Image from "next/image";
 import Modal from "./Modal/Modal";
-import { useRouter } from "next/navigation";
+import ModalParty from "./Modal/Party";
 
 export interface SectionPromo2Props {
   className?: string;
@@ -14,7 +14,8 @@ export interface SectionPromo2Props {
 
 const SectionPromo2: FC<SectionPromo2Props> = ({ className = "lg:pt-10" }) => {
   const [isOpenMoreFilter, setisOpenMoreFilter] = useState(false);
-  const router = useRouter();
+  const [isOpenModalParty, setisOpenModalParty] = useState(false);
+
   return (
     <div className={`nc-SectionPromo2 ${className}`}>
       <div className="relative flex flex-col lg:flex-row justify-between bg-indigo-50 dark:bg-slate-800 rounded-2xl sm:rounded-[40px] p-8 sm:p-12 lg:p-16">
@@ -29,8 +30,7 @@ const SectionPromo2: FC<SectionPromo2Props> = ({ className = "lg:pt-10" }) => {
 
         <div className="relative lg:w-[50%] mb-10 lg:mb-0">
           <h2 className="font-semibold text-3xl sm:text-4xl xl:text-5xl !leading-[1.13] tracking-tight">
-            Obrigado por fazer parte <br />
-            dessa nova jornada!
+            Obrigado por fazer parte dessa nova jornada!
           </h2>
 
           <p className="mt-6 text-lg text-slate-600 dark:text-slate-300">
@@ -40,7 +40,7 @@ const SectionPromo2: FC<SectionPromo2Props> = ({ className = "lg:pt-10" }) => {
 
           <div className="mt-8 flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
             <ButtonPrimary
-              onClick={() => router.push("/about")}
+              onClick={() => setisOpenModalParty(true)}
               className="dark:bg-slate-200 dark:text-slate-900"
             >
               Sobre a Festa
@@ -89,6 +89,8 @@ const SectionPromo2: FC<SectionPromo2Props> = ({ className = "lg:pt-10" }) => {
         isOpenMoreFilter={isOpenMoreFilter}
         setisOpenMoreFilter={setisOpenMoreFilter}
       />
+
+      <ModalParty isOpen={isOpenModalParty} setisOpen={setisOpenModalParty} />
     </div>
   );
 };

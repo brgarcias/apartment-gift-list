@@ -704,6 +704,35 @@ const TabFilters: React.FC<TabFiltersProps> = ({
                               setPriceRange([value[0], value[1]]);
                             }
                           }}
+                          dotStyle={{
+                            display: "none",
+                          }}
+                          activeDotStyle={{
+                            display: "none",
+                          }}
+                          styles={{
+                            handle: {
+                              width: 24,
+                              height: 24,
+                              marginTop: -10,
+                              opacity: 1,
+                              backgroundColor: "white",
+                              border: "2px solid #4f46e5",
+                              boxShadow: "0 2px 4px rgba(0,0,0,0.2)",
+                            },
+                            track: {
+                              marginLeft: 8,
+                              marginRight: 8,
+                              backgroundColor: "#4f46e5",
+                              height: 4,
+                            },
+                            rail: {
+                              backgroundColor: "#e5e7eb",
+                              height: 4,
+                              marginLeft: 8,
+                              marginRight: 8,
+                            },
+                          }}
                         />
                       </div>
 

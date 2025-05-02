@@ -5,6 +5,7 @@ import SocialsList1 from "@/shared/SocialsList1/SocialsList1";
 import { CustomLink } from "@/data/types";
 import React, { useState } from "react";
 import Modal from "@/components/Modal/Modal";
+import ModalParty from "@/components/Modal/Party";
 
 export interface WidgetFooterMenu {
   id: string;
@@ -15,6 +16,7 @@ export interface WidgetFooterMenu {
 const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
   const [isOpenMoreFilter, setisOpenMoreFilter] = useState(false);
+  const [isOpenModalParty, setisOpenModalParty] = useState(false);
 
   return (
     <footer className="nc-Footer bg-neutral-50 dark:bg-neutral-900 text-neutral-700 dark:text-neutral-300">
@@ -42,7 +44,7 @@ const Footer: React.FC = () => {
             <ul className="space-y-3">
               <li>
                 <a
-                  href="/about"
+                  onClick={() => setisOpenModalParty(true)}
                   className="transition-colors duration-200 hover:text-primary-600 dark:hover:text-primary-400"
                   aria-label="About us"
                 >
@@ -147,6 +149,8 @@ const Footer: React.FC = () => {
         isOpenMoreFilter={isOpenMoreFilter}
         setisOpenMoreFilter={setisOpenMoreFilter}
       />
+
+      <ModalParty isOpen={isOpenModalParty} setisOpen={setisOpenModalParty} />
     </footer>
   );
 };

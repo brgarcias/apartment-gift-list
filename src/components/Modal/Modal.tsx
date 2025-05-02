@@ -4,11 +4,68 @@ import React, { FC, Fragment, useRef } from "react";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import { Dialog, Transition } from "@headlessui/react";
 import ButtonClose from "@/shared/ButtonClose/ButtonClose";
+import Badge from "@/shared/Badge/Badge";
 
 export interface ModalProps {
   isOpenMoreFilter: boolean;
   setisOpenMoreFilter: (value: boolean) => void;
 }
+
+interface StepItem {
+  number: string;
+  title: string;
+  description: string | JSX.Element;
+}
+
+const steps: StepItem[] = [
+  {
+    number: "1",
+    title: "Escolha Seu Presente",
+    description:
+      "Navegue pela nossa lista de presentes mobiliando nosso lar. Use os filtros para encontrar opções por categoria, faixa de preço ou disponibilidade.",
+  },
+  {
+    number: "2",
+    title: "Ver Detalhes",
+    description: (
+      <>
+        Clique em <Badge className="px-2 py-1" name="Ver Detalhes" /> para ver
+        fotos, descrição completa e o link da loja onde o item está disponível
+        (Amazon, Mercado Livre, etc).
+      </>
+    ),
+  },
+  {
+    number: "3",
+    title: "Compre no Site Parceiro",
+    description:
+      "A compra é feita diretamente no site do vendedor. Você tem toda segurança e garantia da plataforma escolhida.",
+  },
+  {
+    number: "4",
+    title: "Nos Avise Que Comprou",
+    description: (
+      <>
+        Depois de comprar, clique em{" "}
+        <Badge className="px-2 py-1 mr-1" name="Comprar Este Presente" /> para
+        registrarmos seu nome. Assim saberemos quem nos presenteou com cada item
+        especial!
+      </>
+    ),
+  },
+  {
+    number: "5",
+    title: "Faça Login ou Cadastre-se",
+    description:
+      "Para registrar seu presente, você precisará fazer login ou criar uma conta. Isso garante que sua compra seja registrada corretamente e que possamos agradecer pessoalmente.",
+  },
+  {
+    number: "6",
+    title: "Entrega do Presente",
+    description:
+      "O presente pode ser entregue na festa ou combine com os noivos. Não se preocupe, não abriremos o presente antes do evento!",
+  },
+];
 
 const Modal: FC<ModalProps> = ({ isOpenMoreFilter, setisOpenMoreFilter }) => {
   return (
@@ -64,94 +121,23 @@ const Modal: FC<ModalProps> = ({ isOpenMoreFilter, setisOpenMoreFilter }) => {
 
               <div className="flex-grow overflow-y-auto p-6 sm:p-8">
                 <div className="space-y-6 text-neutral-700 dark:text-neutral-300">
-                  <div className="flex items-start">
-                    <div className="flex-shrink-0 bg-indigo-100 dark:bg-indigo-900/50 rounded-full pt-1 pb-1 pl-2 pr-2 mr-4">
-                      <span className="text-indigo-600 dark:text-indigo-400 text-lg">
-                        1
-                      </span>
+                  {steps.map((step, index) => (
+                    <div key={index} className="flex items-start">
+                      <div className="flex-shrink-0 bg-indigo-100 dark:bg-indigo-900/50 rounded-full pt-1 pb-1 pl-2 pr-2 mr-4">
+                        <span className="text-indigo-600 dark:text-indigo-400 text-lg">
+                          {step.number}
+                        </span>
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-lg text-neutral-900 dark:text-white mb-2">
+                          {step.title}
+                        </h4>
+                        <p className="text-neutral-600 dark:text-neutral-400">
+                          {step.description}
+                        </p>
+                      </div>
                     </div>
-                    <div>
-                      <h4 className="font-semibold text-lg text-neutral-900 dark:text-white mb-2">
-                        Escolha Seu Presente
-                      </h4>
-                      <p className="text-neutral-600 dark:text-neutral-400">
-                        Navegue pela nossa lista de presentes mobiliando nosso
-                        lar. Use os filtros para encontrar opções por categoria,
-                        faixa de preço ou disponibilidade.
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start">
-                    <div className="flex-shrink-0 bg-indigo-100 dark:bg-indigo-900/50 rounded-full pt-1 pb-1 pl-2 pr-2 mr-4">
-                      <span className="text-indigo-600 dark:text-indigo-400 text-lg">
-                        2
-                      </span>
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-lg text-neutral-900 dark:text-white mb-2">
-                        Ver Detalhes
-                      </h4>
-                      <p className="text-neutral-600 dark:text-neutral-400">
-                        Clique em &quot;Ver Detalhes&quot; para ver fotos,
-                        descrição completa e o link da loja onde o item está
-                        disponível (Amazon, Mercado Livre, etc).
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start">
-                    <div className="flex-shrink-0 bg-indigo-100 dark:bg-indigo-900/50 rounded-full pt-1 pb-1 pl-2 pr-2 mr-4">
-                      <span className="text-indigo-600 dark:text-indigo-400 text-lg">
-                        3
-                      </span>
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-lg text-neutral-900 dark:text-white mb-2">
-                        Compre no Site Parceiro
-                      </h4>
-                      <p className="text-neutral-600 dark:text-neutral-400">
-                        A compra é feita diretamente no site do vendedor. Você
-                        tem toda segurança e garantia da plataforma escolhida.
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start">
-                    <div className="flex-shrink-0 bg-indigo-100 dark:bg-indigo-900/50 rounded-full pt-1 pb-1 pl-2 pr-2 mr-4">
-                      <span className="text-indigo-600 dark:text-indigo-400 text-lg">
-                        4
-                      </span>
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-lg text-neutral-900 dark:text-white mb-2">
-                        Nos Avise Que Comprou
-                      </h4>
-                      <p className="text-neutral-600 dark:text-neutral-400">
-                        Depois de comprar, clique em &quot;Comprar Este
-                        Presente&quot; para registrarmos seu nome. Assim
-                        saberemos quem nos presenteou com cada item especial!
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start">
-                    <div className="flex-shrink-0 bg-indigo-100 dark:bg-indigo-900/50 rounded-full pt-1 pb-1 pl-2 pr-2 mr-4">
-                      <span className="text-indigo-600 dark:text-indigo-400 text-lg">
-                        5
-                      </span>
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-lg text-neutral-900 dark:text-white mb-2">
-                        Entrega do Presente
-                      </h4>
-                      <p className="text-neutral-600 dark:text-neutral-400">
-                        O presente pode ser entregue na festa ou combine com os
-                        noivos. Não se preocupe, não abriremos o presente antes
-                        do evento!
-                      </p>
-                    </div>
-                  </div>
+                  ))}
                 </div>
               </div>
 
