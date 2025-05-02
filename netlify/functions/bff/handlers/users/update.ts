@@ -14,18 +14,15 @@ export const updateUserById = async (
     if (!body) {
       return errorResponse(400, "Invalid request body");
     }
-    const { name, birthDate, profileImage } = body;
+    const { name, birthDate, profileImage, isAdmin } = body;
 
-    if (!name || !birthDate || !profileImage) {
-      return errorResponse(
-        400,
-        "Name, birth date or profile image are required"
-      );
+    if (!name || !birthDate) {
+      return errorResponse(400, "Name or birth date are required");
     }
 
     const updatedUser = await prisma.user.update({
       where: { id: parseInt(userId) },
-      data: { name, birthDate, profileImage },
+      data: { name, birthDate, profileImage, isAdmin },
     });
 
     return jsonResponse(200, updatedUser);

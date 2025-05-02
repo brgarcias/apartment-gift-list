@@ -205,7 +205,7 @@ export default function GiftList() {
         {purchasedByCurrentUser && (
           <div
             className={`
-              absolute z-20 w-full min-w-[180px] max-w-[340px] 
+              absolute z-20 w-full min-w-[150px] max-w-[150px] 
               bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 
               rounded-lg shadow-lg p-2.5 top-full mt-2 
               opacity-100 group-hover:opacity-100 
@@ -214,8 +214,7 @@ export default function GiftList() {
               ${bounceAnimation}
             `}
             style={{
-              right: "-38%",
-              transform: "translateX(-50%)",
+              right: "-25%",
             }}
           >
             <div className={`flex items-center ${tooltipShakeAnimation}`}>

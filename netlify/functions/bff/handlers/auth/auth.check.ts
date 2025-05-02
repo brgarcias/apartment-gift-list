@@ -2,6 +2,7 @@ import { parse } from "cookie";
 import RedisService from "@/lib/redis";
 import { HandlerEvent, HandlerResponse } from "@netlify/functions";
 import { errorResponse, jsonResponse } from "@/lib/response";
+import { getAuthUser } from "./auth";
 
 export default async function authCheck(
   event: HandlerEvent
@@ -30,5 +31,29 @@ export default async function authCheck(
     return errorResponse(500, "Internal server error");
   } finally {
     await redis.disconnect();
+  }
+}
+
+export async function authCheckAdmin(event: HandlerEvent): Promise<boolean> {
+  try {
+    const authUser = await getAuthUser(event);
+
+    if (authUser.statusCode !== 200) {
+      return false;
+    }
+
+    const authUserData = JSON.parse(authUser.body || "{}");
+    if (!authUserData) {
+      return false;
+    }
+
+    if (!authUserData.user.isAdmin) {
+      return false;
+    }
+
+    return true;
+  } catch (error) {
+    console.error("Auth check error:", error);
+    return false;
   }
 }

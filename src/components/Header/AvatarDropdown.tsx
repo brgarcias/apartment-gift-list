@@ -1,8 +1,7 @@
 "use client";
 
 import { Popover, Transition } from "@/app/headlessui";
-import { avatarImgs } from "@/contains/fakeData";
-import { Fragment, use, useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import Avatar from "@/shared/Avatar/Avatar";
 import Link from "next/link";
 import Modal from "../Modal/Modal";
@@ -11,6 +10,7 @@ import { useToast } from "@/contexts/ToastContext";
 import { useFeedback } from "@/contexts/FeedbackContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { AnimatePresence, motion } from "framer-motion";
+import { LockClosedIcon } from "@heroicons/react/24/outline";
 
 export default function AvatarDropdown() {
   const [isOpenMoreFilter, setisOpenMoreFilter] = useState(false);
@@ -338,6 +338,21 @@ export default function AvatarDropdown() {
                               </p>
                             </div>
                           </Link>
+                          {/* ------------------ ADMIN --------------------- */}
+                          {user?.isAdmin && (
+                            <Link
+                              href={"/admin-users"}
+                              className="flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50"
+                              onClick={() => close()}
+                            >
+                              <div className="flex items-center justify-center flex-shrink-0 text-neutral-500 dark:text-neutral-300">
+                                <LockClosedIcon className="h-6 w-6 text-red-600 dark:text-red-400" />
+                              </div>
+                              <div className="ml-4">
+                                <p className="text-sm font-medium">{"Admin"}</p>
+                              </div>
+                            </Link>
+                          )}
                           <div className="w-full border-b border-neutral-200 dark:border-neutral-700" />
                           {/* ------------------ HELP --------------------- */}
                           <Link

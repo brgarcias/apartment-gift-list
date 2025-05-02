@@ -9,7 +9,7 @@ import {
   getOrders,
   getOrdersByUserId,
 } from "../handlers/orders/get";
-import { getUserById } from "../handlers/users/get";
+import { getUserById, getUsers } from "../handlers/users/get";
 import { RouteTable } from "../types/routes.types";
 import { updateUserById } from "../handlers/users/update";
 import { uploadImage } from "../handlers/google-drive/upload";
@@ -32,6 +32,9 @@ export const ROUTES: RouteTable = {
   },
   "/orders/user/:id": {
     GET: getOrdersByUserId,
+  },
+  "/users": {
+    GET: getUsers,
   },
   "/users/:id": {
     GET: getUserById,

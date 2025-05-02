@@ -184,7 +184,7 @@ const AccountPage = () => {
                 <div className="relative rounded-full overflow-hidden flex">
                   {profileImage ? (
                     <Image
-                      src={profileImage || "/default-avatar.png"}
+                      src={profileImage}
                       alt="avatar"
                       width={128}
                       height={128}

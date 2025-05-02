@@ -1,23 +1,25 @@
 import { HandlerEvent, HandlerResponse } from "@netlify/functions";
 import { prisma } from "@/lib/prisma";
 import { errorResponse, jsonResponse } from "@/lib/response";
-import authCheck from "../auth/auth.check";
+import authCheck, { authCheckAdmin } from "../auth/auth.check";
 
 export const getOrders = async (
   event: HandlerEvent
 ): Promise<HandlerResponse> => {
   try {
-    const { queryStringParameters } = event;
-    const { deletedAt } = queryStringParameters || {};
+    const session = await authCheckAdmin(event);
+
+    if (!session) {
+      return errorResponse(401, "Unauthorized");
+    }
+
     const orders = await prisma.order.findMany({
       cacheStrategy: { swr: 60, ttl: 60, tags: ["all_orders"] },
-      where: {
-        deletedAt: deletedAt ? { not: null } : null,
-      },
       orderBy: {
         createdAt: "desc",
       },
       include: {
+        user: true,
         Gift: {
           include: {
             gift: true,
@@ -39,16 +41,17 @@ export const getOrderById = async (event: HandlerEvent) => {
     return errorResponse(400, "Invalid Order ID");
   }
   try {
-    const session = await authCheck(event);
+    const session = await authCheckAdmin(event);
 
-    if (session.statusCode !== 200) {
-      return session;
+    if (!session) {
+      return errorResponse(401, "Unauthorized");
     }
 
     const order = await prisma.order.findUnique({
       where: { id: parseInt(orderId) },
       cacheStrategy: { swr: 60, ttl: 60, tags: ["order_by_id"] },
       include: {
+        user: true,
         Gift: {
           include: {
             gift: true,
