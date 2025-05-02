@@ -14,7 +14,7 @@ export interface ButtonProps {
   loading?: boolean;
   disabled?: boolean;
   type?: ButtonHTMLAttributes<HTMLButtonElement>["type"];
-  href?: Route;
+  href?: Route | string;
   targetBlank?: boolean;
   onClick?: () => void;
   children?: React.ReactNode;
@@ -66,7 +66,12 @@ const Button: FC<ButtonProps> = ({
 
   if (!!href) {
     return (
-      <Link href={href} className={`${CLASSES} `} onClick={onClick}>
+      <Link
+        target={targetBlank ? "_blank" : "_self"}
+        href={href as Route}
+        className={`${CLASSES} `}
+        onClick={onClick}
+      >
         {children || `This is Link`}
       </Link>
     );
