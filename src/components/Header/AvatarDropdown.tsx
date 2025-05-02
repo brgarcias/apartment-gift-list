@@ -19,6 +19,7 @@ export default function AvatarDropdown() {
   const { showToast } = useToast();
   const { showFeedback } = useFeedback();
   const [isLoading, setIsLoading] = useState(true);
+  const [tempImage, setTempImage] = useState<string | null>(null);
 
   const logout = async (close: any): Promise<void> => {
     showFeedback("Saindo", true);
@@ -54,6 +55,12 @@ export default function AvatarDropdown() {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      setTempImage(event.target?.result as string);
+    };
+    reader.readAsDataURL(file);
+
     showFeedback("Enviando imagem", true);
 
     try {
@@ -79,8 +86,10 @@ export default function AvatarDropdown() {
     } catch (error) {
       console.error("Erro ao enviar imagem:", error);
       showToast("Erro ao enviar imagem. Tente novamente.", "error");
+      setTempImage(null);
     } finally {
       showFeedback("", false);
+      setTempImage(null);
     }
   };
 
@@ -195,7 +204,7 @@ export default function AvatarDropdown() {
                               {/* Avatar */}
                               <div className="relative w-12 h-12 rounded-full overflow-hidden">
                                 <Avatar
-                                  imgUrl={user?.profileImage}
+                                  imgUrl={tempImage || user?.profileImage}
                                   sizeClass="w-full h-full"
                                   userName={user?.name}
                                 />
