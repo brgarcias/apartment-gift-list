@@ -12,7 +12,6 @@ export const getUserById = async (
   try {
     const user = await prisma.user.findUnique({
       where: { id: parseInt(userId) },
-      cacheStrategy: { swr: 60, ttl: 60 * 60 * 24 * 30, tags: ["user_by_id"] },
       include: {
         orders: {
           include: {
