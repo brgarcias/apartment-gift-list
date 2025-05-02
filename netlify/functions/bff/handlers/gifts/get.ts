@@ -6,7 +6,24 @@ export const getGifts = async (): Promise<HandlerResponse> => {
   try {
     const gifts = await prisma.gift.findMany({
       include: {
-        Category: true,
+        Category: {
+          select: {
+            name: true,
+          },
+        },
+        GiftOnOrder: {
+          select: {
+            order: {
+              select: {
+                user: {
+                  select: {
+                    id: true,
+                  },
+                },
+              },
+            },
+          },
+        },
       },
       orderBy: {
         name: "asc",
