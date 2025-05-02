@@ -306,7 +306,7 @@ export default function GiftList() {
                 style={{ minHeight: "450px" }} // Altura mínima para consistência
               >
                 {/* Bloco 1: Imagem (altura fixa) */}
-                <div className="h-48 bg-indigo-50 dark:bg-slate-700 flex items-center justify-center p-4">
+                <div className="rounded-t-lg h-48 bg-indigo-50 dark:bg-slate-700 flex items-center justify-center p-4">
                   <Image
                     src={gift.imageUrl}
                     alt={gift.name}

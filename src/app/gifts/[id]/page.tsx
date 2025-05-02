@@ -311,7 +311,7 @@ export default function GiftDetails({ params }: { params: { id: string } }) {
                 <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm dark:shadow-slate-700/30">
                   <div className="flex flex-col md:flex-row">
                     {/* Image Section */}
-                    <div className="w-full md:w-1/2 bg-indigo-50 dark:bg-slate-700 flex items-center justify-center p-4 sm:p-8">
+                    <div className="rounded-t-lg w-full md:w-1/2 bg-indigo-50 dark:bg-slate-700 flex items-center justify-center p-4 sm:p-8">
                       <div className="relative w-full h-64 sm:h-80 md:h-full">
                         <Image
                           src={gift.imageUrl}
