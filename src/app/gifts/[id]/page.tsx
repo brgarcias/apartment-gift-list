@@ -13,61 +13,58 @@ import { useToast } from "@/contexts/ToastContext";
 import { useFeedback } from "@/contexts/FeedbackContext";
 import { motion, AnimatePresence } from "framer-motion";
 import Badge from "@/shared/Badge/Badge";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
 const brlFormatter = new Intl.NumberFormat("pt-BR", {
   style: "currency",
   currency: "BRL",
-  minimumFractionDigits: 2,
-  maximumFractionDigits: 2,
 });
 
 const SkeletonLoader = () => (
-  <div className="max-w-6xl mx-auto p-6">
+  <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6">
     <div className="mb-6 h-6 w-32 bg-neutral-200 dark:bg-neutral-700 rounded animate-pulse"></div>
 
-    <div className="bg-white dark:bg-slate-800 rounded-lg shadow-md dark:shadow-slate-700/30 overflow-hidden">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* Skeleton para a imagem */}
-        <div className="h-96 bg-neutral-200 dark:bg-neutral-700 animate-pulse"></div>
+    <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm dark:shadow-slate-700/30 overflow-hidden">
+      <div className="flex flex-col md:flex-row">
+        {/* Image skeleton */}
+        <div className="w-full md:w-1/2 h-64 md:h-auto bg-neutral-200 dark:bg-neutral-700 animate-pulse"></div>
 
-        {/* Skeleton para o conteúdo */}
-        <div className="p-8 space-y-6">
-          <div className="flex justify-between items-start">
+        {/* Content skeleton */}
+        <div className="w-full md:w-1/2 p-4 sm:p-6 space-y-4">
+          <div className="flex justify-between">
             <div className="h-8 w-3/4 bg-neutral-200 dark:bg-neutral-700 rounded animate-pulse"></div>
             <div className="h-6 w-20 bg-neutral-200 dark:bg-neutral-700 rounded-full animate-pulse"></div>
           </div>
 
-          <div className="h-10 w-32 bg-neutral-200 dark:bg-neutral-700 rounded animate-pulse"></div>
+          <div className="h-4 w-24 bg-neutral-200 dark:bg-neutral-700 rounded animate-pulse"></div>
+          <div className="h-6 w-32 bg-neutral-200 dark:bg-neutral-700 rounded animate-pulse"></div>
 
-          {/* Skeleton para "Onde comprar" */}
-          <div className="space-y-4">
-            <div className="h-6 w-40 bg-neutral-200 dark:bg-neutral-700 rounded animate-pulse"></div>
-            <div className="h-4 w-3/4 bg-neutral-200 dark:bg-neutral-700 rounded animate-pulse"></div>
-            <div className="h-10 w-32 bg-neutral-200 dark:bg-neutral-700 rounded animate-pulse"></div>
+          {/* Purchase link skeleton */}
+          <div className="space-y-2">
+            <div className="h-4 w-40 bg-neutral-200 dark:bg-neutral-700 rounded animate-pulse"></div>
+            <div className="h-10 w-full bg-neutral-200 dark:bg-neutral-700 rounded animate-pulse"></div>
           </div>
 
-          {/* Skeleton para descrição */}
-          <div className="space-y-3">
-            <div className="h-6 w-32 bg-neutral-200 dark:bg-neutral-700 rounded animate-pulse"></div>
-            <div className="h-4 w-full bg-neutral-200 dark:bg-neutral-700 rounded animate-pulse"></div>
-            <div className="h-4 w-5/6 bg-neutral-200 dark:bg-neutral-700 rounded animate-pulse"></div>
-            <div className="h-4 w-2/3 bg-neutral-200 dark:bg-neutral-700 rounded animate-pulse"></div>
+          {/* Description skeleton */}
+          <div className="space-y-2">
+            <div className="h-4 w-32 bg-neutral-200 dark:bg-neutral-700 rounded animate-pulse"></div>
+            <div className="h-3 w-full bg-neutral-200 dark:bg-neutral-700 rounded animate-pulse"></div>
+            <div className="h-3 w-5/6 bg-neutral-200 dark:bg-neutral-700 rounded animate-pulse"></div>
           </div>
 
-          {/* Skeleton para datas */}
+          {/* Dates skeleton */}
           <div className="grid grid-cols-2 gap-4">
-            <div>
-              <div className="h-4 w-24 bg-neutral-200 dark:bg-neutral-700 rounded animate-pulse mb-2"></div>
-              <div className="h-4 w-32 bg-neutral-200 dark:bg-neutral-700 rounded animate-pulse"></div>
-            </div>
-            <div>
-              <div className="h-4 w-24 bg-neutral-200 dark:bg-neutral-700 rounded animate-pulse mb-2"></div>
-              <div className="h-4 w-32 bg-neutral-200 dark:bg-neutral-700 rounded animate-pulse"></div>
-            </div>
+            {[1, 2].map((item) => (
+              <div key={item}>
+                <div className="h-3 w-24 bg-neutral-200 dark:bg-neutral-700 rounded animate-pulse mb-1"></div>
+                <div className="h-4 w-32 bg-neutral-200 dark:bg-neutral-700 rounded animate-pulse"></div>
+              </div>
+            ))}
           </div>
 
-          {/* Skeleton para botão */}
-          <div className="h-12 w-64 bg-neutral-200 dark:bg-neutral-700 rounded-full animate-pulse"></div>
+          {/* Button skeleton */}
+          <div className="h-12 w-full bg-neutral-200 dark:bg-neutral-700 rounded-full animate-pulse mt-4"></div>
         </div>
       </div>
     </div>
@@ -215,7 +212,7 @@ export default function GiftDetails({ params }: { params: { id: string } }) {
         {purchasedByCurrentUser && (
           <div
             className={`
-              absolute z-20 w-full min-w-[180px] max-w-[340px] 
+              absolute z-20 w-full min-w-[150px] max-w-[150px] 
               bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 
               rounded-lg shadow-lg p-2.5 top-full mt-2 
               opacity-100 group-hover:opacity-100 
@@ -224,8 +221,7 @@ export default function GiftDetails({ params }: { params: { id: string } }) {
               ${bounceAnimation}
             `}
             style={{
-              right: "-38%",
-              transform: "translateX(-50%)",
+              right: "-25%",
             }}
           >
             <div className={`flex items-center ${tooltipShakeAnimation}`}>
@@ -251,24 +247,27 @@ export default function GiftDetails({ params }: { params: { id: string } }) {
     );
   };
 
+  const formatDate = (dateString: Date) => {
+    return format(new Date(dateString), "dd 'de' MMMM 'de' yyyy", {
+      locale: ptBR,
+    });
+  };
+
   if (error) {
     return (
       <div className="max-w-6xl mx-auto p-6">
         <div className="bg-red-100 border border-red-400 text-red-700 dark:bg-red-900 dark:border-red-700 dark:text-red-100 px-4 py-3 rounded mb-6">
           {error}
         </div>
-        <button
-          onClick={() => router.push("/")}
-          className="bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-700 dark:hover:bg-indigo-600 text-white font-medium py-2 px-4 rounded transition-colors duration-300"
-        >
+        <ButtonPrimary onClick={() => router.push("/")}>
           Voltar para a lista
-        </button>
+        </ButtonPrimary>
       </div>
     );
   }
 
   return (
-    <div className="max-w-6xl mx-auto p-6">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6">
       <AnimatePresence>
         {isLoading ? (
           <motion.div
@@ -289,10 +288,10 @@ export default function GiftDetails({ params }: { params: { id: string } }) {
             transition={{ duration: 0.3 }}
           >
             {gift && (
-              <>
+              <div className="space-y-6">
                 <button
                   onClick={() => router.push("/")}
-                  className="mb-6 flex items-center text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300 transition-colors duration-300"
+                  className="flex items-center text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300 transition-colors duration-200 text-sm sm:text-base"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -309,73 +308,79 @@ export default function GiftDetails({ params }: { params: { id: string } }) {
                   Voltar para a lista
                 </button>
 
-                <div className="bg-white dark:bg-slate-800 rounded-lg shadow-md dark:shadow-slate-700/30">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div className="h-96 bg-indigo-50 dark:bg-slate-700 flex items-center justify-center p-8">
-                      <Image
-                        src={gift.imageUrl}
-                        alt={gift.name}
-                        width={320}
-                        height={320}
-                        className="object-contain max-h-full"
-                        priority
-                      />
+                <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm dark:shadow-slate-700/30">
+                  <div className="flex flex-col md:flex-row">
+                    {/* Image Section */}
+                    <div className="w-full md:w-1/2 bg-indigo-50 dark:bg-slate-700 flex items-center justify-center p-4 sm:p-8">
+                      <div className="relative w-full h-64 sm:h-80 md:h-full">
+                        <Image
+                          src={gift.imageUrl}
+                          alt={gift.name}
+                          fill
+                          className="object-contain"
+                          priority
+                          sizes="(max-width: 768px) 100vw, 50vw"
+                        />
+                      </div>
                     </div>
-                    <div className="p-6">
-                      <div className="flex justify-between items-center mb-2">
-                        <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">
+
+                    {/* Content Section */}
+                    <div className="w-full md:w-1/2 p-4 sm:p-6 space-y-4 sm:space-y-6">
+                      <div className="flex justify-between items-start gap-2">
+                        <h1 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-gray-100">
                           {gift.name}
                         </h1>
                         {getStatusBadge(gift.status as GiftStatusEnum)}
                       </div>
-                      <div className="mb-6">
+
+                      <div>
                         <Badge
-                          className="font-small"
                           name={gift.Category.name}
+                          className="text-xs sm:text-sm"
                         />
                       </div>
 
-                      <div className="mb-6">
-                        <p className="text-3xl font-bold text-indigo-600 dark:text-indigo-400">
-                          {brlFormatter.format(gift.price)}
-                        </p>
+                      <div className="text-2xl sm:text-3xl font-bold text-indigo-600 dark:text-indigo-400">
+                        {brlFormatter.format(gift.price)}
                       </div>
+
+                      {/* Purchase Link */}
                       {gift.purchaseLink && (
-                        <div className="mb-6 bg-blue-50 dark:bg-slate-700 p-4 rounded-lg">
-                          <h2 className="text-lg font-semibold text-blue-800 dark:text-blue-300 mb-2">
+                        <div className="bg-blue-50 dark:bg-slate-700 p-3 sm:p-4 rounded-lg">
+                          <h2 className="text-sm sm:text-base font-semibold text-blue-800 dark:text-blue-300 mb-2">
                             Onde comprar
                           </h2>
-                          <a
-                            href={gift.purchaseLink}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 break-all"
-                          >
-                            {new URL(gift.purchaseLink).hostname.replace(
-                              "www.",
-                              ""
-                            )}
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              className="h-4 w-4 ml-1"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                              />
-                            </svg>
-                          </a>
-                          <div className="mt-3">
+                          <div className="flex flex-col sm:flex-row sm:items-center gap-3">
                             <a
                               href={gift.purchaseLink}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 text-white font-medium py-2 px-4 rounded transition-colors duration-300 inline-flex items-center"
+                              className="text-sm sm:text-base text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 break-all flex items-center"
+                            >
+                              {new URL(gift.purchaseLink).hostname.replace(
+                                "www.",
+                                ""
+                              )}
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="h-4 w-4 ml-1"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                                />
+                              </svg>
+                            </a>
+                            <a
+                              href={gift.purchaseLink}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 text-white text-sm sm:text-base font-medium py-2 px-3 sm:px-4 rounded transition-colors duration-200 inline-flex items-center justify-center flex-shrink-0"
                             >
                               Visitar loja
                               <svg
@@ -397,103 +402,92 @@ export default function GiftDetails({ params }: { params: { id: string } }) {
                         </div>
                       )}
 
-                      <div className="mb-8">
-                        <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">
+                      {/* Description */}
+                      <div>
+                        <h2 className="text-sm sm:text-base font-semibold text-gray-800 dark:text-gray-200 mb-2">
                           Descrição
                         </h2>
-                        <p className="text-gray-600 dark:text-gray-300">
+                        <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300">
                           {gift.description.trim() ||
                             "Este presente não possui descrição detalhada."}
                         </p>
                       </div>
 
-                      <div className="grid grid-cols-2 gap-4 mb-8">
+                      {/* Dates */}
+                      <div className="grid grid-cols-2 gap-4 text-sm sm:text-base">
                         <div>
-                          <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                          <h3 className="font-medium text-gray-500 dark:text-gray-400">
                             Adicionado em
                           </h3>
                           <p className="text-gray-800 dark:text-gray-200">
-                            {new Date(gift.createdAt).toLocaleDateString(
-                              "pt-BR",
-                              {
-                                day: "2-digit",
-                                month: "2-digit",
-                                year: "numeric",
-                              }
-                            )}
+                            {formatDate(gift.createdAt)}
                           </p>
                         </div>
                         <div>
-                          <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                          <h3 className="font-medium text-gray-500 dark:text-gray-400">
                             Atualizado em
                           </h3>
                           <p className="text-gray-800 dark:text-gray-200">
-                            {new Date(gift.updatedAt).toLocaleDateString(
-                              "pt-BR",
-                              {
-                                day: "2-digit",
-                                month: "2-digit",
-                                year: "numeric",
-                              }
-                            )}
+                            {formatDate(gift.updatedAt)}
                           </p>
                         </div>
                       </div>
 
-                      {gift.status ===
-                      GiftStatusEnum.AVAILABLE.toUpperCase() ? (
-                        showConfirmation ? (
-                          <div className="space-y-4">
-                            <p className="text-lg font-medium text-gray-800 dark:text-gray-200">
-                              Confirmar compra deste presente?
-                            </p>
-                            <div className="grid grid-cols-2 gap-4">
-                              <ButtonThird
-                                onClick={handlePurchase}
-                                disabled={isProcessing}
-                                sizeClass="px-1 py-1 lg:px-1 lg:py-3"
-                                className="bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-600 text-white font-medium py-3 px-6 transition-colors duration-300"
-                              >
-                                {isProcessing ? "Processando..." : "Confirmar"}
-                              </ButtonThird>
-                              <ButtonPrimary
-                                onClick={() => setShowConfirmation(false)}
-                                disabled={isProcessing}
-                                sizeClass="px-1 py-1 lg:px-1 lg:py-3"
-                                className="bg-gray-200 hover:bg-gray-300 dark:bg-slate-700 dark:hover:bg-slate-600 text-gray-800 dark:text-white font-medium py-3 px-6 transition-colors duration-300"
-                              >
-                                Cancelar
-                              </ButtonPrimary>
+                      {/* Purchase Button */}
+                      <div className="pt-2">
+                        {gift.status ===
+                        GiftStatusEnum.AVAILABLE.toUpperCase() ? (
+                          showConfirmation ? (
+                            <div className="space-y-4">
+                              <p className="text-sm sm:text-base font-medium text-gray-800 dark:text-gray-200">
+                                Confirmar compra deste presente?
+                              </p>
+                              <div className="grid grid-cols-2 gap-3">
+                                <ButtonPrimary
+                                  onClick={handlePurchase}
+                                  disabled={isProcessing}
+                                  className="bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-600 text-white"
+                                >
+                                  {isProcessing
+                                    ? "Processando..."
+                                    : "Confirmar"}
+                                </ButtonPrimary>
+                                <ButtonThird
+                                  onClick={() => setShowConfirmation(false)}
+                                  disabled={isProcessing}
+                                  className="bg-gray-200 hover:bg-gray-300 dark:bg-slate-700 dark:hover:bg-slate-600 text-gray-800 dark:text-white"
+                                >
+                                  Cancelar
+                                </ButtonThird>
+                              </div>
                             </div>
-                          </div>
+                          ) : (
+                            <ButtonPrimary
+                              onClick={() => {
+                                if (!isLoggedIn) {
+                                  setOpenModalLogIn(true);
+                                  return;
+                                }
+                                setShowConfirmation(true);
+                              }}
+                              className="w-full"
+                            >
+                              Comprar este presente
+                            </ButtonPrimary>
+                          )
                         ) : (
                           <ButtonPrimary
-                            onClick={() => {
-                              if (!isLoggedIn) {
-                                setOpenModalLogIn(true);
-                                return;
-                              }
-                              setShowConfirmation(true);
-                            }}
-                            sizeClass="px-2 py-2 lg:px-6 lg:py-3"
-                            className="bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-700 dark:hover:bg-indigo-600 text-white font-medium py-3 px-6 transition-colors duration-300"
+                            disabled
+                            className="w-full bg-gray-200 hover:bg-gray-300 dark:bg-slate-700 dark:hover:bg-slate-600 text-gray-800 dark:text-white"
                           >
-                            Comprar este presente
+                            Presente indisponível
                           </ButtonPrimary>
-                        )
-                      ) : (
-                        <ButtonPrimary
-                          disabled
-                          sizeClass="px-2 py-2 lg:px-8 lg:py-4"
-                          className="bg-gray-200 hover:bg-gray-300 dark:bg-slate-700 dark:hover:bg-slate-600 text-gray-800 dark:text-white font-medium py-3 px-6 transition-colors duration-300"
-                        >
-                          Presente indisponível
-                        </ButtonPrimary>
-                      )}
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
-              </>
+              </div>
             )}
           </motion.div>
         )}
