@@ -149,6 +149,8 @@ export default function GiftDetails({ params }: { params: { id: string } }) {
     const pulseAnimation = "animate-[pulse_1.5s_ease-in-out_infinite]";
     const bounceAnimation = "animate-[bounce_1s_ease-in-out_infinite]";
     const shakeAnimation = "hover:animate-[shake_0.5s_ease-in-out]";
+    const tooltipShakeAnimation =
+      "group-hover:animate-[shake_0.5s_ease-in-out]";
 
     const statusMap = {
       [GiftStatusEnum.AVAILABLE.toUpperCase()]: {
@@ -215,9 +217,10 @@ export default function GiftDetails({ params }: { params: { id: string } }) {
             className={`
               absolute z-20 w-full min-w-[180px] max-w-[340px] 
               bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 
-              rounded-lg shadow-lg p-3 top-full mt-2 
+              rounded-lg shadow-lg p-2.5 top-full mt-2 
               opacity-100 group-hover:opacity-100 
-              transition-all duration-300 pointer-events-none 
+              transition-all duration-300 
+              transform hover:scale-105
               ${bounceAnimation}
             `}
             style={{
@@ -225,7 +228,7 @@ export default function GiftDetails({ params }: { params: { id: string } }) {
               transform: "translateX(-50%)",
             }}
           >
-            <div className="flex items-center">
+            <div className={`flex items-center ${tooltipShakeAnimation}`}>
               <svg
                 className="w-4 h-4 mr-2 text-emerald-500 dark:text-emerald-400 flex-shrink-0"
                 fill="currentColor"
