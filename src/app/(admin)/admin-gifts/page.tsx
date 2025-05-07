@@ -225,23 +225,35 @@ const AdminGiftsPage = () => {
         <h2 className="text-2xl font-semibold">Gerenciamento de Presentes</h2>
 
         {/* Barra de busca */}
-        <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-4">
-          <div className="flex justify-between items-center">
-            <Input
-              type="text"
-              placeholder="Buscar presentes..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full mr-2"
-            />
-            <ButtonPrimary
-              fontSize="sm:font-small"
-              sizeClass="px-3 py-2"
-              onClick={openCreateModal}
+        <div className="flex justify-between items-center">
+          <Input
+            type="text"
+            placeholder="Buscar presentes..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full mr-2"
+          />
+          <ButtonPrimary
+            fontSize="sm:font-small"
+            sizeClass="px-3 py-2"
+            onClick={openCreateModal}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
             >
-              Adicionar
-            </ButtonPrimary>
-          </div>
+              <circle cx="12" cy="12" r="10" />
+              <path d="M12 8v8M8 12h8" />
+            </svg>
+          </ButtonPrimary>
         </div>
 
         {/* Tabela de presentes */}
@@ -345,13 +357,39 @@ const AdminGiftsPage = () => {
                           onClick={() => openEditModal(gift)}
                           className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-900 dark:hover:text-indigo-500 mr-4"
                         >
-                          Editar
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="20"
+                            height="20"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            aria-hidden="true"
+                          >
+                            <path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+                          </svg>
                         </button>
                         <button
                           onClick={() => handleDelete(gift)}
                           className="text-red-600 dark:text-red-400 hover:text-red-900 dark:hover:text-red-500"
                         >
-                          Excluir
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="20"
+                            height="20"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            aria-hidden="true"
+                          >
+                            <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                          </svg>
                         </button>
                       </td>
                     </tr>

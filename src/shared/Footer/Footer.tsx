@@ -20,7 +20,7 @@ const Footer: React.FC = () => {
 
   return (
     <footer className="nc-Footer bg-neutral-50 dark:bg-neutral-900 text-neutral-700 dark:text-neutral-300">
-      <div className="container mx-auto px-4 py-10 lg:py-10">
+      <div className="container mx-auto px-4 py-6 lg:py-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-12">
           {/* Logo and Socials */}
           <div className="lg:col-span-2 space-y-4">
@@ -126,7 +126,7 @@ const Footer: React.FC = () => {
         </div>
 
         {/* Copyright */}
-        <div className="border-t border-neutral-200 dark:border-neutral-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+        <div className="border-t border-neutral-200 dark:border-neutral-800 mt-12 pt-6 flex flex-col md:flex-row justify-between items-center">
           <div className="text-sm opacity-80 mb-4 md:mb-0">
             © {currentYear} All rights reserved.
           </div>
