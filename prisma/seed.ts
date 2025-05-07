@@ -8,10 +8,12 @@ async function main() {
       {
         name: "Bruno Garcia",
         birthDate: "15/12/1999",
+        email: "bruno-151299@hotmail.com",
       },
       {
         name: "Amanda Roque",
         birthDate: "11/07/2000",
+        email: "arra347@gmail.com",
       },
     ],
     skipDuplicates: true,

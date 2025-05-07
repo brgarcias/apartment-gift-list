@@ -14,6 +14,7 @@ import Textarea from "@/shared/Textarea/Textarea";
 import Select from "@/shared/Select/Select";
 import { Category } from "@prisma/client";
 import NcModal from "@/shared/NcModal/NcModal";
+import Badge from "@/shared/Badge/Badge";
 
 const AdminGiftsPage = () => {
   const router = useRouter();
@@ -25,6 +26,7 @@ const AdminGiftsPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
 
   // Estados para o modal de cadastro/edição
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -166,23 +168,28 @@ const AdminGiftsPage = () => {
     }
   };
 
+  const handleDelete = (gift: Gift) => {
+    setCurrentGift(gift);
+    setIsModalDeleteOpen(true);
+  };
+
   // Excluir presente
-  const handleDeleteGift = async (id: number) => {
-    if (!confirm("Tem certeza que deseja excluir este presente?")) return;
+  const handleDeleteGift = async (id: number | undefined) => {
+    showFeedback("Excluindo presente", true);
 
-    showFeedback("Excluindo presente...", true);
-
-    try {
-      // Simular chamada à API
-      setTimeout(() => {
+    setTimeout(() => {
+      try {
+        // Simular chamada à API
         setGifts((prev) => prev.filter((gift) => gift.id !== id));
         showToast("Presente excluído com sucesso!", "success");
         showFeedback("", false);
-      }, 1000);
-    } catch (err) {
-      showToast("Erro ao excluir presente", "error");
-      showFeedback("", false);
-    }
+      } catch (err) {
+        showToast("Erro ao excluir presente", "error");
+        showFeedback("", false);
+      } finally {
+        setIsModalDeleteOpen(false);
+      }
+    }, 2000);
   };
 
   // Esqueleto de carregamento
@@ -341,7 +348,7 @@ const AdminGiftsPage = () => {
                           Editar
                         </button>
                         <button
-                          onClick={() => handleDeleteGift(gift.id)}
+                          onClick={() => handleDelete(gift)}
                           className="text-red-600 dark:text-red-400 hover:text-red-900 dark:hover:text-red-500"
                         >
                           Excluir
@@ -519,6 +526,38 @@ const AdminGiftsPage = () => {
                     </ButtonPrimary>
                   </div>
                 </form>
+              )
+            }
+          />
+
+          <NcModal
+            isOpenProp={isModalDeleteOpen}
+            onCloseModal={() => setIsModalDeleteOpen(false)}
+            modalTitle="Deletar Presente"
+            triggerText={false}
+            contentExtraClass="max-w-[450px]"
+            renderContent={() =>
+              currentGift && (
+                <>
+                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                    Tem certeza que deseja excluir o presente{" "}
+                    <Badge
+                      className="bg-red-500 text-white"
+                      name={currentGift.name}
+                    />{" "}
+                    ?
+                  </label>
+
+                  <div className="flex justify-end space-x-3 pt-4">
+                    <ButtonPrimary
+                      sizeClass="px-3 py-1"
+                      type="button"
+                      onClick={() => handleDeleteGift(currentGift.id)}
+                    >
+                      Deletar
+                    </ButtonPrimary>
+                  </div>
+                </>
               )
             }
           />
