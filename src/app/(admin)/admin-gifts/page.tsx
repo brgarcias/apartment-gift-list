@@ -281,6 +281,9 @@ const AdminGiftsPage = () => {
                       Nome
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                      Link de Compra
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                       Categoria
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
@@ -319,6 +322,39 @@ const AdminGiftsPage = () => {
                               {gift.description}
                             </div>
                           </div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm text-gray-900 dark:text-gray-100">
+                          {gift.purchaseLink ? (
+                            <a
+                              href={gift.purchaseLink}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-sm sm:text-base text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 break-all flex items-center"
+                            >
+                              {new URL(gift.purchaseLink).hostname.replace(
+                                "www.",
+                                ""
+                              )}
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="h-4 w-4 ml-1"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                                />
+                              </svg>
+                            </a>
+                          ) : (
+                            "Sem link de compra"
+                          )}
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
@@ -426,6 +462,21 @@ const AdminGiftsPage = () => {
                         })
                       }
                       required
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                      Link de Compra
+                    </label>
+                    <Input
+                      value={currentGift.purchaseLink || ""}
+                      onChange={(e) =>
+                        setCurrentGift({
+                          ...currentGift,
+                          purchaseLink: e.target.value,
+                        })
+                      }
                     />
                   </div>
 
