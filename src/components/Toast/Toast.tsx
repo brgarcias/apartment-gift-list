@@ -15,7 +15,7 @@ type ToastProps = {
   duration?: number;
 };
 
-export function Toast({ message, type, onClose, duration = 5000 }: ToastProps) {
+export function Toast({ message, type, onClose, duration = 2000 }: ToastProps) {
   const [visible, setVisible] = useState(true);
 
   useEffect(() => {

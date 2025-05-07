@@ -19,6 +19,7 @@ const AccountPage = () => {
   const [fullName, setFullName] = useState("");
   const [birthDate, setBirthDate] = useState("");
   const [profileImage, setProfileImage] = useState("");
+  const [email, setEmail] = useState(user?.email || "");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -26,6 +27,7 @@ const AccountPage = () => {
       setFullName(user?.name || "");
       setBirthDate(formatDateForInput(user?.birthDate) || "");
       setProfileImage(user?.profileImage || "");
+      setEmail(user?.email || "");
       setIsLoading(false);
     }
   }, [user]);
@@ -73,7 +75,7 @@ const AccountPage = () => {
 
   const updateAccount = () => {
     showFeedback("Atualizando", true);
-    if (!fullName || !birthDate) {
+    if (!fullName || !birthDate || !email) {
       showToast(
         "Opa, opa, opa, perai! Preencha todos os campos por favor, meu rei.",
         "error"
@@ -93,6 +95,7 @@ const AccountPage = () => {
             },
             body: JSON.stringify({
               name: fullName,
+              email,
               birthDate: new Date(birthDate).toLocaleDateString("pt-BR", {
                 timeZone: "UTC",
                 year: "numeric",
@@ -184,6 +187,7 @@ const AccountPage = () => {
                 <div className="relative rounded-full overflow-hidden flex">
                   {profileImage ? (
                     <Image
+                      draggable="false"
                       src={profileImage}
                       alt="avatar"
                       width={128}
@@ -227,6 +231,15 @@ const AccountPage = () => {
                     className="mt-1.5"
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
+                  />
+                </div>
+
+                <div className="max-w-lg">
+                  <Label>E-mail</Label>
+                  <Input
+                    className="mt-1.5"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                   />
                 </div>
 

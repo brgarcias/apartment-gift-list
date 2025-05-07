@@ -22,6 +22,7 @@ export default function UnauthorizedAdminAccess() {
         {/* Background Pattern */}
         <div className="absolute inset-0 overflow-hidden opacity-10 dark:opacity-5">
           <Image
+            draggable="false"
             fill
             className="object-cover"
             src={backgroundPattern}

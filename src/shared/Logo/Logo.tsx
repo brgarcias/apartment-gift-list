@@ -22,6 +22,7 @@ const Logo: React.FC<LogoProps> = ({
       {img ? (
         <>
           <Image
+            draggable="false"
             className={`block h-12 sm:h-10 w-auto dark:hidden`}
             src={img}
             alt="Logo"
@@ -30,6 +31,7 @@ const Logo: React.FC<LogoProps> = ({
           />
 
           <Image
+            draggable="false"
             className={`hidden dark:block h-12 sm:h-10 w-auto filter invert brightness-0 dark:brightness-100`}
             src={img}
             alt="Logo"

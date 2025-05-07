@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { errorResponse, jsonResponse } from "@/lib/response";
 import { GiftStatusEnum } from "@/enums/gift.enum";
 import { GiftStatus } from "@prisma/client";
-import authCheck from "../auth/auth.check";
+import authCheck, { authCheckAdmin } from "../auth/auth.check";
 
 interface HandlerEventWithParams extends HandlerEvent {
   pathParameters?: {
@@ -82,6 +82,59 @@ const purchaseGift = async (
   }
 };
 
+const returnGift = async (
+  event: HandlerEventWithParams
+): Promise<HandlerResponse> => {
+  const giftId = event.pathParameters?.id
+    ? parseInt(event.pathParameters.id)
+    : NaN;
+  if (!giftId) {
+    return errorResponse(400, "Gift ID not provided");
+  }
+  try {
+    const session = await authCheckAdmin(event);
+
+    if (!session) {
+      return errorResponse(401, "Unauthorized");
+    }
+    const gift = await prisma.gift.findUnique({
+      where: { id: giftId },
+      select: { status: true, GiftOnOrder: { select: { orderId: true } } },
+    });
+    if (!gift) {
+      return errorResponse(404, "Gift not found");
+    }
+    if (gift.status !== GiftStatus.PURCHASED) {
+      return errorResponse(400, "Gift is not purchased");
+    }
+    const result = await prisma.$transaction(async (prisma) => {
+      await prisma.giftOnOrder.deleteMany({
+        where: { giftId: giftId },
+      });
+
+      const orderId = gift.GiftOnOrder[0].orderId;
+
+      await prisma.order.delete({
+        where: { id: orderId },
+      });
+
+      const updatedGift = await prisma.gift.update({
+        where: { id: giftId },
+        data: { status: GiftStatus.AVAILABLE },
+      });
+
+      return updatedGift;
+    });
+    return jsonResponse(200, result);
+  } catch (error) {
+    console.error("Error in returnGift:", error);
+    return errorResponse(
+      500,
+      error instanceof Error ? error.message : "Internal server error"
+    );
+  }
+};
+
 export const handleGiftStatusUpdate = async (
   event: HandlerEventWithParams
 ): Promise<HandlerResponse> => {
@@ -106,6 +159,8 @@ export const handleGiftStatusUpdate = async (
     switch (action) {
       case GiftStatusEnum.PURCHASED:
         return await purchaseGift(event);
+      case GiftStatusEnum.AVAILABLE:
+        return await returnGift(event);
       default:
         return errorResponse(400, "Invalid action");
     }

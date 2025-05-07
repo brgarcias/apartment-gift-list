@@ -39,6 +39,7 @@ const Avatar: FC<AvatarProps> = ({
     >
       {url ? (
         <Image
+          draggable="false"
           fill
           sizes="100px"
           className={`absolute inset-0 w-full h-full object-cover ${radius}`}

@@ -21,7 +21,7 @@ const DATA_sortOrderRadios = [
   { name: "Preço: Maior para Menor", id: "Price-hight-low" },
 ];
 
-const PRICE_RANGE = [0, 5000];
+const PRICE_RANGE = [0, 2000];
 
 interface TabFiltersProps {
   categories: Category[];

@@ -13,6 +13,7 @@ import { getUserById, getUsers } from "../handlers/users/get";
 import { RouteTable } from "../types/routes.types";
 import { updateUserById } from "../handlers/users/update";
 import { uploadImage } from "../handlers/google-drive/upload";
+import { deleteUserById } from "../handlers/users/delete";
 
 export const ROUTES: RouteTable = {
   "/gifts": {
@@ -41,6 +42,9 @@ export const ROUTES: RouteTable = {
   },
   "/users/update/:id": {
     PATCH: updateUserById,
+  },
+  "/users/delete/:id": {
+    DELETE: deleteUserById,
   },
   "/categories": {
     GET: getCategories,

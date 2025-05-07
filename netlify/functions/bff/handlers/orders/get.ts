@@ -14,7 +14,6 @@ export const getOrders = async (
     }
 
     const orders = await prisma.order.findMany({
-      cacheStrategy: { swr: 60, ttl: 60, tags: ["all_orders"] },
       orderBy: {
         createdAt: "desc",
       },
@@ -49,7 +48,6 @@ export const getOrderById = async (event: HandlerEvent) => {
 
     const order = await prisma.order.findUnique({
       where: { id: parseInt(orderId) },
-      cacheStrategy: { swr: 60, ttl: 60, tags: ["order_by_id"] },
       include: {
         user: true,
         Gift: {
@@ -85,7 +83,6 @@ export const getOrdersByUserId = async (event: HandlerEvent) => {
 
     const orders = await prisma.order.findMany({
       where: { userId: parseInt(userId) },
-      cacheStrategy: { swr: 60, ttl: 60, tags: ["order_by_user_id"] },
       include: {
         Gift: {
           include: {

@@ -4,7 +4,6 @@ import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ArchiveBoxIcon,
-  CheckCircleIcon,
   XCircleIcon,
   MagnifyingGlassIcon,
   EyeIcon,
@@ -20,6 +19,9 @@ import { useFeedback } from "@/contexts/FeedbackContext";
 import Badge from "@/shared/Badge/Badge";
 import Image from "next/image";
 import Avatar from "@/shared/Avatar/Avatar";
+import { useRouter } from "next/navigation";
+import ButtonThird from "@/shared/Button/ButtonThird";
+import { GiftStatusEnum } from "@/enums/gift.enum";
 
 interface User {
   id: number;
@@ -64,10 +66,12 @@ interface Order {
 
 const AdminOrdersPage = () => {
   const [orders, setOrders] = useState<Order[]>([]);
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentOrder, setCurrentOrder] = useState<Order | null>(null);
+  const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
   const { showToast } = useToast();
   const { showFeedback } = useFeedback();
 
@@ -104,30 +108,34 @@ const AdminOrdersPage = () => {
     });
   };
 
-  const handleUpdateStatus = async (orderId: number, newStatus: string) => {
-    showFeedback("Atualizando status...", true);
+  const handleDelete = (order: Order) => {
+    setCurrentOrder(order);
+    setIsModalDeleteOpen(true);
+  };
+
+  const handleDeleteOrder = async (giftId: number) => {
+    showFeedback("Excluindo pedido", true);
     try {
-      const res = await fetch(`/api/admin/orders/${orderId}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ status: newStatus }),
-      });
-
-      if (!res.ok) throw new Error("Failed to update order status");
-
-      setOrders(
-        orders.map((order) =>
-          order.id === orderId ? { ...order, status: newStatus } : order
-        )
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_NETLIFY_URL}/gifts/${giftId}/status`,
+        {
+          method: "PATCH",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            action: GiftStatusEnum.AVAILABLE,
+          }),
+        }
       );
-      showToast("Status atualizado com sucesso", "success");
+      if (!res.ok) throw new Error("Failed to delete order");
+      showToast("Pedido excluído com sucesso", "success");
     } catch (error) {
-      console.error("Error updating order status:", error);
-      showToast("Erro ao atualizar status", "error");
+      showToast("Erro ao excluir pedido", "error");
     } finally {
       showFeedback("", false);
+      setIsModalDeleteOpen(false);
     }
   };
 
@@ -299,30 +307,15 @@ const AdminOrdersPage = () => {
                               <EyeIcon className="h-5 w-5" />
                             </button>
                             <button
-                              onClick={() =>
-                                handleUpdateStatus(
-                                  order.id,
-                                  order.Gift[0].gift.status === "PURCHASED"
-                                    ? "PROCESSING"
-                                    : "COMPLETED"
-                                )
-                              }
+                              onClick={() => handleDelete(order)}
                               className={`p-1 rounded-full ${
                                 order.Gift[0].gift.status === "PURCHASED"
                                   ? "text-yellow-600 dark:text-yellow-400 hover:bg-yellow-50 dark:hover:bg-yellow-900/30"
                                   : "text-green-600 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/30"
                               }`}
-                              title={
-                                order.Gift[0].gift.status === "PURCHASED"
-                                  ? "Marcar como processando"
-                                  : "Marcar como completo"
-                              }
+                              title="Desvincular Pedido"
                             >
-                              {order.Gift[0].gift.status === "PURCHASED" ? (
-                                <XCircleIcon className="h-5 w-5" />
-                              ) : (
-                                <CheckCircleIcon className="h-5 w-5" />
-                              )}
+                              <XCircleIcon className="h-5 w-5" />
                             </button>
                           </td>
                         </tr>
@@ -409,6 +402,7 @@ const AdminOrdersPage = () => {
                     <div key={item.giftId} className="flex py-4">
                       <div className="relative h-24 w-24 flex-shrink-0 overflow-hidden rounded-xl bg-slate-100">
                         <Image
+                          draggable="false"
                           fill
                           src={item.gift.imageUrl}
                           alt={item.gift.name}
@@ -426,14 +420,16 @@ const AdminOrdersPage = () => {
                           </p>
                         </div>
                         <div className="flex flex-1 items-end justify-between text-sm">
-                          <a
-                            href={item.gift.purchaseLink}
-                            target="_blank"
-                            rel="noopener noreferrer"
+                          <ButtonThird
+                            onClick={() =>
+                              router.push(`/gifts/${item.gift.id}`)
+                            }
+                            sizeClass="py-0 px-0"
+                            fontSize="font-small"
                             className="font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300"
                           >
-                            Link de compra
-                          </a>
+                            Ver produto
+                          </ButtonThird>
                         </div>
                       </div>
                     </div>
@@ -442,11 +438,53 @@ const AdminOrdersPage = () => {
               </div>
 
               <div className="flex justify-end pt-4">
-                <ButtonPrimary onClick={() => setIsModalOpen(false)}>
+                <ButtonPrimary
+                  sizeClass="px-3 py-1"
+                  onClick={() => setIsModalOpen(false)}
+                >
                   Fechar
                 </ButtonPrimary>
               </div>
             </div>
+          )
+        }
+      />
+
+      <NcModal
+        isOpenProp={isModalDeleteOpen}
+        onCloseModal={() => setIsModalDeleteOpen(false)}
+        modalTitle={`Desvincular Pedido #${currentOrder?.id}`}
+        triggerText={false}
+        contentExtraClass="max-w-[450px]"
+        renderContent={() =>
+          currentOrder && (
+            <>
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                Tem certeza que deseja desvincular o pedido
+                <Badge
+                  className="px-2 py-1 mx-1 bg-red-500 text-white"
+                  name={currentOrder.id}
+                />
+                do presente
+                <Badge
+                  className="px-2 py-1 mx-1"
+                  name={currentOrder.Gift[0].gift.name}
+                />
+                ?
+              </label>
+
+              <div className="flex justify-end space-x-3 pt-4">
+                <ButtonPrimary
+                  sizeClass="px-3 py-1"
+                  type="button"
+                  onClick={() =>
+                    handleDeleteOrder(currentOrder?.Gift[0].gift.id)
+                  }
+                >
+                  Desvincular
+                </ButtonPrimary>
+              </div>
+            </>
           )
         }
       />

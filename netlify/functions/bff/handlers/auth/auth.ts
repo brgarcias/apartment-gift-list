@@ -1,10 +1,9 @@
 import { prisma } from "@/lib/prisma";
-import { UserPayload } from "@/types/user";
+import { UserPayload, UserPayloadLogin } from "@/types/user";
 import { HandlerEvent, HandlerResponse } from "@netlify/functions";
 import { errorResponse, jsonResponse } from "@/lib/response";
 import RedisService from "@/lib/redis";
 import { randomBytes } from "crypto";
-import { User } from "@prisma/client";
 import authCheck from "./auth.check";
 
 export const signup = async (event: HandlerEvent): Promise<HandlerResponse> => {
@@ -14,15 +13,14 @@ export const signup = async (event: HandlerEvent): Promise<HandlerResponse> => {
       return errorResponse(400, "No data provided");
     }
     const userData: UserPayload = JSON.parse(body);
-    const verifyIfUserExists = await prisma.user.findFirst({
+    const verifyIfUserExists = await prisma.user.findUnique({
       where: {
-        name: userData.name,
-        birthDate: userData.birthDate,
+        email: userData.email,
       },
     });
 
     if (verifyIfUserExists) {
-      return errorResponse(400, "User already exists");
+      return errorResponse(409, "User already exists");
     }
 
     const createdUser = await prisma.user.create({
@@ -46,11 +44,10 @@ export const signin = async (event: HandlerEvent): Promise<HandlerResponse> => {
     if (!body) {
       return errorResponse(400, "No data provided");
     }
-    const userData: UserPayload = JSON.parse(body);
-    let userFinded = await prisma.user.findFirst({
+    const userData: UserPayloadLogin = JSON.parse(body);
+    let userFinded = await prisma.user.findUnique({
       where: {
-        name: userData.name,
-        birthDate: userData.birthDate,
+        email: userData.email,
       },
     });
 
@@ -81,6 +78,8 @@ export const signin = async (event: HandlerEvent): Promise<HandlerResponse> => {
       name: userFinded.name,
       birthDate: userFinded.birthDate,
       profileImage: userFinded.profileImage,
+      email: userFinded.email,
+      isAdmin: userFinded.isAdmin,
     });
 
     const cookieHeader = [
@@ -90,7 +89,7 @@ export const signin = async (event: HandlerEvent): Promise<HandlerResponse> => {
       `Path=/`,
       `SameSite=Lax`,
       `Max-Age=${sessionDuration}`,
-      process.env.NODE_ENV === "production" && `Domain=abcasanova.netlify.app`,
+      process.env.NODE_ENV === "production" && `Domain=abcasanova.com.br`,
     ]
       .filter(Boolean)
       .join("; ");

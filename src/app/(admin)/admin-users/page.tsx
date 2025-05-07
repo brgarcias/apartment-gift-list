@@ -69,9 +69,6 @@ const AdminUsersPage = () => {
   };
 
   const handleDeleteUser = async (userId: number) => {
-    setIsModalDeleteOpen(true);
-    if (!confirm()) return;
-
     showFeedback("Excluindo usuário", true);
     try {
       const res = await fetch(
@@ -83,7 +80,6 @@ const AdminUsersPage = () => {
       );
       if (!res.ok) throw new Error("Failed to delete user");
       showToast("Usuário excluído com sucesso", "success");
-      fetchUsers();
     } catch (error) {
       showToast("Erro ao excluir usuário", "error");
     } finally {
@@ -123,7 +119,6 @@ const AdminUsersPage = () => {
       );
       if (!res.ok) throw new Error("Failed to update user");
       showToast("Usuário atualizado com sucesso", "success");
-      fetchUsers();
       setIsModalOpen(false);
     } catch (error) {
       showToast("Erro ao atualizar usuário", "error");
@@ -253,11 +248,14 @@ const AdminUsersPage = () => {
 
             <div className="bg-white dark:bg-slate-800 rounded-lg shadow overflow-hidden">
               <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-slate-200 dark:divide-slate-700">
+                <table className="min-h-[150px] min-w-full divide-y divide-slate-200 dark:divide-slate-700">
                   <thead className="bg-slate-50 dark:bg-slate-700">
                     <tr>
                       <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-300 uppercase tracking-wider">
                         Usuário
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-300 uppercase tracking-wider">
+                        E-mail
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-300 uppercase tracking-wider">
                         Data de Cadastro
@@ -334,6 +332,9 @@ const AdminUsersPage = () => {
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap justify-items-center text-sm text-slate-500 dark:text-slate-400">
+                          {user.email}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap justify-items-center text-sm text-slate-500 dark:text-slate-400">
                           {new Date(user.createdAt).toLocaleDateString()}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap justify-items-center text-sm text-slate-500 dark:text-slate-400">
@@ -376,14 +377,16 @@ const AdminUsersPage = () => {
                                 className={`
                                   absolute z-20 w-full min-w-[150px] max-w-[150px]
                                   bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700
-                                  rounded-lg shadow-lg p-2.5 top-full mt-2
+                                  rounded-lg shadow-lg p-2.5 right-full mr-2
                                   opacity-0 group-hover:opacity-100
                                   transition-all duration-300
                                   transform hover:scale-105
                                   break-words
+                                  pointer-events-none
+                                  group-hover:pointer-events-auto
                                 `}
                                 style={{
-                                  right: "-29%",
+                                  top: "-70%",
                                 }}
                               >
                                 <div className="flex items-start">
@@ -391,7 +394,7 @@ const AdminUsersPage = () => {
                                     Você não pode excluir a si mesmo
                                   </p>
                                 </div>
-                                <div className="absolute -top-1.5 left-1/2 w-3 h-3 bg-white dark:bg-gray-800 border-t border-l border-gray-100 dark:border-gray-700 transform rotate-45 -translate-x-1/2"></div>
+                                <div className="absolute top-1/2 -right-1.5 w-3 h-3 bg-white dark:bg-gray-800 border-t border-r border-gray-100 dark:border-gray-700 transform rotate-45 -translate-y-1/2"></div>
                               </div>
                             )}
                           </div>
@@ -422,6 +425,22 @@ const AdminUsersPage = () => {
                           setCurrentUser({
                             ...currentUser,
                             name: e.target.value,
+                          })
+                        }
+                        required
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                        E-mail
+                      </label>
+                      <Input
+                        value={currentUser.email || ""}
+                        onChange={(e) =>
+                          setCurrentUser({
+                            ...currentUser,
+                            email: e.target.value,
                           })
                         }
                         required
@@ -467,7 +486,9 @@ const AdminUsersPage = () => {
                     </div>
 
                     <div className="flex justify-end space-x-3 pt-4">
-                      <ButtonPrimary type="submit">Salvar</ButtonPrimary>
+                      <ButtonPrimary sizeClass="px-3 py-1" type="submit">
+                        Salvar
+                      </ButtonPrimary>
                     </div>
                   </form>
                 )
@@ -494,6 +515,7 @@ const AdminUsersPage = () => {
 
                     <div className="flex justify-end space-x-3 pt-4">
                       <ButtonPrimary
+                        sizeClass="px-3 py-1"
                         type="button"
                         onClick={() => handleDeleteUser(currentUser.id)}
                       >

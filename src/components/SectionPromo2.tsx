@@ -21,6 +21,7 @@ const SectionPromo2: FC<SectionPromo2Props> = ({ className = "lg:pt-10" }) => {
       <div className="relative flex flex-col lg:flex-row justify-between bg-indigo-50 dark:bg-slate-800 rounded-2xl sm:rounded-[40px] p-8 sm:p-12 lg:p-16">
         <div className="absolute inset-0 overflow-hidden">
           <Image
+            draggable="false"
             fill
             className="object-cover opacity-10 dark:opacity-5"
             src={backgroundPattern}
@@ -59,6 +60,7 @@ const SectionPromo2: FC<SectionPromo2Props> = ({ className = "lg:pt-10" }) => {
           <div className="bg-white dark:bg-slate-700 p-6 rounded-xl shadow-lg w-full max-w-md">
             <div className="aspect-w-16 aspect-h-9 bg-gray-100 dark:bg-slate-600 rounded-lg flex items-center justify-center">
               <Image
+                draggable="false"
                 fill
                 className="object-cover rounded-lg"
                 src={imagePromo}

@@ -21,6 +21,7 @@ const SectionPromo2: FC<SectionPromo2Props> = ({ className = "lg:pt-10" }) => {
       <div className="relative flex flex-col lg:flex-row lg:items-center justify-between bg-indigo-50 dark:bg-slate-800 rounded-2xl sm:rounded-[40px] p-4 sm:p-8 lg:p-12 overflow-hidden">
         <div className="absolute inset-0 overflow-hidden">
           <Image
+            draggable="false"
             fill
             className="object-cover opacity-10 dark:opacity-5"
             src={backgroundPattern}
@@ -60,8 +61,9 @@ const SectionPromo2: FC<SectionPromo2Props> = ({ className = "lg:pt-10" }) => {
         </div>
 
         <div className="relative lg:w-[45%] flex items-center justify-center z-10">
-          <div className="bg-white dark:bg-slate-700 p-3 sm:p-4 rounded-xl shadow-lg w-full aspect-[4/3] lg:aspect-auto lg:h-[400px] xl:h-[450px] overflow-hidden">
+          <div className="select-none bg-white dark:bg-slate-700 p-3 sm:p-4 rounded-xl shadow-lg w-full aspect-[4/3] lg:aspect-auto lg:h-[400px] xl:h-[450px] overflow-hidden">
             <Image
+              draggable="false"
               fill
               className="w-full h-full object-cover rounded-lg"
               src={imageNoivos}

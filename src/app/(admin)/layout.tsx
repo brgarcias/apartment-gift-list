@@ -26,8 +26,8 @@ const pages: {
     link: "/admin-orders",
   },
   {
-    name: "Configurações",
-    link: "/admin-settings",
+    name: "Presentes",
+    link: "/admin-gifts",
   },
 ];
 

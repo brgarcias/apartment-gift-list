@@ -46,6 +46,7 @@ const AccountOrder = () => {
       <div key={index} className="flex py-4 sm:py-7 last:pb-0 first:pt-0">
         <div className="relative h-20 w-20 sm:h-24 sm:w-24 flex-shrink-0 overflow-hidden rounded-xl bg-slate-100">
           <Image
+            draggable="false"
             fill
             sizes="80px"
             src={imageUrl}

@@ -19,6 +19,7 @@ export type Gift = {
     };
   }>;
   giftOnReservation: GiftOnReservation[];
+  categoryId: number;
   Category: Category;
 };
 

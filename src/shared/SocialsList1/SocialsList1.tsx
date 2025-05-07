@@ -35,7 +35,7 @@ const SocialsList1: FC<SocialsList1Props> = ({ className = "space-y-3" }) => {
         data-nc-name="SocialsList1Item"
       >
         <div className="flex-shrink-0 w-5 ">
-          <Image sizes="40px" src={item.icon} alt="" />
+          <Image draggable="false" sizes="40px" src={item.icon} alt="" />
         </div>
         <span className="hidden lg:block text-sm">{item.name}</span>
       </a>

@@ -18,6 +18,7 @@ export interface ModalProps {
 const ModalLogin: FC<ModalProps> = ({ isOpen, setIsOpen }) => {
   const [fullName, setFullName] = useState("");
   const [birthDate, setBirthDate] = useState("1999-12-15");
+  const [email, setEmail] = useState("");
   const [isFlipped, setIsFlipped] = useState(false);
   const { showToast } = useToast();
   const { showFeedback } = useFeedback();
@@ -31,9 +32,9 @@ const ModalLogin: FC<ModalProps> = ({ isOpen, setIsOpen }) => {
 
   const login = async () => {
     showFeedback("Entrando", true);
-    if (!fullName || !birthDate) {
+    if (!email) {
       showToast(
-        "Opa, opa, opa, perai! Preencha todos os campos por favor, meu rei.",
+        "Opa, opa, opa, perai! Preciso do seu e-mail, meu rei.",
         "error"
       );
       showFeedback("", false);
@@ -50,16 +51,14 @@ const ModalLogin: FC<ModalProps> = ({ isOpen, setIsOpen }) => {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              name: fullName,
-              birthDate: new Date(birthDate).toLocaleDateString("pt-BR", {
-                timeZone: "UTC",
-                year: "numeric",
-                month: "2-digit",
-                day: "2-digit",
-              }),
+              email,
             }),
           }
         );
+        if (res.status === 404) {
+          showToast("Opa! Não encontramos seu usuário.", "warning");
+          return;
+        }
         if (res.ok) {
           const userData = await res.json();
           authLogin(userData);
@@ -88,7 +87,7 @@ const ModalLogin: FC<ModalProps> = ({ isOpen, setIsOpen }) => {
 
   const register = async () => {
     showFeedback("Cadastrando", true);
-    if (!birthDate || !fullName) {
+    if (!birthDate || !fullName || !email) {
       showToast(
         "Opa, opa, opa, perai! Preencha todos os campos por favor, meu rei.",
         "error"
@@ -106,6 +105,7 @@ const ModalLogin: FC<ModalProps> = ({ isOpen, setIsOpen }) => {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             name: fullName,
+            email,
             birthDate: new Date(birthDate).toLocaleDateString("pt-BR", {
               timeZone: "UTC",
               year: "numeric",
@@ -115,6 +115,11 @@ const ModalLogin: FC<ModalProps> = ({ isOpen, setIsOpen }) => {
           }),
         }
       );
+
+      if (res.status === 409) {
+        showToast("Esse e-mail já está cadastrado.", "warning");
+        return;
+      }
 
       if (res.ok) {
         showToast("Cadastro realizado com sucesso!", "success");
@@ -155,14 +160,6 @@ const ModalLogin: FC<ModalProps> = ({ isOpen, setIsOpen }) => {
               <Dialog.Overlay className="fixed inset-0 bg-black bg-opacity-40 dark:bg-opacity-60 backdrop-blur-sm pointer-events-none" />
             </Transition.Child>
 
-            {/* Este elemento é para enganar o navegador para centralizar o modal */}
-            <span
-              className="inline-block h-screen align-middle"
-              aria-hidden="true"
-            >
-              &#8203;
-            </span>
-
             <Transition.Child
               as={Fragment}
               enter="ease-out duration-300"
@@ -172,7 +169,7 @@ const ModalLogin: FC<ModalProps> = ({ isOpen, setIsOpen }) => {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <div className="relative inline-block w-full max-w-2xl my-8 overflow-hidden text-left align-middle transition-all transform bg-transparent shadow-xl rounded-2xl">
+              <div className="relative inline-block w-full max-w-2xl my-0 text-left align-middle transition-all transform bg-transparent shadow-xl rounded-2xl">
                 <div className="relative perspective w-full">
                   <div
                     className={`transition-transform duration-500 transform-style-preserve-3d relative w-full ${
@@ -182,7 +179,7 @@ const ModalLogin: FC<ModalProps> = ({ isOpen, setIsOpen }) => {
                     {/* Front - Login */}
                     <div className="backface-hidden w-full">
                       <div className="inline-flex flex-col w-full text-left align-middle transition-all transform bg-white dark:bg-neutral-800 rounded-2xl overflow-hidden shadow-xl">
-                        <div className="relative bg-gradient-to-r from-indigo-500 to-purple-600 p-6 text-center">
+                        <div className="relative bg-gradient-to-r from-indigo-500 to-purple-600 p-4 text-center">
                           <Dialog.Title
                             as="h3"
                             className="text-2xl font-bold text-white leading-tight"
@@ -200,34 +197,20 @@ const ModalLogin: FC<ModalProps> = ({ isOpen, setIsOpen }) => {
 
                         <div className="flex-grow overflow-y-auto p-6 sm:p-8">
                           <div className="space-y-6 text-neutral-700 dark:text-neutral-300">
-                            <div>
-                              <Label>Nome completo</Label>
+                            <div className="w-full">
+                              <Label>E-mail</Label>
                               <Input
                                 className="mt-1.5"
-                                placeholder="Mestre dos Magos"
-                                value={fullName}
-                                onChange={(e) => setFullName(e.target.value)}
+                                placeholder="mestre@gmail.com"
+                                value={email}
+                                type="email"
+                                onChange={(e) => setEmail(e.target.value)}
                               />
-                            </div>
-
-                            <div className="max-w-lg">
-                              <Label>Data de nascimento</Label>
-                              <div className="mt-1.5 flex">
-                                <span className="inline-flex items-center px-2.5 rounded-l-2xl border border-r-0 border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 text-sm">
-                                  <i className="text-2xl las la-calendar"></i>
-                                </span>
-                                <Input
-                                  className="!rounded-l-none"
-                                  type="date"
-                                  value={birthDate}
-                                  onChange={(e) => setBirthDate(e.target.value)}
-                                />
-                              </div>
                             </div>
                           </div>
                         </div>
 
-                        <div className="flex flex-col bg-neutral-50 dark:bg-neutral-900/50 p-6 flex justify-center border-t border-neutral-200 dark:border-neutral-700">
+                        <div className="flex flex-col bg-neutral-50 dark:bg-neutral-900/50 py-2 px-8 flex justify-center border-t border-neutral-200 dark:border-neutral-700">
                           <ButtonPrimary
                             onClick={login}
                             sizeClass="px-6 py-3"
@@ -248,9 +231,9 @@ const ModalLogin: FC<ModalProps> = ({ isOpen, setIsOpen }) => {
                     </div>
 
                     {/* Back - Cadastro */}
-                    <div className="absolute top-0 left-0 backface-hidden w-full rotate-y-180">
+                    <div className="absolute top-[-100px] left-0 backface-hidden w-full rotate-y-180">
                       <div className="inline-flex flex-col w-full text-left align-middle transition-all transform bg-white dark:bg-neutral-800 rounded-2xl overflow-hidden shadow-xl">
-                        <div className="relative bg-gradient-to-r from-indigo-500 to-purple-600 p-6 text-center">
+                        <div className="relative bg-gradient-to-r from-indigo-500 to-purple-600 p-4 text-center">
                           <Dialog.Title
                             as="h3"
                             className="text-2xl font-bold text-white leading-tight"
@@ -269,17 +252,30 @@ const ModalLogin: FC<ModalProps> = ({ isOpen, setIsOpen }) => {
 
                         <div className="flex-grow overflow-y-auto p-6 sm:p-8">
                           <div className="space-y-6 text-neutral-700 dark:text-neutral-300">
-                            <div>
+                            <div className="w-full">
                               <Label>Nome completo</Label>
+                              <div className="mt-1.5 flex">
+                                <Input
+                                  className="mt-1.5"
+                                  placeholder="Mestre dos Magos"
+                                  value={fullName}
+                                  onChange={(e) => setFullName(e.target.value)}
+                                />
+                              </div>
+                            </div>
+
+                            <div className="w-full">
+                              <Label>E-mail</Label>
                               <Input
                                 className="mt-1.5"
-                                placeholder="Mestre dos Magos"
-                                value={fullName}
-                                onChange={(e) => setFullName(e.target.value)}
+                                placeholder="mestre@gmail.com"
+                                value={email}
+                                type="email"
+                                onChange={(e) => setEmail(e.target.value)}
                               />
                             </div>
 
-                            <div className="max-w-lg">
+                            <div className="w-full">
                               <Label>Data de nascimento</Label>
                               <div className="mt-1.5 flex">
                                 <span className="inline-flex items-center px-2.5 rounded-l-2xl border border-r-0 border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 text-sm">
@@ -296,7 +292,7 @@ const ModalLogin: FC<ModalProps> = ({ isOpen, setIsOpen }) => {
                           </div>
                         </div>
 
-                        <div className="flex flex-col bg-neutral-50 dark:bg-neutral-900/50 p-6 flex justify-center border-t border-neutral-200 dark:border-neutral-700">
+                        <div className="flex flex-col bg-neutral-50 dark:bg-neutral-900/50 py-2 px-8 flex justify-center border-t border-neutral-200 dark:border-neutral-700">
                           <ButtonPrimary
                             onClick={register}
                             sizeClass="px-6 py-3"
