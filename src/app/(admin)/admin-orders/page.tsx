@@ -86,7 +86,7 @@ const AdminOrdersPage = () => {
       const ordersWithTotal = data.map((order) => ({
         ...order,
         total: order.Gift.reduce((sum, item) => sum + item.gift.price, 0),
-        status: "PROCESSING", // Default status
+        status: "AVAILABLE", // Default status
       }));
 
       setOrders(ordersWithTotal);
@@ -280,7 +280,7 @@ const AdminOrdersPage = () => {
                               name={
                                 order.Gift[0].gift.status === "PURCHASED"
                                   ? "Finalizada"
-                                  : "Processando"
+                                  : "Cancelada"
                               }
                               className={
                                 order.Gift[0].gift.status === "PURCHASED"
@@ -307,11 +307,14 @@ const AdminOrdersPage = () => {
                               <EyeIcon className="h-5 w-5" />
                             </button>
                             <button
+                              disabled={
+                                order.Gift[0].gift.status !== "PURCHASED"
+                              }
                               onClick={() => handleDelete(order)}
                               className={`p-1 rounded-full ${
                                 order.Gift[0].gift.status === "PURCHASED"
                                   ? "text-yellow-600 dark:text-yellow-400 hover:bg-yellow-50 dark:hover:bg-yellow-900/30"
-                                  : "text-green-600 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/30"
+                                  : "text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-900/30"
                               }`}
                               title="Desvincular Pedido"
                             >
@@ -358,7 +361,7 @@ const AdminOrdersPage = () => {
                         name={
                           currentOrder.Gift[0].gift.status === "PURCHASED"
                             ? "Finalizada"
-                            : "Processando"
+                            : "Cancelada"
                         }
                         className={
                           currentOrder.Gift[0].gift.status === "PURCHASED"
