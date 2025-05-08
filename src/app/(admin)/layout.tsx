@@ -118,7 +118,7 @@ const AdminLayout: FC<AdminLayoutProps> = ({ children }) => {
                         <Link
                           key={index}
                           href={item.link}
-                          className={`block py-5 md:py-8 border-b-2 flex-shrink-0 text-sm sm:text-base ${
+                          className={`block py-4 md:py-4 border-b-2 flex-shrink-0 text-sm sm:text-base ${
                             pathname === item.link
                               ? "border-primary-500 font-medium text-slate-900 dark:text-slate-200"
                               : "border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200"

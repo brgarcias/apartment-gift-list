@@ -15,6 +15,7 @@ export const getGifts = async (): Promise<HandlerResponse> => {
           select: {
             order: {
               select: {
+                id: true,
                 user: {
                   select: {
                     id: true,

@@ -13,6 +13,7 @@ export type Gift = {
   updatedAt: Date;
   GiftOnOrder?: Array<{
     order: {
+      id: number;
       user: {
         id: number;
       };

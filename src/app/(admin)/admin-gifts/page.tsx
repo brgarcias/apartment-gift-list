@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import Input from "@/shared/Input/Input";
 import { useToast } from "@/contexts/ToastContext";
@@ -15,6 +14,8 @@ import Select from "@/shared/Select/Select";
 import { Category } from "@prisma/client";
 import NcModal from "@/shared/NcModal/NcModal";
 import Badge from "@/shared/Badge/Badge";
+import { EyeIcon } from "@heroicons/react/24/outline";
+import { useRouter } from "next/navigation";
 
 const AdminGiftsPage = () => {
   const router = useRouter();
@@ -314,6 +315,9 @@ const AdminGiftsPage = () => {
                       Status
                     </th>
                     <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                      Pedido Vinculado
+                    </th>
+                    <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                       Ações
                     </th>
                   </tr>
@@ -409,7 +413,22 @@ const AdminGiftsPage = () => {
                             : "Comprado"}
                         </span>
                       </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-center">
+                        <div className="text-sm text-gray-900 dark:text-gray-100">
+                          {gift.GiftOnOrder?.[0]?.order?.id ||
+                            "Sem pedido vinculado"}
+                        </div>
+                      </td>
                       <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
+                        <button
+                          onClick={() => {
+                            router.push(`/gifts/${gift.id}`);
+                          }}
+                          className="text-yellow-600 dark:text-yellow-400 hover:text-yellow-900 dark:hover:text-yellow-500 mr-4"
+                          title="Detalhes do pedido"
+                        >
+                          <EyeIcon className="h-5 w-5" />
+                        </button>
                         <button
                           onClick={() => openEditModal(gift)}
                           className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-900 dark:hover:text-indigo-500 mr-4"
