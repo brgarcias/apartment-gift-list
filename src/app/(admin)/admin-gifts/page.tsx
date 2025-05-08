@@ -450,8 +450,16 @@ const AdminGiftsPage = () => {
                           </svg>
                         </button>
                         <button
+                          disabled={(gift.GiftOnOrder?.length ?? 0) > 0}
                           onClick={() => handleDelete(gift)}
-                          className="text-red-600 dark:text-red-400 hover:text-red-900 dark:hover:text-red-500"
+                          className={`
+                            ${
+                              (gift.GiftOnOrder?.length ?? 0) > 0
+                                ? "text-gray-400 dark:text-gray-500 cursor-not-allowed"
+                                : "text-red-600 dark:text-red-400 hover:text-red-900 dark:hover:text-red-500"
+                            }
+                            transition-colors duration-200
+                          `}
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
