@@ -415,8 +415,9 @@ const AdminGiftsPage = () => {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-center">
                         <div className="text-sm text-gray-900 dark:text-gray-100">
-                          {gift.GiftOnOrder?.[0]?.order?.id ||
-                            "Sem pedido vinculado"}
+                          {gift.GiftOnOrder?.[0]?.order?.id
+                            ? `Número do pedido #${gift.GiftOnOrder[0].order.id}`
+                            : "Sem pedido vinculado"}
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
