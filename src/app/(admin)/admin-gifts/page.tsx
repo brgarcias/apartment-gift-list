@@ -20,22 +20,17 @@ const AdminGiftsPage = () => {
   const router = useRouter();
   const { showToast } = useToast();
   const { showFeedback } = useFeedback();
-
-  // Estados para listagem
   const [gifts, setGifts] = useState<Gift[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false);
-
-  // Estados para o modal de cadastro/edição
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentGift, setCurrentGift] = useState<Partial<Gift> | null>(null);
   const [categories, setCategories] = useState<Category[]>([]);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
 
-  // Formatação de preço
   const brlFormatter = new Intl.NumberFormat("pt-BR", {
     style: "currency",
     currency: "BRL",
@@ -47,7 +42,6 @@ const AdminGiftsPage = () => {
     return brlFormatter.format(price);
   };
 
-  // Buscar presentes
   const fetchGifts = async () => {
     try {
       setIsLoading(true);
@@ -62,7 +56,6 @@ const AdminGiftsPage = () => {
     }
   };
 
-  // Buscar categorias
   const fetchCategories = async () => {
     try {
       const res = await fetch(
@@ -81,19 +74,17 @@ const AdminGiftsPage = () => {
     fetchCategories();
   }, []);
 
-  // Filtro de busca
   const filteredGifts = gifts.filter((gift) =>
     gift.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Manipuladores de modal
   const openCreateModal = () => {
     setCurrentGift({
       name: "",
       description: "",
       price: 0,
       imageUrl: "",
-      status: GiftStatusEnum.AVAILABLE,
+      status: GiftStatusEnum.AVAILABLE.toUpperCase() as GiftStatusEnum,
     });
     setImagePreview(null);
     setIsModalOpen(true);
@@ -110,60 +101,85 @@ const AdminGiftsPage = () => {
     setCurrentGift(null);
   };
 
-  // Upload de imagem (simulado)
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setIsUploading(true);
 
-      // Simular upload
-      setTimeout(() => {
-        const file = e.target.files![0];
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          setImagePreview(reader.result as string);
-          setCurrentGift((prev) => ({
-            ...prev,
-            imageUrl: URL.createObjectURL(file),
-          }));
-          setIsUploading(false);
-        };
-        reader.readAsDataURL(file);
-      }, 1000);
+      const file = e.target.files![0];
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+        const base64 = reader.result as string;
+        setCurrentGift((prev) => ({
+          ...prev,
+          image: {
+            content: base64.split(",")[1],
+            filename: file.name,
+            mimetype: file.type,
+          },
+        }));
+        setIsUploading(false);
+      };
+      reader.readAsDataURL(file);
     }
   };
 
-  // Salvar presente
   const handleSaveGift = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!currentGift) return;
 
     showFeedback("Salvando presente", true);
-    const isNew = !currentGift.id;
 
     try {
-      // Simular chamada à API
-      setTimeout(() => {
-        if (isNew) {
-          // Adicionar novo presente
-          const newGift = {
-            ...currentGift,
-          };
-          setGifts((prev) => [...prev, newGift as Gift]);
+      if (!currentGift.id) {
+        const result = await fetch(
+          `${process.env.NEXT_PUBLIC_NETLIFY_URL}/gifts/create`,
+          {
+            method: "POST",
+            credentials: "include",
+            body: JSON.stringify({
+              ...currentGift,
+              status: currentGift?.status?.toUpperCase(),
+            }),
+          }
+        );
+        if (result.ok) {
+          const { gift }: { gift: Gift } = await result.json();
+
+          setGifts((prev) => [...prev, gift]);
           showToast("Presente criado com sucesso!", "success");
         } else {
-          // Atualizar presente existente
+          throw new Error("Falha ao atualizar imagem no banco de dados");
+        }
+      } else {
+        const result = await fetch(
+          `${process.env.NEXT_PUBLIC_NETLIFY_URL}/gifts/update/${currentGift.id}`,
+          {
+            method: "PATCH",
+            credentials: "include",
+            body: JSON.stringify({
+              ...currentGift,
+              status: currentGift?.status?.toUpperCase(),
+            }),
+          }
+        );
+        if (result.ok) {
+          const { giftUpdated }: { giftUpdated: Gift } = await result.json();
+
           setGifts((prev) =>
             prev.map((gift) =>
-              gift.id === currentGift.id ? { ...gift, ...currentGift } : gift
+              gift.id === giftUpdated.id ? { ...gift, ...giftUpdated } : gift
             )
           );
           showToast("Presente atualizado com sucesso!", "success");
+        } else {
+          throw new Error("Falha ao atualizar imagem no banco de dados");
         }
-        closeModal();
-        showFeedback("", false);
-      }, 1500);
+      }
+      closeModal();
     } catch (err) {
       showToast("Erro ao salvar presente", "error");
+    } finally {
       showFeedback("", false);
     }
   };
@@ -173,26 +189,31 @@ const AdminGiftsPage = () => {
     setIsModalDeleteOpen(true);
   };
 
-  // Excluir presente
   const handleDeleteGift = async (id: number | undefined) => {
     showFeedback("Excluindo presente", true);
 
-    setTimeout(() => {
-      try {
-        // Simular chamada à API
+    try {
+      const result = await fetch(
+        `${process.env.NEXT_PUBLIC_NETLIFY_URL}/gifts/delete/${id}`,
+        {
+          method: "DELETE",
+          credentials: "include",
+        }
+      );
+      if (result.ok) {
         setGifts((prev) => prev.filter((gift) => gift.id !== id));
         showToast("Presente excluído com sucesso!", "success");
-        showFeedback("", false);
-      } catch (err) {
-        showToast("Erro ao excluir presente", "error");
-        showFeedback("", false);
-      } finally {
-        setIsModalDeleteOpen(false);
+      } else {
+        throw new Error("Falha ao atualizar imagem no banco de dados");
       }
-    }, 2000);
+    } catch (err) {
+      showToast("Erro ao excluir presente", "error");
+    } finally {
+      setIsModalDeleteOpen(false);
+      showFeedback("", false);
+    }
   };
 
-  // Esqueleto de carregamento
   const GiftRowSkeleton = () => (
     <tr className="animate-pulse">
       <td className="px-6 py-4">
@@ -521,22 +542,26 @@ const AdminGiftsPage = () => {
                         Status*
                       </label>
                       <Select
-                        value={currentGift.status || GiftStatusEnum.AVAILABLE}
+                        value={
+                          currentGift.status ||
+                          GiftStatusEnum.AVAILABLE.toUpperCase()
+                        }
                         onChange={(e) =>
                           setCurrentGift({
                             ...currentGift,
-                            status: e.target.value as GiftStatusEnum,
+                            status:
+                              e.target.value.toUpperCase() as GiftStatusEnum,
                           })
                         }
                         required
                       >
-                        <option value={GiftStatusEnum.AVAILABLE}>
+                        <option value={GiftStatusEnum.AVAILABLE.toUpperCase()}>
                           Disponível
                         </option>
-                        <option value={GiftStatusEnum.RESERVED}>
+                        <option value={GiftStatusEnum.RESERVED.toUpperCase()}>
                           Reservado
                         </option>
-                        <option value={GiftStatusEnum.PURCHASED}>
+                        <option value={GiftStatusEnum.PURCHASED.toUpperCase()}>
                           Comprado
                         </option>
                       </Select>

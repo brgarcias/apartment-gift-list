@@ -2,12 +2,21 @@ import { HandlerEvent, HandlerResponse } from "@netlify/functions";
 import { prisma } from "@/lib/prisma";
 import { errorResponse, jsonResponse } from "@/lib/response";
 import { GiftStatusEnum } from "@/enums/gift.enum";
-import { GiftStatus } from "@prisma/client";
+import { Gift, GiftStatus } from "@prisma/client";
 import authCheck, { authCheckAdmin } from "../auth/auth.check";
+import { uploadGiftImage } from "../google-drive/upload";
 
 interface HandlerEventWithParams extends HandlerEvent {
   pathParameters?: {
     id?: string;
+  };
+}
+
+interface GiftWithImageFormData extends Gift {
+  image: {
+    content: string;
+    filename: string;
+    mimetype: string;
   };
 }
 
@@ -166,6 +175,67 @@ export const handleGiftStatusUpdate = async (
     }
   } catch (error) {
     console.error("Error in gift status update:", error);
+    return errorResponse(500, "Internal server error");
+  }
+};
+
+export const updateGift = async (
+  event: HandlerEvent
+): Promise<HandlerResponse> => {
+  const giftId = event.path.split("/").pop();
+  if (!giftId || isNaN(parseInt(giftId))) {
+    return errorResponse(400, "Invalid gift ID");
+  }
+
+  if (!event.body) {
+    return errorResponse(400, "No data provided");
+  }
+
+  const data: GiftWithImageFormData = JSON.parse(event.body);
+
+  try {
+    const session = await authCheckAdmin(event);
+
+    if (!session) {
+      return errorResponse(401, "Unauthorized");
+    }
+
+    let imageUrl = data.imageUrl;
+
+    const { image } = data;
+    if (image) {
+      const imageContent = Buffer.from(image.content, "base64");
+
+      imageUrl = await uploadGiftImage({
+        content: imageContent,
+        filename: image.filename,
+        mimetype: image.mimetype,
+      });
+    }
+
+    const updatedGift = await prisma.gift.update({
+      where: {
+        id: parseInt(giftId),
+      },
+      data: {
+        name: data.name,
+        purchaseLink: data.purchaseLink,
+        description: data.description,
+        price: data.price,
+        status: data.status,
+        categoryId: data.categoryId,
+        imageUrl,
+      },
+      include: {
+        Category: true,
+      },
+    });
+
+    return jsonResponse(201, {
+      giftUpdated: updatedGift,
+    });
+  } catch (error) {
+    console.error("Error in gift update:", error);
     return errorResponse(500, "Internal server error");
   }
 };

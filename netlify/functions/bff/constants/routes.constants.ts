@@ -1,9 +1,8 @@
-import { get } from "http";
 import { getAuthUser, signin, signout, signup } from "../handlers/auth/auth";
 import authCheck from "../handlers/auth/auth.check";
 import { getCategories } from "../handlers/categories/get";
 import { getGiftById, getGifts } from "../handlers/gifts/get";
-import { handleGiftStatusUpdate } from "../handlers/gifts/update";
+import { handleGiftStatusUpdate, updateGift } from "../handlers/gifts/update";
 import {
   getOrderById,
   getOrders,
@@ -14,10 +13,21 @@ import { RouteTable } from "../types/routes.types";
 import { updateUserById } from "../handlers/users/update";
 import { uploadImage } from "../handlers/google-drive/upload";
 import { deleteUserById } from "../handlers/users/delete";
+import { createGift } from "../handlers/gifts/create";
+import { deleteGift } from "../handlers/gifts/delete";
 
 export const ROUTES: RouteTable = {
   "/gifts": {
     GET: getGifts,
+  },
+  "/gifts/create": {
+    POST: createGift,
+  },
+  "/gifts/delete/:id": {
+    DELETE: deleteGift,
+  },
+  "/gifts/update/:id": {
+    PATCH: updateGift,
   },
   "/gifts/:id": {
     GET: getGiftById,
