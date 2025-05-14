@@ -108,16 +108,28 @@ const Footer: React.FC = () => {
                 </svg>
                 <div className="space-y-1">
                   <a
-                    href="tel:+5511996969301"
+                    href="https://api.whatsapp.com/send/?phone=5511996969301&text=Oi Mestre lindão, tenho uma dúvida sobre o noivado.&type=phone_number&app_absent=0"
                     className="block transition-colors duration-200 hover:text-primary-600 dark:hover:text-primary-400"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="WhatsApp Bruno contact"
                   >
-                    +55 (11) 99696-9301
+                    +55 (11) 99696-9301{" "}
+                    <span className="text-sm text-gray-600 dark:text-gray-400 font-medium ml-1 transition-colors duration-200">
+                      (Bruno)
+                    </span>
                   </a>
                   <a
-                    href="tel:+5511996240704"
+                    href="https://api.whatsapp.com/send/?phone=5511996240704&text=Oi Amanda, quero fazer uma fofoca 🤭.&type=phone_number&app_absent=0"
                     className="block transition-colors duration-200 hover:text-primary-600 dark:hover:text-primary-400"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="WhatsApp Amanda contact"
                   >
-                    +55 (11) 99624-0704
+                    +55 (11) 99624-0704{" "}
+                    <span className="text-sm text-gray-600 dark:text-gray-400 font-medium ml-1 transition-colors duration-200">
+                      (Amanda)
+                    </span>
                   </a>
                 </div>
               </div>

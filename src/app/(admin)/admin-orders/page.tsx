@@ -114,7 +114,7 @@ const AdminOrdersPage = () => {
   };
 
   const handleDeleteOrder = async (giftId: number) => {
-    showFeedback("Excluindo pedido", true);
+    showFeedback("Cancelando pedido", true);
     try {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_NETLIFY_URL}/gifts/${giftId}/status`,
@@ -129,10 +129,10 @@ const AdminOrdersPage = () => {
           }),
         }
       );
-      if (!res.ok) throw new Error("Failed to delete order");
-      showToast("Pedido excluído com sucesso", "success");
+      if (!res.ok) throw new Error("Failed to cancel order");
+      showToast("Pedido cancelado com sucesso", "success");
     } catch (error) {
-      showToast("Erro ao excluir pedido", "error");
+      showToast("Erro ao cancelar pedido", "error");
     } finally {
       showFeedback("", false);
       setIsModalDeleteOpen(false);
@@ -278,12 +278,10 @@ const AdminOrdersPage = () => {
                           <td className="text-center px-6 py-4 whitespace-nowrap">
                             <Badge
                               name={
-                                order.Gift[0].gift.status === "PURCHASED"
-                                  ? "Finalizada"
-                                  : "Cancelada"
+                                !order.deletedAt ? "Finalizado" : "Cancelado"
                               }
                               className={
-                                order.Gift[0].gift.status === "PURCHASED"
+                                !order.deletedAt
                                   ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
                                   : "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200"
                               }
@@ -307,14 +305,12 @@ const AdminOrdersPage = () => {
                               <EyeIcon className="h-5 w-5" />
                             </button>
                             <button
-                              disabled={
-                                order.Gift[0].gift.status !== "PURCHASED"
-                              }
+                              disabled={!!order.deletedAt}
                               onClick={() => handleDelete(order)}
                               className={`p-1 rounded-full ${
-                                order.Gift[0].gift.status === "PURCHASED"
+                                !order.deletedAt
                                   ? "text-yellow-600 dark:text-yellow-400 hover:bg-yellow-50 dark:hover:bg-yellow-900/30"
-                                  : "text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-900/30"
+                                  : "text-gray-600 dark:text-gray-400"
                               }`}
                               title="Desvincular Pedido"
                             >
@@ -359,12 +355,10 @@ const AdminOrdersPage = () => {
                       <span className="font-medium">Status:</span>{" "}
                       <Badge
                         name={
-                          currentOrder.Gift[0].gift.status === "PURCHASED"
-                            ? "Finalizada"
-                            : "Cancelada"
+                          !currentOrder.deletedAt ? "Finalizado" : "Cancelado"
                         }
                         className={
-                          currentOrder.Gift[0].gift.status === "PURCHASED"
+                          !currentOrder.deletedAt
                             ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
                             : "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200"
                         }
@@ -456,24 +450,21 @@ const AdminOrdersPage = () => {
       <NcModal
         isOpenProp={isModalDeleteOpen}
         onCloseModal={() => setIsModalDeleteOpen(false)}
-        modalTitle={`Desvincular Pedido #${currentOrder?.id}`}
+        modalTitle={`Cancelar Pedido #${currentOrder?.id}`}
         triggerText={false}
         contentExtraClass="max-w-[450px]"
         renderContent={() =>
           currentOrder && (
             <>
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
-                Tem certeza que deseja desvincular o pedido
+                Tem certeza que deseja cancelar o pedido
+                <Badge className="px-2 py-1 mx-1" name={currentOrder.id} /> e
+                desvincular o presente
                 <Badge
                   className="px-2 py-1 mx-1 bg-red-500 text-white"
-                  name={currentOrder.id}
-                />
-                do presente
-                <Badge
-                  className="px-2 py-1 mx-1"
                   name={currentOrder.Gift[0].gift.name}
-                />
-                ?
+                />{" "}
+                dele ?
               </label>
 
               <div className="flex justify-end space-x-3 pt-4">
@@ -484,7 +475,7 @@ const AdminOrdersPage = () => {
                     handleDeleteOrder(currentOrder?.Gift[0].gift.id)
                   }
                 >
-                  Desvincular
+                  Cancelar
                 </ButtonPrimary>
               </div>
             </>

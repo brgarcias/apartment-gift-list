@@ -12,7 +12,7 @@ const socials: SocialType[] = [
   {
     name: "Whatsapp",
     icon: whatsapp,
-    href: "https://api.whatsapp.com/send/?phone=5511996240704&text&type=phone_number&app_absent=0",
+    href: "https://api.whatsapp.com/send/?phone=5511996240704&text=Oi Amanda, quero fazer uma fofoca 🤭.&type=phone_number&app_absent=0",
   },
   {
     name: "Instagram",

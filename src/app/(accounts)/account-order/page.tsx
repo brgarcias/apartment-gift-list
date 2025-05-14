@@ -107,7 +107,7 @@ const AccountOrder = () => {
             <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
               <span>{formatDate(order.createdAt)}</span>
               <span className="mx-1 sm:mx-2">·</span>
-              {order.Gift[0].gift.status === "PURCHASED" ? (
+              {!order.deletedAt ? (
                 <span className="text-green-600">Compra confirmada</span>
               ) : (
                 <span className="text-red-500">Pedido Cancelado</span>

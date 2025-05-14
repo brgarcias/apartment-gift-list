@@ -415,8 +415,14 @@ const AdminGiftsPage = () => {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-center">
                         <div className="text-sm text-gray-900 dark:text-gray-100">
-                          {gift.GiftOnOrder?.[0]?.order?.id
-                            ? `Número do pedido #${gift.GiftOnOrder[0].order.id}`
+                          {gift.status !==
+                            GiftStatusEnum.AVAILABLE.toUpperCase() &&
+                          gift.GiftOnOrder?.[gift.GiftOnOrder.length - 1]?.order
+                            ?.id
+                            ? `Número do pedido #${
+                                gift.GiftOnOrder[gift.GiftOnOrder.length - 1]
+                                  .order.id
+                              }`
                             : "Sem pedido vinculado"}
                         </div>
                       </td>
@@ -450,11 +456,18 @@ const AdminGiftsPage = () => {
                           </svg>
                         </button>
                         <button
-                          disabled={(gift.GiftOnOrder?.length ?? 0) > 0}
+                          disabled={
+                            ((gift.GiftOnOrder?.length ?? 0) > 0 &&
+                              gift.status !==
+                                GiftStatusEnum.AVAILABLE.toUpperCase()) ||
+                            false
+                          }
                           onClick={() => handleDelete(gift)}
                           className={`
                             ${
-                              (gift.GiftOnOrder?.length ?? 0) > 0
+                              (gift.GiftOnOrder?.length ?? 0) > 0 &&
+                              gift.status !==
+                                GiftStatusEnum.AVAILABLE.toUpperCase()
                                 ? "text-gray-400 dark:text-gray-500 cursor-not-allowed"
                                 : "text-red-600 dark:text-red-400 hover:text-red-900 dark:hover:text-red-500"
                             }

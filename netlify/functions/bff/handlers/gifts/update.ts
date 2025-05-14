@@ -117,11 +117,7 @@ const returnGift = async (
       return errorResponse(400, "Gift is not purchased");
     }
     const result = await prisma.$transaction(async (prisma) => {
-      // await prisma.giftOnOrder.deleteMany({
-      //   where: { giftId: giftId },
-      // });
-
-      const orderId = gift.GiftOnOrder[0].orderId;
+      const orderId = gift.GiftOnOrder[gift.GiftOnOrder.length - 1].orderId;
 
       await prisma.order.update({
         where: { id: orderId },

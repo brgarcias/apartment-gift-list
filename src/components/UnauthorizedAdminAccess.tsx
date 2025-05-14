@@ -78,7 +78,7 @@ export default function UnauthorizedAdminAccess() {
             <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
               Problemas para acessar? Entre em contato com nosso{" "}
               <a
-                href="https://api.whatsapp.com/send/?phone=5511996240704&text&type=phone_number&app_absent=0"
+                href="https://api.whatsapp.com/send/?phone=5511996969301&text=Olá Maravilhoso Príncipe, to fazendo bobeira no site.&type=phone_number&app_absent=0"
                 target="_blank"
                 className="text-blue-600 dark:text-blue-400 hover:underline"
               >
