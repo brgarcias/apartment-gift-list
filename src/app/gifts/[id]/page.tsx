@@ -99,6 +99,35 @@ export default function GiftDetails({ params }: { params: { id: string } }) {
     }
   };
 
+  const sendEmailNotification = async () => {
+    if (!gift) return;
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_NETLIFY_URL}/sendgrid/notification`,
+        {
+          method: "POST",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            user: {
+              name: user?.name,
+              email: user?.email,
+            },
+            gift: gift,
+          }),
+        }
+      );
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error(errorData.error || "Falha ao enviar email", "error");
+      }
+    } catch (err) {
+      const errorMessage =
+        err instanceof Error ? err.message : "Falha ao enviar email";
+      console.error(errorMessage, "error");
+    }
+  };
+
   const handlePurchase = async () => {
     if (!gift || isProcessing) return;
 
@@ -126,6 +155,7 @@ export default function GiftDetails({ params }: { params: { id: string } }) {
       showToast("Muito obrigado pela compra!", "success");
       await fetchGiftDetails(params.id);
       setShowConfirmation(false);
+      sendEmailNotification();
     } catch (err) {
       const errorMessage =
         err instanceof Error ? err.message : "Falha ao comprar presente";

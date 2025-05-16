@@ -56,6 +56,7 @@ export const getGiftById = async (event: HandlerEvent) => {
           select: {
             order: {
               select: {
+                id: true,
                 user: {
                   select: {
                     id: true,

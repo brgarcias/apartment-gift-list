@@ -15,6 +15,7 @@ import { uploadImage } from "../handlers/google-drive/upload";
 import { deleteUserById } from "../handlers/users/delete";
 import { createGift } from "../handlers/gifts/create";
 import { deleteGift } from "../handlers/gifts/delete";
+import { sendEmail } from "../handlers/send-grid/notification";
 
 export const ROUTES: RouteTable = {
   "/gifts": {
@@ -76,5 +77,8 @@ export const ROUTES: RouteTable = {
   },
   "/drive/upload/:id": {
     POST: uploadImage,
+  },
+  "/sendgrid/notification": {
+    POST: sendEmail,
   },
 };
