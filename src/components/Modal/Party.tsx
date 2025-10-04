@@ -57,7 +57,7 @@ const ModalParty: FC<ModalProps> = ({ isOpen, setisOpen }) => {
                   Chá de Casa Nova & Noivado
                 </Dialog.Title>
                 <p className="mt-2 text-indigo-100">
-                  1 de Outubro de 2025, às 13h, quadra de futebol
+                  16 de Novembro de 2025, às 10h, Espaço Casa de Vidro
                 </p>
                 <ButtonClose className="absolute right-3 top-3 opacity-0 w-0 h-0 overflow-hidden" />
               </div>
@@ -65,12 +65,13 @@ const ModalParty: FC<ModalProps> = ({ isOpen, setisOpen }) => {
               <div className="flex-grow overflow-y-auto p-6 sm:p-8">
                 <div className="space-y-6 text-neutral-700 dark:text-neutral-300">
                   <p>
-                    A festa será realizada na quadra de futebol do bairro, com
-                    decoração temática e atividades para todas as idades.
+                    A festa será realizada no Espaço Casa de Vidro, endereço Rua
+                    Coronel Estevam Lopes de Camargo, 88, - Vila Moreira - CEP:
+                    03088-050, São Paulo/SP.
                   </p>
                   <p>
-                    Teremos música ao vivo, comida deliciosa e muitas surpresas
-                    para todos os convidados.
+                    Teremos churrasco, piscina, som e muitas surpresas para
+                    todos os convidados.
                   </p>
                   <p>
                     Venha celebrar conosco e fazer parte desse momento tão

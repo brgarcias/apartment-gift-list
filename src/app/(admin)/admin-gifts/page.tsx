@@ -141,6 +141,8 @@ const AdminGiftsPage = () => {
             body: JSON.stringify({
               ...currentGift,
               status: currentGift?.status?.toUpperCase(),
+              purchaseLink:
+                currentGift.purchaseLink || "Local de sua preferencia",
             }),
           }
         );
