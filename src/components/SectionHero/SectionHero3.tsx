@@ -3,11 +3,13 @@
 import React, { FC, Fragment, useState } from "react";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import backgroundPattern from "@/images/Moon.svg";
-import imageNoivos from "@/images/foto-noivos.png";
+import imageNoivosWhite from "@/images/foto-noivos-white.png";
+import imageNoivosBlack from "@/images/foto-noivos-black.png";
 import Image from "next/image";
 import Modal from "../Modal/Modal";
 import ButtonSecondary from "@/shared/Button/ButtonSecondary";
 import ModalParty from "../Modal/Party";
+import { useThemeMode } from "@/hooks/useThemeMode";
 
 export interface SectionPromo2Props {
   className?: string;
@@ -16,6 +18,10 @@ export interface SectionPromo2Props {
 const SectionPromo2: FC<SectionPromo2Props> = ({ className = "lg:pt-10" }) => {
   const [isOpenMoreFilter, setisOpenMoreFilter] = useState(false);
   const [isOpenModalParty, setisOpenModalParty] = useState(false);
+
+  const { isDarkMode } = useThemeMode();
+
+  const imageNoivos = isDarkMode ? imageNoivosWhite : imageNoivosBlack;
   return (
     <div className={`nc-SectionPromo2 ${className}`}>
       <div className="relative flex flex-col lg:flex-row lg:items-center justify-between bg-indigo-50 dark:bg-slate-800 rounded-2xl sm:rounded-[40px] p-4 sm:p-8 lg:p-12 overflow-hidden">
@@ -65,7 +71,7 @@ const SectionPromo2: FC<SectionPromo2Props> = ({ className = "lg:pt-10" }) => {
             <Image
               draggable="false"
               fill
-              className="w-full h-full object-cover rounded-lg"
+              className="object-contain object-center rounded-lg"
               src={imageNoivos}
               alt="Noivos"
               sizes="(max-width: 1023px) 100vw, 50vw"

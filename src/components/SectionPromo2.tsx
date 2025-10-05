@@ -70,17 +70,15 @@ const SectionPromo2: FC<SectionPromo2Props> = ({ className = "lg:pt-10" }) => {
 
             <div className="mt-6 text-center">
               <h3 className="text-xl font-medium text-slate-800 dark:text-white">
-                Endereço para Entrega
+                Informações para Entrega
               </h3>
               <p className="mt-2 text-slate-600 dark:text-slate-300">
-                Av. Inajar de Souza, 3947 - Apt 501 Torre 3
-                <br />
-                Vila Nova Cachoeirinha, São Paulo - SP
-                <br />
-                CEP: 02861-160
+                Combine a entrega diretamente com os noivos no dia da festa ou
+                opte por entregar o presente pessoalmente durante o evento.
               </p>
               <p className="mt-4 text-sm text-slate-500 dark:text-slate-400">
-                * Por favor, avise quando enviar o presente
+                * Caso prefira enviar o presente antes da festa, avise-nos com
+                antecedência.
               </p>
             </div>
           </div>
