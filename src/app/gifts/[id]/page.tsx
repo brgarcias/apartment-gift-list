@@ -377,8 +377,13 @@ export default function GiftDetails({ params }: { params: { id: string } }) {
 
                       {/* Purchase Link */}
                       {gift.purchaseLink &&
-                        gift.status ===
-                          GiftStatusEnum.AVAILABLE.toUpperCase() && (
+                        (gift.status ===
+                          GiftStatusEnum.AVAILABLE.toUpperCase() ||
+                          (gift.status ===
+                            GiftStatusEnum.PURCHASED.toUpperCase() &&
+                            gift?.GiftOnOrder?.some(
+                              (order) => order.order.user.id === user?.id
+                            ))) && (
                           <div className="bg-blue-50 dark:bg-slate-700 p-3 sm:p-4 rounded-lg">
                             <h2 className="text-sm sm:text-base font-semibold text-blue-800 dark:text-blue-300 mb-2">
                               Onde comprar
