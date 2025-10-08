@@ -57,7 +57,7 @@ const ModalParty: FC<ModalProps> = ({ isOpen, setisOpen }) => {
                   Chá de Casa Nova & Noivado
                 </Dialog.Title>
                 <p className="mt-2 text-indigo-100">
-                  16 de Novembro de 2025, às 10h30, Espaço Casa de Vidro
+                  16 de Novembro de 2025, às 11h, Espaço Casa de Vidro
                 </p>
                 <ButtonClose className="absolute right-3 top-3 opacity-0 w-0 h-0 overflow-hidden" />
               </div>
