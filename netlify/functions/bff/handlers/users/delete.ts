@@ -4,10 +4,10 @@ import { errorResponse, jsonResponse } from "@/lib/response";
 import { authCheckAdmin } from "../auth/auth.check";
 
 export const deleteUserById = async (
-  event: HandlerEvent
+  event: HandlerEvent,
 ): Promise<HandlerResponse> => {
   const userId = event.path.split("/").pop();
-  if (!userId || isNaN(parseInt(userId))) {
+  if (!userId || Number.isNaN(Number.parseInt(userId))) {
     return errorResponse(400, "Invalid user ID");
   }
 
@@ -19,7 +19,7 @@ export const deleteUserById = async (
     }
 
     const userWithRelations = await prisma.user.findUnique({
-      where: { id: parseInt(userId) },
+      where: { id: Number.parseInt(userId) },
       include: {
         orders: {
           include: {
@@ -39,7 +39,7 @@ export const deleteUserById = async (
 
     const result = await prisma.$transaction(async (prisma) => {
       const giftIdsFromOrders = userWithRelations.orders.flatMap((order) =>
-        order.Gift.map((giftOnOrder) => giftOnOrder.giftId)
+        order.Gift.map((giftOnOrder) => giftOnOrder.giftId),
       );
 
       if (giftIdsFromOrders.length > 0) {
@@ -50,15 +50,15 @@ export const deleteUserById = async (
       }
 
       await prisma.giftOnOrder.deleteMany({
-        where: { order: { userId: parseInt(userId) } },
+        where: { order: { userId: Number.parseInt(userId) } },
       });
 
       await prisma.order.deleteMany({
-        where: { userId: parseInt(userId) },
+        where: { userId: Number.parseInt(userId) },
       });
 
       const deletedUser = await prisma.user.delete({
-        where: { id: parseInt(userId) },
+        where: { id: Number.parseInt(userId) },
       });
 
       return deletedUser;

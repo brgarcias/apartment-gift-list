@@ -3,10 +3,10 @@ import { prisma } from "@/lib/prisma";
 import { errorResponse, jsonResponse } from "@/lib/response";
 
 export const updateUserById = async (
-  event: HandlerEvent
+  event: HandlerEvent,
 ): Promise<HandlerResponse> => {
   const userId = event.path.split("/").pop();
-  if (!userId || isNaN(parseInt(userId))) {
+  if (!userId || Number.isNaN(Number.parseInt(userId))) {
     return errorResponse(400, "Invalid user ID");
   }
   try {
@@ -21,7 +21,7 @@ export const updateUserById = async (
     }
 
     const updatedUser = await prisma.user.update({
-      where: { id: parseInt(userId) },
+      where: { id: Number.parseInt(userId) },
       data: { name, birthDate, profileImage, isAdmin },
     });
 
@@ -34,9 +34,9 @@ export const updateUserById = async (
 
 export const uploadProfileImage = async (
   userId: string,
-  profileImage: string
+  profileImage: string,
 ): Promise<HandlerResponse> => {
-  if (!userId || isNaN(parseInt(userId))) {
+  if (!userId || Number.isNaN(Number.parseInt(userId))) {
     return errorResponse(400, "Invalid user ID");
   }
   try {
@@ -45,7 +45,7 @@ export const uploadProfileImage = async (
     }
 
     const updatedUser = await prisma.user.update({
-      where: { id: parseInt(userId) },
+      where: { id: Number.parseInt(userId) },
       data: { profileImage },
     });
 

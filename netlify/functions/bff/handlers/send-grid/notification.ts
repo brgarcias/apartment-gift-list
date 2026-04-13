@@ -67,13 +67,13 @@ const getLastOrderId = (gift: Gift): string => {
   if (!gift.GiftOnOrder || gift.GiftOnOrder.length === 0) {
     return "N/A";
   }
-  const lastOrder = gift.GiftOnOrder[gift.GiftOnOrder.length - 1];
-  return lastOrder?.order.id.toString();
+  const lastOrder = gift.GiftOnOrder.at(-1);
+  return lastOrder?.order.id.toString() ?? "N/A";
 };
 
 const buildEmailContent = (
   gift: Gift,
-  user: EmailData["user"]
+  user: EmailData["user"],
 ): EmailContent => {
   const orderId = getLastOrderId(gift);
   return {
@@ -100,7 +100,7 @@ const buildEmailHead = (): string => `
 const buildEmailBody = (
   gift: Gift,
   user: EmailData["user"],
-  orderId: string
+  orderId: string,
 ): string => `
   <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;">
     <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; color: #1e293b;">
@@ -121,11 +121,11 @@ const buildHeader = (): string => `
 const buildMainContent = (
   gift: Gift,
   user: EmailData["user"],
-  orderId: string
+  orderId: string,
 ): string => `
   <main style="padding: 2rem;">
     ${buildConfirmationBadge()}
-    ${buildGiftDetails(gift, user)}
+    ${buildGiftDetails(gift)}
     ${buildOrderDetails(user, orderId)}
     ${buildViewGiftLink(gift.id)}
   </main>
@@ -142,7 +142,7 @@ const buildConfirmationBadge = (): string => `
   </div>
 `;
 
-const buildGiftDetails = (gift: Gift, user: EmailData["user"]): string => `
+const buildGiftDetails = (gift: Gift): string => `
   <div style="margin-bottom: 2rem;">
     <h1 style="font-size: 1.5rem; font-weight: 700; color: #1e293b; margin-bottom: 1rem;">Novo Presente Comprado!</h1>
     <p style="color: #64748b; margin-bottom: 1.5rem;">Você recebeu uma nova compra em sua lista de presentes.</p>
@@ -151,8 +151,8 @@ const buildGiftDetails = (gift: Gift, user: EmailData["user"]): string => `
       <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1rem; margin-bottom: 1.5rem;">
         <div style="background-color: #f1f5f9; border-radius: 0.75rem; padding: 1rem; text-align: center;">
           <img src="${gift.imageUrl}" alt="${
-  gift.name
-}" style="max-width: 150px; height: auto; margin: 0 auto;"/>
+            gift.name
+          }" style="max-width: 150px; height: auto; margin: 0 auto;"/>
         </div>
         <div>
           <h2 style="font-size: 1.25rem; font-weight: 600; color: #1e293b; margin-bottom: 0.5rem;">${
@@ -172,7 +172,7 @@ const buildGiftDetails = (gift: Gift, user: EmailData["user"]): string => `
 
 const buildOrderDetails = (
   user: EmailData["user"],
-  orderId: string
+  orderId: string,
 ): string => `
   <div style="border: 1px solid #e2e8f0; border-radius: 0.75rem; padding: 1.5rem; margin-bottom: 2rem;">
     <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
@@ -184,7 +184,7 @@ const buildOrderDetails = (
       <div>
         <div style="font-size: 0.875rem; color: #64748b;">Data da Compra</div>
         <div style="font-weight: 600; color: #1e293b;">${new Date().toLocaleDateString(
-          "pt-BR"
+          "pt-BR",
         )}</div>
       </div>
       <div>
@@ -227,7 +227,7 @@ const buildFooter = (gift: Gift): string => `
   </footer>
 `;
 
-const buildDarkModeStyles = (): string => `
+const buildDarkModeStyles = (): string => String.raw`
   <style>
     @media (prefers-color-scheme: dark) {
       body { background-color: #0f172a; }
@@ -236,9 +236,9 @@ const buildDarkModeStyles = (): string => `
         color: #f8fafc !important;
         border-color: #334155 !important;
       }
-      h1, h2, .dark\\:text-gray-200 { color: #f8fafc !important; }
-      .dark\\:bg-slate-800 { background-color: #1e293b !important; }
-      .dark\\:text-gray-400 { color: #94a3b8 !important; }
+      h1, h2, .dark\:text-gray-200 { color: #f8fafc !important; }
+      .dark\:bg-slate-800 { background-color: #1e293b !important; }
+      .dark\:text-gray-400 { color: #94a3b8 !important; }
     }
   </style>
 `;

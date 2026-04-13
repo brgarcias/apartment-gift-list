@@ -9,7 +9,7 @@ export const runtime = "edge";
 
 export async function uploadImage(event: HandlerEvent) {
   const userId = event.path.split("/").pop();
-  if (!userId || isNaN(parseInt(userId))) {
+  if (!userId || Number.isNaN(Number.parseInt(userId))) {
     return errorResponse(400, "Invalid user ID");
   }
 
@@ -24,7 +24,10 @@ export async function uploadImage(event: HandlerEvent) {
     const auth = new google.auth.GoogleAuth({
       credentials: {
         client_email: process.env.GOOGLE_CLIENT_ID,
-        private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, "\n"),
+        private_key: process.env.GOOGLE_PRIVATE_KEY?.replaceAll(
+          String.raw`\n`,
+          "\n",
+        ),
       },
       scopes: ["https://www.googleapis.com/auth/drive.file"],
     });
@@ -80,7 +83,10 @@ export async function uploadGiftImage(file: {
     const auth = new google.auth.GoogleAuth({
       credentials: {
         client_email: process.env.GOOGLE_CLIENT_ID,
-        private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, "\n"),
+        private_key: process.env.GOOGLE_PRIVATE_KEY?.replaceAll(
+          String.raw`\n`,
+          "\n",
+        ),
       },
       scopes: ["https://www.googleapis.com/auth/drive.file"],
     });

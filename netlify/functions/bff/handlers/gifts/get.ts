@@ -40,12 +40,12 @@ export const getGifts = async (): Promise<HandlerResponse> => {
 
 export const getGiftById = async (event: HandlerEvent) => {
   const giftId = event.path.split("/").pop();
-  if (!giftId || isNaN(parseInt(giftId))) {
+  if (!giftId || Number.isNaN(Number.parseInt(giftId))) {
     return errorResponse(400, "Invalid gift ID");
   }
   try {
     const gift = await prisma.gift.findUnique({
-      where: { id: parseInt(giftId) },
+      where: { id: Number.parseInt(giftId) },
       include: {
         Category: {
           select: {

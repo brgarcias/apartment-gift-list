@@ -4,7 +4,7 @@ import { errorResponse, jsonResponse } from "@/lib/response";
 import { authCheckAdmin } from "../auth/auth.check";
 
 export const getUsers = async (
-  event: HandlerEvent
+  event: HandlerEvent,
 ): Promise<HandlerResponse> => {
   try {
     const session = await authCheckAdmin(event);
@@ -35,15 +35,15 @@ export const getUsers = async (
 };
 
 export const getUserById = async (
-  event: HandlerEvent
+  event: HandlerEvent,
 ): Promise<HandlerResponse> => {
   const userId = event.path.split("/").pop();
-  if (!userId || isNaN(parseInt(userId))) {
+  if (!userId || Number.isNaN(Number.parseInt(userId))) {
     return errorResponse(400, "Invalid user ID");
   }
   try {
     const user = await prisma.user.findUnique({
-      where: { id: parseInt(userId) },
+      where: { id: Number.parseInt(userId) },
       include: {
         orders: {
           include: {

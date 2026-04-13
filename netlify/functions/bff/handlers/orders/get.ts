@@ -4,7 +4,7 @@ import { errorResponse, jsonResponse } from "@/lib/response";
 import authCheck, { authCheckAdmin } from "../auth/auth.check";
 
 export const getOrders = async (
-  event: HandlerEvent
+  event: HandlerEvent,
 ): Promise<HandlerResponse> => {
   try {
     const session = await authCheckAdmin(event);
@@ -36,7 +36,7 @@ export const getOrders = async (
 
 export const getOrderById = async (event: HandlerEvent) => {
   const orderId = event.path.split("/").pop();
-  if (!orderId || isNaN(parseInt(orderId))) {
+  if (!orderId || Number.isNaN(Number.parseInt(orderId))) {
     return errorResponse(400, "Invalid Order ID");
   }
   try {
@@ -47,7 +47,7 @@ export const getOrderById = async (event: HandlerEvent) => {
     }
 
     const order = await prisma.order.findUnique({
-      where: { id: parseInt(orderId) },
+      where: { id: Number.parseInt(orderId) },
       include: {
         user: true,
         Gift: {
@@ -71,7 +71,7 @@ export const getOrderById = async (event: HandlerEvent) => {
 
 export const getOrdersByUserId = async (event: HandlerEvent) => {
   const userId = event.path.split("/").pop();
-  if (!userId || isNaN(parseInt(userId))) {
+  if (!userId || Number.isNaN(Number.parseInt(userId))) {
     return errorResponse(400, "Invalid User ID");
   }
   try {
@@ -82,7 +82,7 @@ export const getOrdersByUserId = async (event: HandlerEvent) => {
     }
 
     const orders = await prisma.order.findMany({
-      where: { userId: parseInt(userId) },
+      where: { userId: Number.parseInt(userId) },
       include: {
         Gift: {
           include: {

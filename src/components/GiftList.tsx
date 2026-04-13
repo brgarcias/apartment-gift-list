@@ -22,7 +22,7 @@ export default function GiftList() {
   const [priceRange, setPriceRange] = useState<number[]>([0, 2000]);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [sortOrder, setSortOrder] = useState<string>("");
-  const [onlyAvailable, setOnlyAvailable] = useState(false);
+  const [onlyAvailable, setOnlyAvailable] = useState(true);
 
   const fetchAvailableGifts = async () => {
     try {
@@ -31,7 +31,6 @@ export default function GiftList() {
       if (!res.ok) throw new Error("Falha ao carregar presentes");
       const data = await res.json();
       setGifts(data);
-      setFilteredGifts(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Erro desconhecido");
     } finally {
@@ -45,26 +44,26 @@ export default function GiftList() {
     // Filtro por nome
     if (searchTerm) {
       result = result.filter((gift) =>
-        gift.name.toLowerCase().includes(searchTerm.toLowerCase())
+        gift.name.toLowerCase().includes(searchTerm.toLowerCase()),
       );
     }
 
     // Filtro por range de preço
     result = result.filter(
-      (gift) => gift.price >= priceRange[0] && gift.price <= priceRange[1]
+      (gift) => gift.price >= priceRange[0] && gift.price <= priceRange[1],
     );
 
     // Filtro por categoria
     if (selectedCategories.length > 0) {
       result = result.filter((gift) =>
-        selectedCategories.includes(gift.Category?.name || "")
+        selectedCategories.includes(gift.Category?.name || ""),
       );
     }
 
     // Filtro por disponibilidade
     if (onlyAvailable) {
       result = result.filter(
-        (gift) => gift.status.toLocaleLowerCase() === GiftStatusEnum.AVAILABLE
+        (gift) => gift.status.toLocaleLowerCase() === GiftStatusEnum.AVAILABLE,
       );
     }
 
@@ -79,13 +78,13 @@ export default function GiftList() {
       case "Newest":
         result.sort(
           (a, b) =>
-            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
         );
         break;
       case "Oldest":
         result.sort(
           (a, b) =>
-            new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+            new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
         );
         break;
       case "A-Z":
@@ -245,7 +244,7 @@ export default function GiftList() {
     setPriceRange([0, 2000]);
     setSelectedCategories([]);
     setSortOrder("");
-    setOnlyAvailable(false);
+    setOnlyAvailable(true);
   };
 
   const GiftCardSkeleton = () => (

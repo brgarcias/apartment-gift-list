@@ -7,7 +7,7 @@ export const getCategories = async (
 ): Promise<HandlerResponse> => {
   try {
     const categories = await prisma.category.findMany({
-      cacheStrategy: { swr: 60, ttl: 60, tags: ["all_categories"] },
+      cacheStrategy: { swr: 60, ttl: 60, tags: ["all_categories"] } as never,
       orderBy: {
         createdAt: "desc",
       },

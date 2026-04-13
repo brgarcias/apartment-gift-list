@@ -129,11 +129,10 @@ export const viewport: Viewport = {
 
 export default function RootLayout({
   children,
-  params,
-}: {
+}: Readonly<{
   children: React.ReactNode;
   params: any;
-}) {
+}>) {
   return (
     <html lang="en" className={`${poppins.className} scroll-smooth`}>
       <head>

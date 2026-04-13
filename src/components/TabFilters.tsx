@@ -71,12 +71,12 @@ const TabFilters: React.FC<TabFiltersProps> = ({
       : setSelectedCategories(selectedCategories.filter((i) => i !== name));
   };
 
-  const renderXClear = () => {
+  const renderXClear = (onClear: () => void) => {
     return (
       <span
         onClick={(e) => {
           e.stopPropagation(); // Impede que o evento de clique propague para o elemento pai
-          clearAllFilters();
+          onClear();
         }}
         className="flex-shrink-0 w-4 h-4 rounded-full bg-primary-500 text-white flex items-center justify-center ml-3 cursor-pointer"
       >
@@ -167,9 +167,7 @@ const TabFilters: React.FC<TabFiltersProps> = ({
               {!selectedCategories.length ? (
                 <ChevronDownIcon className="w-4 h-4 ml-3" />
               ) : (
-                <span onClick={() => setSelectedCategories([])}>
-                  {renderXClear()}
-                </span>
+                <span>{renderXClear(() => setSelectedCategories([]))}</span>
               )}
             </Popover.Button>
             <Transition
@@ -191,7 +189,7 @@ const TabFilters: React.FC<TabFiltersProps> = ({
                           label={item.name}
                           subLabel={item.description || ""}
                           defaultChecked={selectedCategories.includes(
-                            item.name
+                            item.name,
                           )}
                           onChange={(checked) =>
                             handleChangeCategories(checked, item.name)
@@ -286,7 +284,7 @@ const TabFilters: React.FC<TabFiltersProps> = ({
               {!sortOrder ? (
                 <ChevronDownIcon className="w-4 h-4 ml-3" />
               ) : (
-                <span onClick={() => setSortOrder("")}>{renderXClear()}</span>
+                <span>{renderXClear(() => setSortOrder(""))}</span>
               )}
             </Popover.Button>
             <Transition
@@ -380,9 +378,7 @@ const TabFilters: React.FC<TabFiltersProps> = ({
               <span className="ml-2 min-w-[90px]">{`${priceRange[0]} - ${priceRange[1]} R$`}</span>
               {(priceRange[0] !== PRICE_RANGE[0] ||
                 priceRange[1] !== PRICE_RANGE[1]) && (
-                <span onClick={() => setPriceRange(PRICE_RANGE)}>
-                  {renderXClear()}
-                </span>
+                <span>{renderXClear(() => setPriceRange(PRICE_RANGE))}</span>
               )}
             </Popover.Button>
             <Transition
@@ -435,7 +431,7 @@ const TabFilters: React.FC<TabFiltersProps> = ({
                             onChange={(e) => {
                               const value = Math.min(
                                 Number(e.target.value),
-                                priceRange[1]
+                                priceRange[1],
                               );
                               setPriceRange([value, priceRange[1]]);
                             }}
@@ -464,7 +460,7 @@ const TabFilters: React.FC<TabFiltersProps> = ({
                             onChange={(e) => {
                               const value = Math.max(
                                 Number(e.target.value),
-                                priceRange[0]
+                                priceRange[0],
                               );
                               setPriceRange([priceRange[0], value]);
                             }}
@@ -544,7 +540,7 @@ const TabFilters: React.FC<TabFiltersProps> = ({
         <span className="line-clamp-1 ml-2">
           {onlyAvailable ? "Somente disponíveis" : "Todos os itens"}
         </span>
-        {onlyAvailable && renderXClear()}
+        {onlyAvailable && renderXClear(() => setOnlyAvailable(!onlyAvailable))}
       </div>
     );
   };
@@ -613,7 +609,7 @@ const TabFilters: React.FC<TabFiltersProps> = ({
           </svg>
 
           <span className="ml-2">Aplicar Filtros ({activeFiltersCount})</span>
-          {activeFiltersCount > 0 && renderXClear()}
+          {activeFiltersCount > 0 && renderXClear(() => clearAllFilters())}
         </div>
 
         <Transition appear show={isOpenMoreFilter} as={Fragment}>
@@ -752,7 +748,7 @@ const TabFilters: React.FC<TabFiltersProps> = ({
                               onChange={(e) => {
                                 const value = Math.min(
                                   Number(e.target.value),
-                                  priceRange[1]
+                                  priceRange[1],
                                 );
                                 setPriceRange([value, priceRange[1]]);
                               }}
@@ -776,7 +772,7 @@ const TabFilters: React.FC<TabFiltersProps> = ({
                               onChange={(e) => {
                                 const value = Math.max(
                                   Number(e.target.value),
-                                  priceRange[0]
+                                  priceRange[0],
                                 );
                                 setPriceRange([priceRange[0], value]);
                               }}
@@ -833,7 +829,7 @@ const TabFilters: React.FC<TabFiltersProps> = ({
                         setPriceRange(PRICE_RANGE);
                         setSelectedCategories([]);
                         setSortOrder("");
-                        setOnlyAvailable(false);
+                        setOnlyAvailable(true);
                       }}
                       sizeClass="px-6 py-3"
                     >

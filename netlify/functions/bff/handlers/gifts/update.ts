@@ -21,7 +21,7 @@ interface GiftWithImageFormData extends Gift {
 }
 
 const purchaseGift = async (
-  event: HandlerEventWithParams
+  event: HandlerEventWithParams,
 ): Promise<HandlerResponse> => {
   const userId = event.body ? JSON.parse(event.body).userId : null;
   if (!userId) {
@@ -29,8 +29,8 @@ const purchaseGift = async (
   }
 
   const giftId = event.pathParameters?.id
-    ? parseInt(event.pathParameters.id)
-    : NaN;
+    ? Number.parseInt(event.pathParameters.id)
+    : Number.NaN;
 
   if (!giftId) {
     return errorResponse(400, "Gift ID not provided");
@@ -52,7 +52,7 @@ const purchaseGift = async (
         throw new Error(
           gift.status === GiftStatus.PURCHASED
             ? "Este presente já foi comprado"
-            : "Não é possível comprar um presente reservado"
+            : "Não é possível comprar um presente reservado",
         );
       }
 
@@ -86,17 +86,17 @@ const purchaseGift = async (
     console.error("Error in purchase transaction:", error);
     return errorResponse(
       400,
-      error instanceof Error ? error.message : "Falha na compra do presente"
+      error instanceof Error ? error.message : "Falha na compra do presente",
     );
   }
 };
 
 const returnGift = async (
-  event: HandlerEventWithParams
+  event: HandlerEventWithParams,
 ): Promise<HandlerResponse> => {
   const giftId = event.pathParameters?.id
-    ? parseInt(event.pathParameters.id)
-    : NaN;
+    ? Number.parseInt(event.pathParameters.id)
+    : Number.NaN;
   if (!giftId) {
     return errorResponse(400, "Gift ID not provided");
   }
@@ -117,7 +117,11 @@ const returnGift = async (
       return errorResponse(400, "Gift is not purchased");
     }
     const result = await prisma.$transaction(async (prisma) => {
-      const orderId = gift.GiftOnOrder[gift.GiftOnOrder.length - 1].orderId;
+      const lastGiftOnOrder = gift.GiftOnOrder.at(-1);
+      if (!lastGiftOnOrder) {
+        throw new Error("Order not found for this gift");
+      }
+      const orderId = lastGiftOnOrder.orderId;
 
       await prisma.order.update({
         where: { id: orderId },
@@ -138,13 +142,13 @@ const returnGift = async (
     console.error("Error in returnGift:", error);
     return errorResponse(
       500,
-      error instanceof Error ? error.message : "Internal server error"
+      error instanceof Error ? error.message : "Internal server error",
     );
   }
 };
 
 export const handleGiftStatusUpdate = async (
-  event: HandlerEventWithParams
+  event: HandlerEventWithParams,
 ): Promise<HandlerResponse> => {
   if (!event.body) {
     return errorResponse(400, "No data provided");
@@ -179,10 +183,10 @@ export const handleGiftStatusUpdate = async (
 };
 
 export const updateGift = async (
-  event: HandlerEvent
+  event: HandlerEvent,
 ): Promise<HandlerResponse> => {
   const giftId = event.path.split("/").pop();
-  if (!giftId || isNaN(parseInt(giftId))) {
+  if (!giftId || Number.isNaN(Number.parseInt(giftId))) {
     return errorResponse(400, "Invalid gift ID");
   }
 
@@ -214,7 +218,7 @@ export const updateGift = async (
 
     const updatedGift = await prisma.gift.update({
       where: {
-        id: parseInt(giftId),
+        id: Number.parseInt(giftId),
       },
       data: {
         name: data.name,

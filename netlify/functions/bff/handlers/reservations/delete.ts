@@ -4,7 +4,7 @@ import { HandlerResponse } from "@netlify/functions";
 import { GiftStatus } from "@prisma/client";
 
 export const deleteReservation = async (
-  id: number
+  id: number,
 ): Promise<HandlerResponse> => {
   try {
     const deletedReservation = await prisma.reservation.update({

@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { errorResponse, jsonResponse } from "@/lib/response";
 
 export const getReservations = async (
-  event: HandlerEvent
+  event: HandlerEvent,
 ): Promise<HandlerResponse> => {
   try {
     const { queryStringParameters } = event;
@@ -13,7 +13,7 @@ export const getReservations = async (
         swr: 60,
         ttl: 60,
         tags: ["all_reservations"],
-      },
+      } as never,
       where: {
         deletedAt: deletedAt ? { not: null } : null,
       },
@@ -38,17 +38,17 @@ export const getReservations = async (
 
 export const getReservationById = async (event: HandlerEvent) => {
   const reservationId = event.path.split("/").pop();
-  if (!reservationId || isNaN(parseInt(reservationId))) {
+  if (!reservationId || Number.isNaN(Number.parseInt(reservationId))) {
     return errorResponse(400, "Invalid Reservation ID");
   }
   try {
     const reservation = await prisma.reservation.findUnique({
-      where: { id: parseInt(reservationId) },
+      where: { id: Number.parseInt(reservationId) },
       cacheStrategy: {
         swr: 60,
         ttl: 60,
         tags: ["reservation_by_id"],
-      },
+      } as never,
     });
 
     if (!reservation) {
