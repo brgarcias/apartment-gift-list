@@ -14,7 +14,7 @@ interface GiftWithImageFormData extends Gift {
 }
 
 export const createGift = async (
-  event: HandlerEvent
+  event: HandlerEvent,
 ): Promise<HandlerResponse> => {
   if (!event.body) {
     return errorResponse(400, "No data provided");
