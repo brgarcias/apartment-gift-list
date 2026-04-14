@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "netlify:dev": "netlify dev",
+    "ntl:dev": "netlify dev",
     "prisma:generate": "npx prisma generate",
     "prisma:migration": "npx prisma migrate dev --name :migration_name",
     "prisma:migration-resolve": "npx prisma migrate resolve --applied --name :migration_name",

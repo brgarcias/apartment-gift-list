@@ -9,11 +9,6 @@ export const getReservations = async (
     const { queryStringParameters } = event;
     const { deletedAt } = queryStringParameters || {};
     const reservations = await prisma.reservation.findMany({
-      cacheStrategy: {
-        swr: 60,
-        ttl: 60,
-        tags: ["all_reservations"],
-      } as never,
       where: {
         deletedAt: deletedAt ? { not: null } : null,
       },
@@ -44,11 +39,6 @@ export const getReservationById = async (event: HandlerEvent) => {
   try {
     const reservation = await prisma.reservation.findUnique({
       where: { id: Number.parseInt(reservationId) },
-      cacheStrategy: {
-        swr: 60,
-        ttl: 60,
-        tags: ["reservation_by_id"],
-      } as never,
     });
 
     if (!reservation) {

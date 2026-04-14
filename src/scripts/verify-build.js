@@ -1,19 +1,26 @@
-const fs = require("fs");
-const path = require("path");
+const fs = require("node:fs");
+const path = require("node:path");
 
-// Verifica se o Prisma Client foi gerado corretamente
-const prismaClientPath = path.join(
-  __dirname,
-  "../../node_modules/.prisma/client/index.js"
+const root = path.resolve(__dirname, "../../");
+
+// ---------- Prisma Client check ----------
+const prismaEntryPath = path.join(
+  root,
+  "node_modules",
+  "@prisma",
+  "client",
+  "index.js",
 );
-if (!fs.existsSync(prismaClientPath)) {
+
+if (!fs.existsSync(prismaEntryPath)) {
   console.error("❌ Prisma Client não foi gerado corretamente");
   process.exit(1);
 }
 
-// Verifica se o build do Next.js está completo
-const nextBuildPath = path.join(__dirname, "../../.next/build-manifest.json");
-if (!fs.existsSync(nextBuildPath)) {
+// ---------- Next.js build check ----------
+const nextBuildManifestPath = path.join(root, ".next", "build-manifest.json");
+
+if (!fs.existsSync(nextBuildManifestPath)) {
   console.error("❌ Build do Next.js incompleto");
   process.exit(1);
 }
