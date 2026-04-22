@@ -71,7 +71,9 @@ const SkeletonLoader = () => (
   </div>
 );
 
-export default function GiftDetails({ params }: { params: { id: string } }) {
+export default function GiftDetails({
+  params,
+}: Readonly<{ params: { id: string } }>) {
   const [gift, setGift] = useState<Gift | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -87,7 +89,7 @@ export default function GiftDetails({ params }: { params: { id: string } }) {
     setIsLoading(true);
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_NETLIFY_URL}/gifts/${id}`
+        `${process.env.NEXT_PUBLIC_NETLIFY_URL}/gifts/${id}`,
       );
       if (!res.ok) throw new Error("Falha ao carregar detalhes do presente");
       const data = await res.json();
@@ -115,7 +117,7 @@ export default function GiftDetails({ params }: { params: { id: string } }) {
             },
             gift: gift,
           }),
-        }
+        },
       );
       if (!response.ok) {
         const errorData = await response.json();
@@ -144,7 +146,7 @@ export default function GiftDetails({ params }: { params: { id: string } }) {
             action: GiftStatusEnum.PURCHASED,
             userId: user?.id,
           }),
-        }
+        },
       );
 
       if (!response.ok) {
@@ -289,7 +291,7 @@ export default function GiftDetails({ params }: { params: { id: string } }) {
         <div className="bg-red-100 border border-red-400 text-red-700 dark:bg-red-900 dark:border-red-700 dark:text-red-100 px-4 py-3 rounded mb-6">
           {error}
         </div>
-        <ButtonPrimary onClick={() => router.push("/")}>
+        <ButtonPrimary onClick={() => router.back()}>
           Voltar para a lista
         </ButtonPrimary>
       </div>
@@ -320,7 +322,7 @@ export default function GiftDetails({ params }: { params: { id: string } }) {
             {gift && (
               <div className="space-y-6">
                 <button
-                  onClick={() => router.push("/")}
+                  onClick={() => router.back()}
                   className="flex items-center text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300 transition-colors duration-200 text-sm sm:text-base"
                 >
                   <svg
@@ -382,7 +384,7 @@ export default function GiftDetails({ params }: { params: { id: string } }) {
                           (gift.status ===
                             GiftStatusEnum.PURCHASED.toUpperCase() &&
                             gift?.GiftOnOrder?.some(
-                              (order) => order.order.user.id === user?.id
+                              (order) => order.order.user.id === user?.id,
                             ))) && (
                           <div className="bg-blue-50 dark:bg-slate-700 p-3 sm:p-4 rounded-lg">
                             <h2 className="text-sm sm:text-base font-semibold text-blue-800 dark:text-blue-300 mb-2">
