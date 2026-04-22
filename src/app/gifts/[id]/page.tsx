@@ -23,48 +23,59 @@ const brlFormatter = new Intl.NumberFormat("pt-BR", {
 
 const SkeletonLoader = () => (
   <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6">
-    <div className="mb-6 h-6 w-32 bg-neutral-200 dark:bg-neutral-700 rounded animate-pulse"></div>
+    {/* back button skeleton */}
+    <div className="mb-6 h-6 w-40 bg-neutral-200 dark:bg-neutral-700 rounded animate-pulse" />
 
     <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm dark:shadow-slate-700/30 overflow-hidden">
       <div className="flex flex-col md:flex-row">
-        {/* Image skeleton */}
-        <div className="w-full md:w-1/2 h-64 md:h-auto bg-neutral-200 dark:bg-neutral-700 animate-pulse"></div>
+        {/* IMAGE SECTION (pixel-locked height) */}
+        <div className="rounded-t-lg w-full md:w-1/2 bg-indigo-50 dark:bg-slate-700 flex items-center justify-center p-4 sm:p-8">
+          <div className="relative w-full h-64 sm:h-80 md:h-full">
+            <div className="absolute inset-0 bg-neutral-200 dark:bg-neutral-700 animate-pulse rounded" />
+          </div>
+        </div>
 
-        {/* Content skeleton */}
-        <div className="w-full md:w-1/2 p-4 sm:p-6 space-y-4">
-          <div className="flex justify-between">
-            <div className="h-8 w-3/4 bg-neutral-200 dark:bg-neutral-700 rounded animate-pulse"></div>
-            <div className="h-6 w-20 bg-neutral-200 dark:bg-neutral-700 rounded-full animate-pulse"></div>
+        {/* CONTENT SECTION */}
+        <div className="w-full md:w-1/2 p-4 sm:p-6 space-y-4 sm:space-y-6">
+          {/* title + badge */}
+          <div className="flex justify-between items-start gap-2">
+            <div className="h-8 w-3/4 bg-neutral-200 dark:bg-neutral-700 rounded animate-pulse" />
+            <div className="h-6 w-20 bg-neutral-200 dark:bg-neutral-700 rounded-full animate-pulse" />
           </div>
 
-          <div className="h-4 w-24 bg-neutral-200 dark:bg-neutral-700 rounded animate-pulse"></div>
-          <div className="h-6 w-32 bg-neutral-200 dark:bg-neutral-700 rounded animate-pulse"></div>
+          {/* category badge */}
+          <div className="h-5 w-32 bg-neutral-200 dark:bg-neutral-700 rounded animate-pulse" />
 
-          {/* Purchase link skeleton */}
+          {/* price */}
+          <div className="h-8 w-40 bg-neutral-200 dark:bg-neutral-700 rounded animate-pulse" />
+
+          {/* purchase link block (always reserved space) */}
+          <div className="bg-neutral-100 dark:bg-slate-700 p-3 sm:p-4 rounded-lg space-y-3">
+            <div className="h-4 w-32 bg-neutral-200 dark:bg-neutral-600 rounded animate-pulse" />
+            <div className="h-10 w-full bg-neutral-200 dark:bg-neutral-600 rounded animate-pulse" />
+          </div>
+
+          {/* description */}
           <div className="space-y-2">
-            <div className="h-4 w-40 bg-neutral-200 dark:bg-neutral-700 rounded animate-pulse"></div>
-            <div className="h-10 w-full bg-neutral-200 dark:bg-neutral-700 rounded animate-pulse"></div>
+            <div className="h-4 w-28 bg-neutral-200 dark:bg-neutral-700 rounded animate-pulse" />
+            <div className="h-3 w-full bg-neutral-200 dark:bg-neutral-700 rounded animate-pulse" />
+            <div className="h-3 w-5/6 bg-neutral-200 dark:bg-neutral-700 rounded animate-pulse" />
           </div>
 
-          {/* Description skeleton */}
-          <div className="space-y-2">
-            <div className="h-4 w-32 bg-neutral-200 dark:bg-neutral-700 rounded animate-pulse"></div>
-            <div className="h-3 w-full bg-neutral-200 dark:bg-neutral-700 rounded animate-pulse"></div>
-            <div className="h-3 w-5/6 bg-neutral-200 dark:bg-neutral-700 rounded animate-pulse"></div>
-          </div>
-
-          {/* Dates skeleton */}
+          {/* dates */}
           <div className="grid grid-cols-2 gap-4">
             {[1, 2].map((item) => (
               <div key={item}>
-                <div className="h-3 w-24 bg-neutral-200 dark:bg-neutral-700 rounded animate-pulse mb-1"></div>
-                <div className="h-4 w-32 bg-neutral-200 dark:bg-neutral-700 rounded animate-pulse"></div>
+                <div className="h-3 w-24 mb-1 bg-neutral-200 dark:bg-neutral-700 rounded animate-pulse" />
+                <div className="h-4 w-32 bg-neutral-200 dark:bg-neutral-700 rounded animate-pulse" />
               </div>
             ))}
           </div>
 
-          {/* Button skeleton */}
-          <div className="h-12 w-full bg-neutral-200 dark:bg-neutral-700 rounded-full animate-pulse mt-4"></div>
+          {/* button */}
+          <div className="pt-2">
+            <div className="h-12 sm:h-[52px] w-full rounded-full bg-neutral-200 dark:bg-neutral-700 animate-pulse" />
+          </div>
         </div>
       </div>
     </div>
@@ -300,7 +311,7 @@ export default function GiftDetails({
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6">
-      <AnimatePresence>
+      <AnimatePresence mode="wait">
         {isLoading ? (
           <motion.div
             key="skeleton"
