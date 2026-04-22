@@ -1,6 +1,6 @@
 "use client";
 
-import React, { FC, Fragment, useState } from "react";
+import { FC, Fragment, useState } from "react";
 import ButtonPrimary from "@/shared/Button/ButtonPrimary";
 import { Dialog, Transition } from "@headlessui/react";
 import ButtonClose from "@/shared/ButtonClose/ButtonClose";
@@ -35,7 +35,7 @@ const ModalLogin: FC<ModalProps> = ({ isOpen, setIsOpen }) => {
     if (!email) {
       showToast(
         "Opa, opa, opa, perai! Preciso do seu e-mail, meu rei.",
-        "error"
+        "error",
       );
       showFeedback("", false);
       return;
@@ -53,7 +53,7 @@ const ModalLogin: FC<ModalProps> = ({ isOpen, setIsOpen }) => {
             body: JSON.stringify({
               email,
             }),
-          }
+          },
         );
         if (res.status === 404) {
           showToast("Opa! Não encontramos seu usuário.", "warning");
@@ -66,7 +66,7 @@ const ModalLogin: FC<ModalProps> = ({ isOpen, setIsOpen }) => {
           setIsOpen(false);
           showToast(
             "Bem vindo camarada! Pode comprar quantos presentes quiser.",
-            "success"
+            "success",
           );
         } else if (res.status === 404) {
           showToast("Opa! Não encontramos seu usuário.", "warning");
@@ -77,7 +77,7 @@ const ModalLogin: FC<ModalProps> = ({ isOpen, setIsOpen }) => {
         console.error("Sign in error:", error);
         showToast(
           "Opa, algo deu errado amigo. Tente de novo aí por favor.",
-          "error"
+          "error",
         );
       } finally {
         showFeedback("", false);
@@ -90,7 +90,7 @@ const ModalLogin: FC<ModalProps> = ({ isOpen, setIsOpen }) => {
     if (!birthDate || !fullName || !email) {
       showToast(
         "Opa, opa, opa, perai! Preencha todos os campos por favor, meu rei.",
-        "error"
+        "error",
       );
       showFeedback("", false);
       return;
@@ -113,7 +113,7 @@ const ModalLogin: FC<ModalProps> = ({ isOpen, setIsOpen }) => {
               day: "2-digit",
             }),
           }),
-        }
+        },
       );
 
       if (res.status === 409) {
@@ -131,7 +131,7 @@ const ModalLogin: FC<ModalProps> = ({ isOpen, setIsOpen }) => {
       console.error("Signup error:", err);
       showToast(
         "Opa, algo deu errado amigo. Tente de novo aí por favor.",
-        "error"
+        "error",
       );
     } finally {
       showFeedback("", false);
@@ -139,186 +139,184 @@ const ModalLogin: FC<ModalProps> = ({ isOpen, setIsOpen }) => {
   };
 
   return (
-    <>
-      <Transition appear show={isOpen} as={Fragment}>
-        <Dialog
-          as="div"
-          className="fixed inset-0 z-40 overflow-y-hidden"
-          onClose={() => setIsOpen(false)}
-          onTransitionEnd={() => !isOpen && resetFields()}
-        >
-          <div className="flex items-center justify-center min-h-screen p-4 text-center">
-            <Transition.Child
-              as={Fragment}
-              enter="ease-out duration-300"
-              enterFrom="opacity-0"
-              enterTo="opacity-100"
-              leave="ease-in duration-200"
-              leaveFrom="opacity-100"
-              leaveTo="opacity-0"
-            >
-              <Dialog.Overlay className="fixed inset-0 bg-black bg-opacity-40 dark:bg-opacity-60 backdrop-blur-sm pointer-events-none" />
-            </Transition.Child>
+    <Transition appear show={isOpen} as={Fragment}>
+      <Dialog
+        as="div"
+        className="fixed inset-0 z-40 overflow-y-hidden"
+        onClose={() => setIsOpen(false)}
+        onTransitionEnd={() => !isOpen && resetFields()}
+      >
+        <div className="flex items-center justify-center min-h-screen p-4 text-center">
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <Dialog.Overlay className="fixed inset-0 bg-black bg-opacity-40 dark:bg-opacity-60 backdrop-blur-sm pointer-events-none" />
+          </Transition.Child>
 
-            <Transition.Child
-              as={Fragment}
-              enter="ease-out duration-300"
-              enterFrom="opacity-0 scale-95"
-              enterTo="opacity-100 scale-100"
-              leave="ease-in duration-200"
-              leaveFrom="opacity-100 scale-100"
-              leaveTo="opacity-0 scale-95"
-            >
-              <div className="relative inline-block w-full max-w-2xl my-0 text-left align-middle transition-all transform bg-transparent shadow-xl rounded-2xl">
-                <div className="relative perspective w-full">
-                  <div
-                    className={`transition-transform duration-500 transform-style-preserve-3d relative w-full ${
-                      isFlipped ? "rotate-y-180" : ""
-                    }`}
-                  >
-                    {/* Front - Login */}
-                    <div className="backface-hidden w-full">
-                      <div className="inline-flex flex-col w-full text-left align-middle transition-all transform bg-white dark:bg-neutral-800 rounded-2xl overflow-hidden shadow-xl">
-                        <div className="relative bg-gradient-to-r from-indigo-500 to-purple-600 p-4 text-center">
-                          <Dialog.Title
-                            as="h3"
-                            className="text-2xl font-bold text-white leading-tight"
-                          >
-                            Login
-                          </Dialog.Title>
-                          <p className="mt-2 text-indigo-100">
-                            Faça login para accessar todas as funcionalidades.
-                          </p>
-                          <ButtonClose
-                            className="absolute right-3 top-3 w-0 h-0"
-                            onClick={() => setIsOpen(false)}
-                          />
-                        </div>
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0 scale-95"
+            enterTo="opacity-100 scale-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100 scale-100"
+            leaveTo="opacity-0 scale-95"
+          >
+            <div className="relative inline-block w-full max-w-2xl my-0 text-left align-middle transition-all transform bg-transparent shadow-xl rounded-2xl">
+              <div className="relative perspective w-full">
+                <div
+                  className={`transition-transform duration-500 transform-style-preserve-3d relative w-full ${
+                    isFlipped ? "rotate-y-180" : ""
+                  }`}
+                >
+                  {/* Front - Login */}
+                  <div className="backface-hidden w-full">
+                    <div className="inline-flex flex-col w-full text-left align-middle transition-all transform bg-white dark:bg-neutral-800 rounded-2xl overflow-hidden shadow-xl">
+                      <div className="relative bg-gradient-to-r from-indigo-500 to-purple-600 p-4 text-center">
+                        <Dialog.Title
+                          as="h3"
+                          className="text-2xl font-bold text-white leading-tight"
+                        >
+                          Login
+                        </Dialog.Title>
+                        <p className="mt-2 text-indigo-100">
+                          Faça login para accessar todas as funcionalidades.
+                        </p>
+                        <ButtonClose
+                          className="absolute right-3 top-3 w-0 h-0"
+                          onClick={() => setIsOpen(false)}
+                        />
+                      </div>
 
-                        <div className="flex-grow overflow-y-auto p-6 sm:p-8">
-                          <div className="space-y-6 text-neutral-700 dark:text-neutral-300">
-                            <div className="w-full">
-                              <Label>E-mail</Label>
-                              <Input
-                                className="mt-1.5"
-                                placeholder="mestre@gmail.com"
-                                value={email}
-                                type="email"
-                                onChange={(e) => setEmail(e.target.value)}
-                              />
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="flex flex-col bg-neutral-50 dark:bg-neutral-900/50 py-2 px-8 flex justify-center border-t border-neutral-200 dark:border-neutral-700">
-                          <ButtonPrimary
-                            onClick={login}
-                            sizeClass="px-6 py-3"
-                            className="bg-indigo-600 hover:bg-indigo-100 dark:bg-indigo-700 dark:hover:bg-indigo-300"
-                          >
-                            Entrar
-                          </ButtonPrimary>
-                          <div className="pt-2 text-center">
-                            <button
-                              onClick={() => setIsFlipped(true)}
-                              className="text-sm text-indigo-600 dark:text-indigo-400 hover:underline"
-                            >
-                              Não tem conta? Cadastre-se
-                            </button>
+                      <div className="flex-grow overflow-y-auto p-6 sm:p-8">
+                        <div className="space-y-6 text-neutral-700 dark:text-neutral-300">
+                          <div className="w-full">
+                            <Label>E-mail</Label>
+                            <Input
+                              className="mt-1.5"
+                              placeholder="mestre@gmail.com"
+                              value={email}
+                              type="email"
+                              onChange={(e) => setEmail(e.target.value)}
+                            />
                           </div>
                         </div>
                       </div>
-                    </div>
 
-                    {/* Back - Cadastro */}
-                    <div className="absolute top-[-100px] left-0 backface-hidden w-full rotate-y-180">
-                      <div className="inline-flex flex-col w-full text-left align-middle transition-all transform bg-white dark:bg-neutral-800 rounded-2xl overflow-hidden shadow-xl">
-                        <div className="relative bg-gradient-to-r from-indigo-500 to-purple-600 p-4 text-center">
-                          <Dialog.Title
-                            as="h3"
-                            className="text-2xl font-bold text-white leading-tight"
+                      <div className="flex flex-col bg-neutral-50 dark:bg-neutral-900/50 py-2 px-8 flex justify-center border-t border-neutral-200 dark:border-neutral-700">
+                        <ButtonPrimary
+                          onClick={login}
+                          sizeClass="px-6 py-3"
+                          className="bg-indigo-600 hover:bg-indigo-100 dark:bg-indigo-700 dark:hover:bg-indigo-300"
+                        >
+                          Entrar
+                        </ButtonPrimary>
+                        <div className="pt-2 text-center">
+                          <button
+                            onClick={() => setIsFlipped(true)}
+                            className="text-sm text-indigo-600 dark:text-indigo-400 hover:underline"
                           >
-                            Cadastro
-                          </Dialog.Title>
-                          <p className="mt-2 text-indigo-100">
-                            Faça seu cadastro para acessar todas as
-                            funcionalidades.
-                          </p>
-                          <ButtonClose
-                            className="absolute right-3 top-3 w-0 h-0"
-                            onClick={() => setIsOpen(false)}
-                          />
+                            Não tem conta? Cadastre-se
+                          </button>
                         </div>
+                      </div>
+                    </div>
+                  </div>
 
-                        <div className="flex-grow overflow-y-auto p-6 sm:p-8">
-                          <div className="space-y-6 text-neutral-700 dark:text-neutral-300">
-                            <div className="w-full">
-                              <Label>Nome completo</Label>
-                              <div className="mt-1.5 flex">
-                                <Input
-                                  className="mt-1.5"
-                                  placeholder="Mestre dos Magos"
-                                  value={fullName}
-                                  onChange={(e) => setFullName(e.target.value)}
-                                />
-                              </div>
-                            </div>
+                  {/* Back - Cadastro */}
+                  <div className="absolute top-[-100px] left-0 backface-hidden w-full rotate-y-180">
+                    <div className="inline-flex flex-col w-full text-left align-middle transition-all transform bg-white dark:bg-neutral-800 rounded-2xl overflow-hidden shadow-xl">
+                      <div className="relative bg-gradient-to-r from-indigo-500 to-purple-600 p-4 text-center">
+                        <Dialog.Title
+                          as="h3"
+                          className="text-2xl font-bold text-white leading-tight"
+                        >
+                          Cadastro
+                        </Dialog.Title>
+                        <p className="mt-2 text-indigo-100">
+                          Faça seu cadastro para acessar todas as
+                          funcionalidades.
+                        </p>
+                        <ButtonClose
+                          className="absolute right-3 top-3 w-0 h-0"
+                          onClick={() => setIsOpen(false)}
+                        />
+                      </div>
 
-                            <div className="w-full">
-                              <Label>E-mail</Label>
+                      <div className="flex-grow overflow-y-auto p-6 sm:p-8">
+                        <div className="space-y-6 text-neutral-700 dark:text-neutral-300">
+                          <div className="w-full">
+                            <Label>Nome completo</Label>
+                            <div className="mt-1.5 flex">
                               <Input
                                 className="mt-1.5"
-                                placeholder="mestre@gmail.com"
-                                value={email}
-                                type="email"
-                                onChange={(e) => setEmail(e.target.value)}
+                                placeholder="Mestre dos Magos"
+                                value={fullName}
+                                onChange={(e) => setFullName(e.target.value)}
                               />
                             </div>
+                          </div>
 
-                            <div className="w-full">
-                              <Label>Data de nascimento</Label>
-                              <div className="mt-1.5 flex">
-                                <span className="inline-flex items-center px-2.5 rounded-l-2xl border border-r-0 border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 text-sm">
-                                  <i className="text-2xl las la-calendar"></i>
-                                </span>
-                                <Input
-                                  className="!rounded-l-none"
-                                  type="date"
-                                  value={birthDate}
-                                  onChange={(e) => setBirthDate(e.target.value)}
-                                />
-                              </div>
+                          <div className="w-full">
+                            <Label>E-mail</Label>
+                            <Input
+                              className="mt-1.5"
+                              placeholder="mestre@gmail.com"
+                              value={email}
+                              type="email"
+                              onChange={(e) => setEmail(e.target.value)}
+                            />
+                          </div>
+
+                          <div className="w-full">
+                            <Label>Data de nascimento</Label>
+                            <div className="mt-1.5 flex">
+                              <span className="inline-flex items-center px-2.5 rounded-l-2xl border border-r-0 border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 text-sm">
+                                <i className="text-2xl las la-calendar"></i>
+                              </span>
+                              <Input
+                                className="!rounded-l-none"
+                                type="date"
+                                value={birthDate}
+                                onChange={(e) => setBirthDate(e.target.value)}
+                              />
                             </div>
                           </div>
                         </div>
+                      </div>
 
-                        <div className="flex flex-col bg-neutral-50 dark:bg-neutral-900/50 py-2 px-8 flex justify-center border-t border-neutral-200 dark:border-neutral-700">
-                          <ButtonPrimary
-                            onClick={register}
-                            sizeClass="px-6 py-3"
-                            className="bg-indigo-600 hover:bg-indigo-100 dark:bg-indigo-700 dark:hover:bg-indigo-300"
+                      <div className="flex flex-col bg-neutral-50 dark:bg-neutral-900/50 py-2 px-8 flex justify-center border-t border-neutral-200 dark:border-neutral-700">
+                        <ButtonPrimary
+                          onClick={register}
+                          sizeClass="px-6 py-3"
+                          className="bg-indigo-600 hover:bg-indigo-100 dark:bg-indigo-700 dark:hover:bg-indigo-300"
+                        >
+                          Cadastrar
+                        </ButtonPrimary>
+                        <div className="pt-2 text-center">
+                          <button
+                            onClick={() => setIsFlipped(false)}
+                            className="text-sm text-indigo-600 dark:text-indigo-400 hover:underline"
                           >
-                            Cadastrar
-                          </ButtonPrimary>
-                          <div className="pt-2 text-center">
-                            <button
-                              onClick={() => setIsFlipped(false)}
-                              className="text-sm text-indigo-600 dark:text-indigo-400 hover:underline"
-                            >
-                              Já tem conta? Faça login
-                            </button>
-                          </div>
+                            Já tem conta? Faça login
+                          </button>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </Transition.Child>
-          </div>
-        </Dialog>
-      </Transition>
-    </>
+            </div>
+          </Transition.Child>
+        </div>
+      </Dialog>
+    </Transition>
   );
 };
 

@@ -259,7 +259,7 @@ export default function GiftDetailsClient({ gift }: Readonly<{ gift: Gift }>) {
             <div className="bg-white dark:bg-slate-800 rounded-xl shadow-sm">
               <div className="flex flex-col md:flex-row">
                 {/* image */}
-                <div className="w-full md:w-1/2 bg-indigo-50 dark:bg-slate-700 flex items-center justify-center p-6">
+                <div className="rounded-xl w-full md:w-1/2 bg-indigo-50 dark:bg-slate-700 flex items-center justify-center p-6">
                   <div className="relative w-full h-72">
                     <Image
                       src={gift.imageUrl}
